@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/spdlog/src/spdlog_proj/include/spdlog/details/file_helper.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../../index.html">top level</a> - <a href="index.html">build/spdlog/src/spdlog_proj/include/spdlog/details</a> - file_helper.h<span style="font-size: 80%;"> (source / <a href="file_helper.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">24</td>
+            <td class="headerCovTableEntry">30</td>
+            <td class="headerCovTableEntryMed">80.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryMed">83.3 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Copyright(c) 2015 Gabi Melman.
+<span class="lineNum">       3 </span>            : // Distributed under the MIT License (http://opensource.org/licenses/MIT)
+<span class="lineNum">       4 </span>            : //
+<span class="lineNum">       5 </span>            : 
+<span class="lineNum">       6 </span>            : #pragma once
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : // Helper class for file sink
+<span class="lineNum">       9 </span>            : // When failing to open a file, retry several times(5) with small delay between the tries(10 ms)
+<span class="lineNum">      10 </span>            : // Can be set to auto flush on every line
+<span class="lineNum">      11 </span>            : // Throw spdlog_ex exception on errors
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : #include &lt;spdlog/details/os.h&gt;
+<span class="lineNum">      14 </span>            : #include &lt;spdlog/details/log_msg.h&gt;
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span>            : #include &lt;chrono&gt;
+<span class="lineNum">      17 </span>            : #include &lt;cstdio&gt;
+<span class="lineNum">      18 </span>            : #include &lt;string&gt;
+<span class="lineNum">      19 </span>            : #include &lt;thread&gt;
+<span class="lineNum">      20 </span>            : #include &lt;cerrno&gt;
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            : namespace spdlog
+<span class="lineNum">      23 </span>            : {
+<span class="lineNum">      24 </span>            : namespace details
+<span class="lineNum">      25 </span>            : {
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span>            : class file_helper
+<span class="lineNum">      28 </span>            : {
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span>            : public:
+<span class="lineNum">      31 </span>            :     const int open_tries = 5;
+<a name="32"><span class="lineNum">      32 </span>            :     const int open_interval = 10;</a>
+<span class="lineNum">      33 </span>            : 
+<span class="lineNum">      34 </span><span class="lineCov">          1 :     explicit file_helper() :</span>
+<span class="lineNum">      35 </span><span class="lineCov">          1 :         _fd(nullptr)        </span>
+<span class="lineNum">      36 </span><span class="lineCov">          1 :     {}</span>
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span>            :     file_helper(const file_helper&amp;) = delete;
+<a name="39"><span class="lineNum">      39 </span>            :     file_helper&amp; operator=(const file_helper&amp;) = delete;</a>
+<span class="lineNum">      40 </span>            : 
+<span class="lineNum">      41 </span><span class="lineCov">          1 :     ~file_helper()</span>
+<span class="lineNum">      42 </span><span class="lineCov">          1 :     {</span>
+<span class="lineNum">      43 </span><span class="lineCov">          1 :         close();</span>
+<span class="lineNum">      44 </span><span class="lineCov">          1 :     }</span>
+<a name="45"><span class="lineNum">      45 </span>            : </a>
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span><span class="lineCov">          1 :     void open(const filename_t&amp; fname, bool truncate = false)</span>
+<span class="lineNum">      48 </span>            :     {
+<span class="lineNum">      49 </span>            : 
+<span class="lineNum">      50 </span><span class="lineCov">          1 :         close();</span>
+<span class="lineNum">      51 </span><span class="lineCov">          1 :         auto *mode = truncate ? SPDLOG_FILENAME_T(&quot;wb&quot;) : SPDLOG_FILENAME_T(&quot;ab&quot;);</span>
+<span class="lineNum">      52 </span><span class="lineCov">          1 :         _filename = fname;</span>
+<span class="lineNum">      53 </span><span class="lineCov">          1 :         for (int tries = 0; tries &lt; open_tries; ++tries)</span>
+<span class="lineNum">      54 </span>            :         {
+<span class="lineNum">      55 </span><span class="lineCov">          1 :             if (!os::fopen_s(&amp;_fd, fname, mode))</span>
+<span class="lineNum">      56 </span><span class="lineCov">          2 :                 return;</span>
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span><span class="lineNoCov">          0 :             std::this_thread::sleep_for(std::chrono::milliseconds(open_interval));</span>
+<span class="lineNum">      59 </span>            :         }
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span><span class="lineNoCov">          0 :         throw spdlog_ex(&quot;Failed opening file &quot; + os::filename_to_str(_filename) + &quot; for writing&quot;, errno);</span>
+<span class="lineNum">      62 </span>            :     }
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span>            :     void reopen(bool truncate)
+<span class="lineNum">      65 </span>            :     {
+<span class="lineNum">      66 </span>            :         if (_filename.empty())
+<span class="lineNum">      67 </span>            :             throw spdlog_ex(&quot;Failed re opening file - was not opened before&quot;);
+<span class="lineNum">      68 </span>            :         open(_filename, truncate);
+<span class="lineNum">      69 </span>            : 
+<a name="70"><span class="lineNum">      70 </span>            :     }</a>
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :     void flush()</span>
+<span class="lineNum">      73 </span>            :     {
+<span class="lineNum">      74 </span><span class="lineNoCov">          0 :         std::fflush(_fd);</span>
+<a name="75"><span class="lineNum">      75 </span><span class="lineNoCov">          0 :     }</span></a>
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span><span class="lineCov">          2 :     void close()</span>
+<span class="lineNum">      78 </span>            :     {
+<span class="lineNum">      79 </span><span class="lineCov">          2 :         if (_fd)</span>
+<span class="lineNum">      80 </span>            :         {
+<span class="lineNum">      81 </span><span class="lineCov">          1 :             std::fclose(_fd);</span>
+<span class="lineNum">      82 </span><span class="lineCov">          1 :             _fd = nullptr;</span>
+<span class="lineNum">      83 </span>            :         }
+<a name="84"><span class="lineNum">      84 </span><span class="lineCov">          2 :     }</span></a>
+<span class="lineNum">      85 </span>            : 
+<span class="lineNum">      86 </span><span class="lineCov">         12 :     void write(const log_msg&amp; msg)</span>
+<span class="lineNum">      87 </span>            :     {
+<span class="lineNum">      88 </span>            : 
+<span class="lineNum">      89 </span><span class="lineCov">         12 :         size_t msg_size = msg.formatted.size();</span>
+<span class="lineNum">      90 </span><span class="lineCov">         12 :         auto data = msg.formatted.data();</span>
+<span class="lineNum">      91 </span><span class="lineCov">         12 :         if (std::fwrite(data, 1, msg_size, _fd) != msg_size)</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :             throw spdlog_ex(&quot;Failed writing to file &quot; + os::filename_to_str(_filename), errno);        </span>
+<span class="lineNum">      93 </span><span class="lineCov">         12 :     }</span>
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span>            :     size_t size()
+<span class="lineNum">      96 </span>            :     {
+<span class="lineNum">      97 </span>            :         if (!_fd)
+<span class="lineNum">      98 </span>            :             throw spdlog_ex(&quot;Cannot use size() on closed file &quot; + os::filename_to_str(_filename));
+<span class="lineNum">      99 </span>            :         return os::filesize(_fd);
+<span class="lineNum">     100 </span>            :     }
+<span class="lineNum">     101 </span>            : 
+<span class="lineNum">     102 </span>            :     const filename_t&amp; filename() const
+<span class="lineNum">     103 </span>            :     {
+<span class="lineNum">     104 </span>            :         return _filename;
+<span class="lineNum">     105 </span>            :     }
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span>            :     static bool file_exists(const filename_t&amp; name)
+<span class="lineNum">     108 </span>            :     {
+<span class="lineNum">     109 </span>            : 
+<span class="lineNum">     110 </span>            :         return os::file_exists(name);
+<span class="lineNum">     111 </span>            :     }
+<span class="lineNum">     112 </span>            : 
+<span class="lineNum">     113 </span>            : private:
+<span class="lineNum">     114 </span>            :     FILE* _fd;
+<span class="lineNum">     115 </span>            :     filename_t _filename;    
+<span class="lineNum">     116 </span>            : };
+<span class="lineNum">     117 </span>            : }
+<span class="lineNum">     118 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

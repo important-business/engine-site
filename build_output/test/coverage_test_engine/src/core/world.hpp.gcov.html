@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - src/core/world.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/core</a> - world.hpp<span style="font-size: 80%;"> (source / <a href="world.hpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef CORE_WORLD_HPP</a>
+<span class="lineNum">       2 </span>            : #define CORE_WORLD_HPP
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #include &quot;core/level.hpp&quot;
+<span class="lineNum">       5 </span>            : #include &quot;core/logging.hpp&quot;
+<span class="lineNum">       6 </span>            : #include &quot;core/resource_manager.hpp&quot;
+<span class="lineNum">       7 </span>            : #include &quot;systems/ai.hpp&quot;
+<span class="lineNum">       8 </span>            : #include &quot;systems/movement.hpp&quot;
+<span class="lineNum">       9 </span>            : #include &quot;systems/hockey.hpp&quot;
+<span class="lineNum">      10 </span>            : #include &quot;systems/player_input.hpp&quot;
+<span class="lineNum">      11 </span>            : #include &quot;systems/render.hpp&quot;
+<span class="lineNum">      12 </span>            : #include &quot;systems/collision.hpp&quot;
+<span class="lineNum">      13 </span>            : 
+<span class="lineNum">      14 </span>            : #include &lt;anax/anax.hpp&gt;
+<span class="lineNum">      15 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      16 </span>            : #include &lt;sdl_wrap/wrap.hpp&gt;
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span>            : namespace core
+<a name="19"><span class="lineNum">      19 </span>            : {</a>
+<span class="lineNum">      20 </span>            : 
+<span class="lineNum">      21 </span><span class="lineNoCov">          0 : class World</span>
+<span class="lineNum">      22 </span>            : 
+<a name="23"><span class="lineNum">      23 </span>            : {</a>
+<span class="lineNum">      24 </span>            : public:
+<span class="lineNum">      25 </span><span class="lineNoCov">          0 :     explicit World(sdl_wrap::Window* pwindow) : m_p_window(pwindow)</span>
+<span class="lineNum">      26 </span>            :     {
+<span class="lineNum">      27 </span><span class="lineNoCov">          0 :         m_sp_logger = core::logging_get_logger(&quot;world&quot;);</span>
+<span class="lineNum">      28 </span><span class="lineNoCov">          0 :     }</span>
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span>            :     void init(Uint32 sdl_render_flags);
+<span class="lineNum">      31 </span>            : 
+<span class="lineNum">      32 </span>            :     void deinit();
+<span class="lineNum">      33 </span>            : 
+<span class="lineNum">      34 </span>            :     void execute(float dt);
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            :     void execute_fixed(float dt);
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span>            :     void handle_input();
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            : private:
+<span class="lineNum">      41 </span>            :     sdl_wrap::Window* m_p_window;
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            :     std::unique_ptr&lt;anax::World&gt; m_up_anax_world;
+<span class="lineNum">      44 </span>            : 
+<span class="lineNum">      45 </span>            :     std::unique_ptr&lt;systems::AiSystem&gt; m_up_ai_system;
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            :     std::unique_ptr&lt;systems::Camera&gt; m_up_camera_system;
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            :     std::unique_ptr&lt;systems::Render&gt; m_up_render_system;
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span>            :     std::unique_ptr&lt;systems::Movement&gt; m_up_movement_system;
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            :     std::unique_ptr&lt;systems::Hockey&gt; m_up_hockey_system;
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span>            :     std::unique_ptr&lt;systems::PlayerInput&gt; m_up_player_input_system;
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span>            :     std::unique_ptr&lt;systems::Collision&gt; m_up_collision_system;
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            :     std::unique_ptr&lt;core::ResourceManagerTexture&gt; m_up_texture_manager;
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            :     std::unique_ptr&lt;core::Level&gt; m_up_level;
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span>            :     anax::Entity m_player;
+<span class="lineNum">      64 </span>            : 
+<span class="lineNum">      65 </span>            :     std::shared_ptr&lt;spdlog::logger&gt; m_sp_logger;
+<span class="lineNum">      66 </span>            : };
+<span class="lineNum">      67 </span>            : }
+<span class="lineNum">      68 </span>            : 
+<span class="lineNum">      69 </span>            : #endif /* CORE_WORLD_HPP */
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

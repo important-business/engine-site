@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/anax/src/anax_proj/include/anax/World.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../index.html">top level</a> - <a href="index.html">build/anax/src/anax_proj/include/anax</a> - World.hpp<span style="font-size: 80%;"> (source / <a href="World.hpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : ///</a>
+<span class="lineNum">       2 </span>            : /// anax
+<span class="lineNum">       3 </span>            : /// An open source C++ entity system.
+<span class="lineNum">       4 </span>            : ///
+<span class="lineNum">       5 </span>            : /// Copyright (C) 2013-2014 Miguel Martin (miguel@miguel-martin.com)
+<span class="lineNum">       6 </span>            : ///
+<span class="lineNum">       7 </span>            : /// Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class="lineNum">       8 </span>            : /// of this software and associated documentation files (the &quot;Software&quot;), to deal
+<span class="lineNum">       9 </span>            : /// in the Software without restriction, including without limitation the rights
+<span class="lineNum">      10 </span>            : /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class="lineNum">      11 </span>            : /// copies of the Software, and to permit persons to whom the Software is
+<span class="lineNum">      12 </span>            : /// furnished to do so, subject to the following conditions:
+<span class="lineNum">      13 </span>            : ///
+<span class="lineNum">      14 </span>            : /// The above copyright notice and this permission notice shall be included in
+<span class="lineNum">      15 </span>            : /// all copies or substantial portions of the Software.
+<span class="lineNum">      16 </span>            : ///
+<span class="lineNum">      17 </span>            : /// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class="lineNum">      18 </span>            : /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class="lineNum">      19 </span>            : /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class="lineNum">      20 </span>            : /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class="lineNum">      21 </span>            : /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class="lineNum">      22 </span>            : /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class="lineNum">      23 </span>            : /// THE SOFTWARE.
+<span class="lineNum">      24 </span>            : ///
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            : #ifndef ANAX_WORLD_HPP
+<span class="lineNum">      27 </span>            : #define ANAX_WORLD_HPP
+<span class="lineNum">      28 </span>            : 
+<span class="lineNum">      29 </span>            : #include &lt;vector&gt;
+<span class="lineNum">      30 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      31 </span>            : #include &lt;unordered_map&gt;
+<span class="lineNum">      32 </span>            : #include &lt;type_traits&gt;
+<span class="lineNum">      33 </span>            : #include &lt;utility&gt;
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;anax/detail/EntityIdPool.hpp&gt;
+<span class="lineNum">      36 </span>            : #include &lt;anax/detail/EntityComponentStorage.hpp&gt;
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span>            : #include &lt;anax/Component.hpp&gt;
+<span class="lineNum">      39 </span>            : #include &lt;anax/Entity.hpp&gt;
+<span class="lineNum">      40 </span>            : #include &lt;anax/System.hpp&gt;
+<span class="lineNum">      41 </span>            : 
+<a name="42"><span class="lineNum">      42 </span>            : namespace anax</a>
+<span class="lineNum">      43 </span>            : {
+<span class="lineNum">      44 </span><span class="lineNoCov">          0 :     class World</span>
+<span class="lineNum">      45 </span>            :     {
+<span class="lineNum">      46 </span>            :     private:
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            :         struct SystemDeleter
+<span class="lineNum">      49 </span>            :         {
+<span class="lineNum">      50 </span>            :             void operator() (detail::BaseSystem* system) const;
+<span class="lineNum">      51 </span>            :         };
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            :         /// Describes an array of Systems for storage within the world
+<span class="lineNum">      54 </span>            :         /// The index is the type ID of the system,
+<span class="lineNum">      55 </span>            :         /// thus systems of the same type can not be stored
+<span class="lineNum">      56 </span>            :         /// in the same World object.
+<span class="lineNum">      57 </span>            :         using SystemArray = std::unordered_map&lt;detail::TypeId, std::unique_ptr&lt;detail::BaseSystem, SystemDeleter&gt;&gt;;
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            :     public:
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            :         /// Describes an array of Entities
+<span class="lineNum">      62 </span>            :         using EntityArray = std::vector&lt;Entity&gt;;
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span>            :         /// Default Constructor
+<span class="lineNum">      65 </span>            :         World();
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span>            :         /// Constructs the world with a custom entity pool size
+<span class="lineNum">      68 </span>            :         /// \param entityPoolSize The amount of entities you wish to have pooled ready to use by default
+<span class="lineNum">      69 </span>            :         explicit World(std::size_t entityPoolSize);
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span>            :         World(const World&amp; world) = delete;
+<span class="lineNum">      72 </span>            :         World(World&amp;&amp; world) = delete;
+<span class="lineNum">      73 </span>            :         World&amp; operator=(const World&amp;) = delete;
+<span class="lineNum">      74 </span>            :         World&amp; operator=(World&amp;&amp;) = delete;
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span>            :         /// Adds a system to the World
+<span class="lineNum">      78 </span>            :         /// \tparam TSystem The type of system you wish to add
+<span class="lineNum">      79 </span>            :         /// \param system The system you wish to add
+<span class="lineNum">      80 </span>            :         template &lt;typename TSystem&gt;
+<span class="lineNum">      81 </span>            :         void addSystem(TSystem&amp; system);
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span>            :         /// Removes a system from the World
+<span class="lineNum">      84 </span>            :         /// \tparam TSystem The type of system you wish to remove
+<span class="lineNum">      85 </span>            :         template &lt;typename TSystem&gt;
+<span class="lineNum">      86 </span>            :         void removeSystem();
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span>            :         /// Determines whether a type of system is attached to a world
+<span class="lineNum">      89 </span>            :         /// \tparam TSystem The type of system you wish to check            
+<span class="lineNum">      90 </span>            :         template &lt;typename TSystem&gt;
+<span class="lineNum">      91 </span>            :         bool doesSystemExist() const;
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span>            :         /// Determines if a specific system belongs to this world
+<span class="lineNum">      94 </span>            :         /// \tparam TSystem The type of system you wish to check            
+<span class="lineNum">      95 </span>            :         /// \param system The system you wish to check for
+<span class="lineNum">      96 </span>            :         /// \note This differs from doesSystemExist&lt;TSystem&gt;() as 
+<span class="lineNum">      97 </span>            :         /// doesSystemExist&lt;TSystem&gt;() cannot check whether the system
+<span class="lineNum">      98 </span>            :         /// object belongs to the same world as this.
+<span class="lineNum">      99 </span>            :         template &lt;typename TSystem&gt;
+<span class="lineNum">     100 </span>            :         bool doesSystemExist(const TSystem&amp; system) const;
+<span class="lineNum">     101 </span>            : 
+<span class="lineNum">     102 </span>            :         /// Removes all the systems from the world
+<span class="lineNum">     103 </span>            :         void removeAllSystems();
+<span class="lineNum">     104 </span>            : 
+<span class="lineNum">     105 </span>            :         /// Creates an Entity
+<span class="lineNum">     106 </span>            :         /// \return A new entity for which you can use.
+<span class="lineNum">     107 </span>            :         Entity createEntity();
+<span class="lineNum">     108 </span>            : 
+<span class="lineNum">     109 </span>            :         /// Creates an entity and applies an entity template to the entity
+<span class="lineNum">     110 </span>            :         /// \tparam EntityTemplateFn The type of template function you wish to apply
+<span class="lineNum">     111 </span>            :         ///
+<span class="lineNum">     112 </span>            :         /// \param fn The function you wish to apply to this entity
+<span class="lineNum">     113 </span>            :         /// \param args The corresponding arguments to the entity template function
+<span class="lineNum">     114 </span>            :         template &lt;typename EntityTemplateFn, typename... Args&gt;
+<span class="lineNum">     115 </span>            :         Entity createEntity(EntityTemplateFn fn, Args&amp;&amp;... args)
+<span class="lineNum">     116 </span>            :         {
+<span class="lineNum">     117 </span>            :             Entity e = createEntity();
+<span class="lineNum">     118 </span>            :             fn(e, std::forward&lt;Args&gt;(args)...);
+<span class="lineNum">     119 </span>            :             return e;
+<span class="lineNum">     120 </span>            :         }
+<span class="lineNum">     121 </span>            : 
+<span class="lineNum">     122 </span>            :         /// Creates a specific amount of entities
+<span class="lineNum">     123 </span>            :         /// \param amount The amount of entities you wish to create
+<span class="lineNum">     124 </span>            :         /// \return The entities you created
+<span class="lineNum">     125 </span>            :         EntityArray createEntities(std::size_t amount);
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span>            :         /// Kills and deactivates an Entity
+<span class="lineNum">     128 </span>            :         /// \param entity The Entity you wish to kill
+<span class="lineNum">     129 </span>            :         void killEntity(Entity&amp; entity);
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span>            :         /// Kills and deactivates an array of entities
+<span class="lineNum">     132 </span>            :         /// \param entities The entities you wish to kill
+<span class="lineNum">     133 </span>            :         void killEntities(std::vector&lt;Entity&gt;&amp; entities);
+<span class="lineNum">     134 </span>            : 
+<span class="lineNum">     135 </span>            :         /// Activates an Entity
+<span class="lineNum">     136 </span>            :         /// \param entity The Entity you wish to activate
+<span class="lineNum">     137 </span>            :         void activateEntity(Entity&amp; entity);
+<span class="lineNum">     138 </span>            : 
+<span class="lineNum">     139 </span>            :         /// Deactivates an Entity
+<span class="lineNum">     140 </span>            :         /// \param entity The Entity you wish to deactivate
+<span class="lineNum">     141 </span>            :         void deactivateEntity(Entity&amp; entity);
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span>            :         /// Determines if the Entity is activated
+<span class="lineNum">     144 </span>            :         /// \param entity The Entity you wish to check
+<span class="lineNum">     145 </span>            :         /// \return true if entity is activated
+<span class="lineNum">     146 </span>            :         bool isActivated(const Entity&amp; entity) const;
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span>            :         /// Determines if an Entity is valid.
+<span class="lineNum">     149 </span>            :         /// \note If the entity is valid it may have components attached to it.
+<span class="lineNum">     150 </span>            :         /// If the entity is not valid and a component is attempted to be attached
+<span class="lineNum">     151 </span>            :         /// to the entity, there will be a run-time error (an assertion).
+<span class="lineNum">     152 </span>            :         /// \return true if the Entity is valid within the World
+<span class="lineNum">     153 </span>            :         bool isValid(const Entity&amp; entity) const;
+<span class="lineNum">     154 </span>            : 
+<span class="lineNum">     155 </span>            :         /// Refreshes the World
+<span class="lineNum">     156 </span>            :         void refresh();
+<span class="lineNum">     157 </span>            : 
+<span class="lineNum">     158 </span>            :         /// Instantaneously clears the world, by removing
+<span class="lineNum">     159 </span>            :         /// all systems and entities from the world.
+<span class="lineNum">     160 </span>            :         /// \note It is no guarantee that the entities from the world
+<span class="lineNum">     161 </span>            :         /// will be invalidated, as the counter of the entity may still be
+<span class="lineNum">     162 </span>            :         /// set to the same counter in the pool. However, it is expected
+<span class="lineNum">     163 </span>            :         /// that the entity will not have the same counter as long as you have not
+<span class="lineNum">     164 </span>            :         /// created another entity.
+<span class="lineNum">     165 </span>            :         void clear();
+<span class="lineNum">     166 </span>            : 
+<span class="lineNum">     167 </span>            :         /// \return The amount of entities that are alive (attached to the world)
+<span class="lineNum">     168 </span>            :         /// \note This count includes the deactivated entities
+<span class="lineNum">     169 </span>            :         std::size_t getEntityCount() const;
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span>            :         /// \return All the entities within the world
+<span class="lineNum">     172 </span>            :         const EntityArray&amp; getEntities() const;
+<span class="lineNum">     173 </span>            : 
+<span class="lineNum">     174 </span>            :         /// \return The entity with the associated index
+<span class="lineNum">     175 </span>            :         /// \note This will cause an assertion if it does not exist
+<span class="lineNum">     176 </span>            :         /// \note Is non-const because Entity requires a non-const reference
+<span class="lineNum">     177 </span>            :         /// to the world
+<span class="lineNum">     178 </span>            :         Entity getEntity(std::size_t index);
+<span class="lineNum">     179 </span>            : 
+<span class="lineNum">     180 </span>            :     private:
+<span class="lineNum">     181 </span>            : 
+<span class="lineNum">     182 </span>            :         /// Systems attached with the world.
+<span class="lineNum">     183 </span>            :         SystemArray m_systems;
+<span class="lineNum">     184 </span>            : 
+<span class="lineNum">     185 </span>            :         /// A pool storage of the IDs for the entities within the world
+<a name="186"><span class="lineNum">     186 </span>            :         detail::EntityIdPool m_entityIdPool;</a>
+<span class="lineNum">     187 </span>            : 
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 :         struct EntityAttributes</span>
+<span class="lineNum">     189 </span>            :         {
+<a name="190"><span class="lineNum">     190 </span>            :             // todo: possibly move component storage to single attribute?</a>
+<span class="lineNum">     191 </span>            :             // compare performance.
+<span class="lineNum">     192 </span><span class="lineNoCov">          0 :             struct Attribute</span>
+<span class="lineNum">     193 </span>            :             {
+<span class="lineNum">     194 </span>            :                 /// determines if the entity is activated
+<span class="lineNum">     195 </span>            :                 bool activated;
+<span class="lineNum">     196 </span>            : 
+<span class="lineNum">     197 </span>            :                 /// a bitset that resembles if the entity
+<span class="lineNum">     198 </span>            :                 /// exists in a specific system.
+<span class="lineNum">     199 </span>            :                 /// The index specifies what system, 0 resembles
+<span class="lineNum">     200 </span>            :                 /// it is in the system, 1 is out of the system
+<span class="lineNum">     201 </span>            :                 std::vector&lt;bool&gt; systems;
+<span class="lineNum">     202 </span>            :             };
+<span class="lineNum">     203 </span>            : 
+<span class="lineNum">     204 </span>            :             explicit EntityAttributes(std::size_t amountOfEntities) :     
+<span class="lineNum">     205 </span>            :                 componentStorage(amountOfEntities), 
+<span class="lineNum">     206 </span>            :                 attributes(amountOfEntities)
+<span class="lineNum">     207 </span>            :             {
+<span class="lineNum">     208 </span>            :             }
+<span class="lineNum">     209 </span>            : 
+<span class="lineNum">     210 </span>            :             /// A storage of all components that an entity has
+<span class="lineNum">     211 </span>            :             detail::EntityComponentStorage componentStorage;
+<span class="lineNum">     212 </span>            : 
+<span class="lineNum">     213 </span>            :             /// the attributes of each entity
+<span class="lineNum">     214 </span>            :             std::vector&lt;Attribute&gt; attributes;
+<span class="lineNum">     215 </span>            : 
+<span class="lineNum">     216 </span>            :             /// Used on resize to allow room
+<span class="lineNum">     217 </span>            :             /// for more entities that require to be allocated
+<span class="lineNum">     218 </span>            :             /// \param amountOfEntities The amount of entities to resize for
+<span class="lineNum">     219 </span>            :             void resize(std::size_t amountOfEntities) 
+<span class="lineNum">     220 </span>            :             { 
+<span class="lineNum">     221 </span>            :                 componentStorage.resize(amountOfEntities); 
+<span class="lineNum">     222 </span>            :                 attributes.resize(amountOfEntities);
+<span class="lineNum">     223 </span>            :             }
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span>            :             /// Clears the attributes for all entities
+<span class="lineNum">     226 </span>            :             void clear()
+<span class="lineNum">     227 </span>            :             {
+<span class="lineNum">     228 </span>            :                 componentStorage.clear();
+<span class="lineNum">     229 </span>            :                 attributes.clear();
+<span class="lineNum">     230 </span>            :             }
+<span class="lineNum">     231 </span>            :         }
+<span class="lineNum">     232 </span>            : 
+<span class="lineNum">     233 </span>            :         /// The attributes of the entities attached to this world
+<span class="lineNum">     234 </span>            :         m_entityAttributes;
+<a name="235"><span class="lineNum">     235 </span>            : </a>
+<span class="lineNum">     236 </span>            : 
+<span class="lineNum">     237 </span><span class="lineNoCov">          0 :         struct EntityCache</span>
+<span class="lineNum">     238 </span>            :         {
+<span class="lineNum">     239 </span>            :             /// Contains all the alive entities
+<span class="lineNum">     240 </span>            :             EntityArray alive;
+<span class="lineNum">     241 </span>            : 
+<span class="lineNum">     242 </span>            :             /// A temporary storage for the killed entities
+<span class="lineNum">     243 </span>            :             /// for the world. This array gets cleared every call
+<span class="lineNum">     244 </span>            :             /// to refresh.
+<span class="lineNum">     245 </span>            :             EntityArray killed;
+<span class="lineNum">     246 </span>            : 
+<span class="lineNum">     247 </span>            :             /// A temporary storage for the activated entities
+<span class="lineNum">     248 </span>            :             /// for the world. This array gets cleared every call
+<span class="lineNum">     249 </span>            :             /// to refresh.
+<span class="lineNum">     250 </span>            :             EntityArray activated;
+<span class="lineNum">     251 </span>            : 
+<span class="lineNum">     252 </span>            :             /// A temporary storage for the deactivated entities
+<span class="lineNum">     253 </span>            :             /// for the world. This array gets cleared every call
+<span class="lineNum">     254 </span>            :             /// to refresh.
+<span class="lineNum">     255 </span>            :             EntityArray deactivated;
+<span class="lineNum">     256 </span>            : 
+<span class="lineNum">     257 </span>            :             /// Clears the temporary cache
+<span class="lineNum">     258 </span>            :             void clearTemp()
+<span class="lineNum">     259 </span>            :             {
+<span class="lineNum">     260 </span>            :                 killed.clear();
+<span class="lineNum">     261 </span>            :                 activated.clear();
+<span class="lineNum">     262 </span>            :                 deactivated.clear();
+<span class="lineNum">     263 </span>            :             }
+<span class="lineNum">     264 </span>            : 
+<span class="lineNum">     265 </span>            :             /// Clears everything in the cache
+<span class="lineNum">     266 </span>            :             void clear()
+<span class="lineNum">     267 </span>            :             {
+<span class="lineNum">     268 </span>            :                 alive.clear();
+<span class="lineNum">     269 </span>            :                 clearTemp();
+<span class="lineNum">     270 </span>            :             }
+<span class="lineNum">     271 </span>            :         }
+<span class="lineNum">     272 </span>            : 
+<span class="lineNum">     273 </span>            :         /// A cache of entities, which stores all
+<span class="lineNum">     274 </span>            :         /// types of entities (killed, alive, activated, etc.)
+<span class="lineNum">     275 </span>            :         /// within the World.
+<span class="lineNum">     276 </span>            :         m_entityCache;
+<span class="lineNum">     277 </span>            : 
+<span class="lineNum">     278 </span>            : 
+<span class="lineNum">     279 </span>            :         void checkForResize(std::size_t amountOfEntitiesToBeAllocated);
+<span class="lineNum">     280 </span>            :         void resize(std::size_t amount);
+<span class="lineNum">     281 </span>            : 
+<span class="lineNum">     282 </span>            :         void addSystem(detail::BaseSystem&amp; system, detail::TypeId systemTypeId);
+<span class="lineNum">     283 </span>            :         void removeSystem(detail::TypeId systemTypeId);     
+<span class="lineNum">     284 </span>            :         bool doesSystemExist(detail::TypeId systemTypeId) const;
+<span class="lineNum">     285 </span>            : 
+<span class="lineNum">     286 </span>            :         // to access components
+<span class="lineNum">     287 </span>            :         friend class Entity;
+<span class="lineNum">     288 </span>            :     };
+<a name="289"><span class="lineNum">     289 </span>            : </a>
+<span class="lineNum">     290 </span>            :     template &lt;class TSystem&gt;
+<span class="lineNum">     291 </span><span class="lineNoCov">          0 :     void World::addSystem(TSystem&amp; system)</span>
+<span class="lineNum">     292 </span>            :     { 
+<span class="lineNum">     293 </span>            :         static_assert(std::is_base_of&lt;detail::BaseSystem, TSystem&gt;(), &quot;Template argument does not inherit from BaseSystem&quot;); 
+<span class="lineNum">     294 </span><span class="lineNoCov">          0 :         addSystem(system, SystemTypeId&lt;TSystem&gt;()); </span>
+<span class="lineNum">     295 </span><span class="lineNoCov">          0 :     }</span>
+<span class="lineNum">     296 </span>            : 
+<span class="lineNum">     297 </span>            :     template &lt;class TSystem&gt;
+<span class="lineNum">     298 </span>            :     void World::removeSystem()
+<span class="lineNum">     299 </span>            :     {
+<span class="lineNum">     300 </span>            :         static_assert(std::is_base_of&lt;detail::BaseSystem, TSystem&gt;(), &quot;Template argument does not inherit from BaseSystem&quot;); 
+<span class="lineNum">     301 </span>            :         removeSystem(SystemTypeId&lt;TSystem&gt;());
+<span class="lineNum">     302 </span>            :     }
+<span class="lineNum">     303 </span>            : 
+<span class="lineNum">     304 </span>            :     template &lt;class TSystem&gt;
+<span class="lineNum">     305 </span>            :     bool World::doesSystemExist() const
+<span class="lineNum">     306 </span>            :     {
+<span class="lineNum">     307 </span>            :         static_assert(std::is_base_of&lt;detail::BaseSystem, TSystem&gt;(), &quot;Template argument does not inherit from BaseSystem&quot;); 
+<span class="lineNum">     308 </span>            :         return doesSystemExist(SystemTypeId&lt;TSystem&gt;());
+<span class="lineNum">     309 </span>            :     }
+<span class="lineNum">     310 </span>            : 
+<span class="lineNum">     311 </span>            :     template &lt;class TSystem&gt;
+<span class="lineNum">     312 </span>            :     bool World::doesSystemExist(const TSystem&amp; system) const
+<span class="lineNum">     313 </span>            :     { 
+<span class="lineNum">     314 </span>            :         static_assert(std::is_base_of&lt;detail::BaseSystem, TSystem&gt;(), &quot;Template argument does not inherit from BaseSystem&quot;); 
+<span class="lineNum">     315 </span>            :         return system.m_world == this &amp;&amp; doesSystemExist&lt;TSystem&gt;();
+<span class="lineNum">     316 </span>            :     }
+<span class="lineNum">     317 </span>            : }
+<span class="lineNum">     318 </span>            : 
+<span class="lineNum">     319 </span>            : #endif // ANAX_WORLD_HPP
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

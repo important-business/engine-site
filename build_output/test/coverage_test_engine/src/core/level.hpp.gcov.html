@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - src/core/level.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/core</a> - level.hpp<span style="font-size: 80%;"> (source / <a href="level.hpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef CORE_LEVEL_HPP</a>
+<span class="lineNum">       2 </span>            : #define CORE_LEVEL_HPP
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #include &quot;core/logging.hpp&quot;
+<span class="lineNum">       5 </span>            : #include &quot;sdl_wrap/wrap.hpp&quot;
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : #include &lt;cstdint&gt;
+<span class="lineNum">       8 </span>            : #include &lt;memory&gt;
+<span class="lineNum">       9 </span>            : namespace core
+<a name="10"><span class="lineNum">      10 </span>            : {</a>
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span><span class="lineNoCov">          0 : class LevelTileSet</span>
+<span class="lineNum">      13 </span>            : {
+<span class="lineNum">      14 </span>            : public:
+<span class="lineNum">      15 </span>            :     LevelTileSet(std::string name,
+<span class="lineNum">      16 </span>            :         std::string filename,
+<span class="lineNum">      17 </span>            :         unsigned int columns,
+<span class="lineNum">      18 </span>            :         unsigned int tilecount,
+<span class="lineNum">      19 </span>            :         unsigned int tilewidth,
+<span class="lineNum">      20 </span>            :         unsigned int tileheight,
+<span class="lineNum">      21 </span>            :         unsigned int spacing,
+<span class="lineNum">      22 </span>            :         unsigned int margin);
+<span class="lineNum">      23 </span>            : 
+<span class="lineNum">      24 </span>            :     bool getTileClipping(
+<span class="lineNum">      25 </span>            :         int tile_id, int&amp; x, int&amp; y, int&amp; w, int&amp; h) const;
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span>            :     std::string get_filename() const;
+<span class="lineNum">      28 </span>            :     sdl_wrap::Texture* get_texture();
+<span class="lineNum">      29 </span>            :     void set_texture(std::shared_ptr&lt;sdl_wrap::Texture&gt; sp_texture);
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span>            :     unsigned int get_tilecount() const;
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            : private:
+<span class="lineNum">      34 </span>            :     std::shared_ptr&lt;sdl_wrap::Texture&gt; m_sp_texture;
+<span class="lineNum">      35 </span>            :     std::string m_name;
+<span class="lineNum">      36 </span>            :     std::string m_filename;
+<span class="lineNum">      37 </span>            :     std::shared_ptr&lt;spdlog::logger&gt; m_sp_logger;
+<span class="lineNum">      38 </span>            :     unsigned int m_columns, m_tilecount;
+<span class="lineNum">      39 </span>            :     unsigned int m_tilewidth ,m_tileheight;
+<span class="lineNum">      40 </span>            :     unsigned int m_spacing, m_margin;
+<span class="lineNum">      41 </span>            : };
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            : class Level
+<span class="lineNum">      44 </span>            : {
+<span class="lineNum">      45 </span>            : public:
+<span class="lineNum">      46 </span>            :     Level(int size_x, int size_y, int layers, float scale, int default_tile);
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            :     ~Level();
+<span class="lineNum">      49 </span>            : 
+<span class="lineNum">      50 </span>            :     float get_scale() const;
+<span class="lineNum">      51 </span>            : 
+<span class="lineNum">      52 </span>            :     void get_size(int&amp; x, int&amp; y, int&amp; layers) const;
+<span class="lineNum">      53 </span>            : 
+<span class="lineNum">      54 </span>            :     int&amp; get_tile(int pos_x, int pos_y, int layer);
+<span class="lineNum">      55 </span>            :     const int&amp; get_tile(
+<span class="lineNum">      56 </span>            :         int pos_x, int pos_y, int layer) const;
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            :     void get_tile_coords(
+<span class="lineNum">      59 </span>            :         float world_x, float world_y, int&amp; tile_x, int&amp; tile_y) const;
+<span class="lineNum">      60 </span>            :     void get_tileset(int tile, LevelTileSet* &amp;p_tileset, int &amp;tileset_tile) const;
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span>            :     void print() const;
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span>            :     void add_tileset(int first_tile, LevelTileSet* p_tileset);
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span>            :     void set(int pos_x, int pos_y, int layer, int tile_id);
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span>            : private:
+<span class="lineNum">      69 </span>            :     const int m_size_x, m_size_y, m_layers;
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span>            :     // Number of world units per tile
+<span class="lineNum">      72 </span>            :     const float m_scale;
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            :     int* m_p_tiles;
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span>            :     int m_default_tile;
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span>            :     std::vector&lt;int&gt; m_vec_firsttile;
+<span class="lineNum">      79 </span>            :     std::vector&lt;std::unique_ptr&lt;LevelTileSet&gt;&gt; m_vec_tileset;
+<span class="lineNum">      80 </span>            : 
+<span class="lineNum">      81 </span>            :     std::shared_ptr&lt;spdlog::logger&gt; m_sp_logger;
+<span class="lineNum">      82 </span>            : };
+<span class="lineNum">      83 </span>            : }
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span>            : #endif /* CORE_LEVEL_HPP */
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

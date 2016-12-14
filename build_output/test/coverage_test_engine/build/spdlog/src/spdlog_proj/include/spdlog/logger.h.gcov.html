@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/spdlog/src/spdlog_proj/include/spdlog/logger.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../index.html">top level</a> - <a href="index.html">build/spdlog/src/spdlog_proj/include/spdlog</a> - logger.h<span style="font-size: 80%;"> (source / <a href="logger.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryLo">50.0 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Copyright(c) 2015 Gabi Melman.
+<span class="lineNum">       3 </span>            : // Distributed under the MIT License (http://opensource.org/licenses/MIT)
+<span class="lineNum">       4 </span>            : //
+<span class="lineNum">       5 </span>            : 
+<span class="lineNum">       6 </span>            : #pragma once
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : // Thread safe logger
+<span class="lineNum">       9 </span>            : // Has name, log level, vector of std::shared sink pointers and formatter
+<span class="lineNum">      10 </span>            : // Upon each log write the logger:
+<span class="lineNum">      11 </span>            : // 1. Checks if its log level is enough to log the message
+<span class="lineNum">      12 </span>            : // 2. Format the message using the formatter function
+<span class="lineNum">      13 </span>            : // 3. Pass the formatted message to its sinks to performa the actual logging
+<span class="lineNum">      14 </span>            : 
+<span class="lineNum">      15 </span>            : #include &lt;spdlog/sinks/base_sink.h&gt;
+<span class="lineNum">      16 </span>            : #include &lt;spdlog/common.h&gt;
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span>            : #include &lt;vector&gt;
+<span class="lineNum">      19 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      20 </span>            : #include &lt;string&gt;
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            : namespace spdlog
+<a name="23"><span class="lineNum">      23 </span>            : {</a>
+<span class="lineNum">      24 </span>            : 
+<span class="lineNum">      25 </span><span class="lineCov">         12 : class logger</span>
+<span class="lineNum">      26 </span>            : {
+<span class="lineNum">      27 </span>            : public:
+<span class="lineNum">      28 </span>            :     logger(const std::string&amp; logger_name, sink_ptr single_sink);
+<span class="lineNum">      29 </span>            :     logger(const std::string&amp; name, sinks_init_list);
+<span class="lineNum">      30 </span>            :     template&lt;class It&gt;
+<span class="lineNum">      31 </span>            :     logger(const std::string&amp; name, const It&amp; begin, const It&amp; end);
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            :     virtual ~logger();
+<span class="lineNum">      34 </span>            :     logger(const logger&amp;) = delete;
+<span class="lineNum">      35 </span>            :     logger&amp; operator=(const logger&amp;) = delete;
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span>            :     template &lt;typename... Args&gt; void log(level::level_enum lvl, const char* fmt, const Args&amp;... args);
+<span class="lineNum">      39 </span>            :     template &lt;typename... Args&gt; void log(level::level_enum lvl, const char* msg);
+<span class="lineNum">      40 </span>            :     template &lt;typename... Args&gt; void trace(const char* fmt, const Args&amp;... args);
+<span class="lineNum">      41 </span>            :     template &lt;typename... Args&gt; void debug(const char* fmt, const Args&amp;... args);
+<span class="lineNum">      42 </span>            :     template &lt;typename... Args&gt; void info(const char* fmt, const Args&amp;... args);
+<span class="lineNum">      43 </span>            :     template &lt;typename... Args&gt; void warn(const char* fmt, const Args&amp;... args);
+<span class="lineNum">      44 </span>            :     template &lt;typename... Args&gt; void error(const char* fmt, const Args&amp;... args);
+<span class="lineNum">      45 </span>            :     template &lt;typename... Args&gt; void critical(const char* fmt, const Args&amp;... args);
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            :     template &lt;typename T&gt; void log(level::level_enum lvl, const T&amp;);
+<span class="lineNum">      48 </span>            :     template &lt;typename T&gt; void trace(const T&amp;);
+<span class="lineNum">      49 </span>            :     template &lt;typename T&gt; void debug(const T&amp;);
+<span class="lineNum">      50 </span>            :     template &lt;typename T&gt; void info(const T&amp;);
+<span class="lineNum">      51 </span>            :     template &lt;typename T&gt; void warn(const T&amp;);
+<span class="lineNum">      52 </span>            :     template &lt;typename T&gt; void error(const T&amp;);
+<span class="lineNum">      53 </span>            :     template &lt;typename T&gt; void critical(const T&amp;);
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span>            :     bool should_log(level::level_enum) const;
+<span class="lineNum">      56 </span>            :     void set_level(level::level_enum);
+<span class="lineNum">      57 </span>            :     level::level_enum level() const;
+<span class="lineNum">      58 </span>            :     const std::string&amp; name() const;
+<span class="lineNum">      59 </span>            :     void set_pattern(const std::string&amp;);
+<span class="lineNum">      60 </span>            :     void set_formatter(formatter_ptr);
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span>            :     // error handler
+<span class="lineNum">      63 </span>            :     void set_error_handler(log_err_handler);
+<span class="lineNum">      64 </span>            :     log_err_handler error_handler();
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span>            :     // automatically call flush() if message level &gt;= log_level
+<span class="lineNum">      67 </span>            :     void flush_on(level::level_enum log_level);
+<span class="lineNum">      68 </span>            : 
+<span class="lineNum">      69 </span>            :     virtual void flush();
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span>            : protected:
+<span class="lineNum">      72 </span>            :     virtual void _sink_it(details::log_msg&amp;);
+<span class="lineNum">      73 </span>            :     virtual void _set_pattern(const std::string&amp;);
+<span class="lineNum">      74 </span>            :     virtual void _set_formatter(formatter_ptr);
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span>            :     // default error handler: print the error to stderr with the max rate of 1 message/minute
+<span class="lineNum">      77 </span>            :     virtual void _default_err_handler(const std::string &amp;msg);
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span>            :     // return true if the given message level should trigger a flush
+<span class="lineNum">      80 </span>            :     bool _should_flush_on(const details::log_msg&amp;);
+<span class="lineNum">      81 </span>            : 
+<span class="lineNum">      82 </span>            :     const std::string _name;
+<span class="lineNum">      83 </span>            :     std::vector&lt;sink_ptr&gt; _sinks;
+<span class="lineNum">      84 </span>            :     formatter_ptr _formatter;
+<span class="lineNum">      85 </span>            :     spdlog::level_t _level;
+<span class="lineNum">      86 </span>            :     spdlog::level_t _flush_level;
+<span class="lineNum">      87 </span>            :     log_err_handler _err_handler;
+<span class="lineNum">      88 </span>            :     std::atomic&lt;time_t&gt; _last_err_time;
+<span class="lineNum">      89 </span>            : };
+<span class="lineNum">      90 </span>            : }
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span>            : #include &lt;spdlog/details/logger_impl.h&gt;
+<span class="lineNum">      93 </span>            : 
+<span class="lineNum">      94 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

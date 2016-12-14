@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/Wink-Signals/src/winksignals_proj/wink/slot.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../index.html">top level</a> - <a href="index.html">build/Wink-Signals/src/winksignals_proj/wink</a> - slot.hpp<span style="font-size: 80%;"> (source / <a href="slot.hpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : ///</a>
+<span class="lineNum">       2 </span>            : /// Wink Signals
+<span class="lineNum">       3 </span>            : /// Copyright (C) 2013-2014 Miguel Martin (miguel@miguel-martin.com)
+<span class="lineNum">       4 </span>            : ///
+<span class="lineNum">       5 </span>            : ///
+<span class="lineNum">       6 </span>            : /// This software is provided 'as-is', without any express or implied warranty.
+<span class="lineNum">       7 </span>            : /// In no event will the authors be held liable for any damages arising from the
+<span class="lineNum">       8 </span>            : /// use of this software.
+<span class="lineNum">       9 </span>            : ///
+<span class="lineNum">      10 </span>            : /// Permission is hereby granted, free of charge, to any person
+<span class="lineNum">      11 </span>            : /// obtaining a copy of this software and associated documentation files (the &quot;Software&quot;),
+<span class="lineNum">      12 </span>            : /// to deal in the Software without restriction, including without limitation the rights
+<span class="lineNum">      13 </span>            : /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class="lineNum">      14 </span>            : /// copies of the Software, and to permit persons to whom the Software is
+<span class="lineNum">      15 </span>            : /// furnished to do so, subject to the following conditions:
+<span class="lineNum">      16 </span>            : ///
+<span class="lineNum">      17 </span>            : /// 1. The origin of this software must not be misrepresented;
+<span class="lineNum">      18 </span>            : ///    you must not claim that you wrote the original software.
+<span class="lineNum">      19 </span>            : ///    If you use this software in a product, an acknowledgment
+<span class="lineNum">      20 </span>            : ///    in the product documentation would be appreciated but is not required.
+<span class="lineNum">      21 </span>            : ///
+<span class="lineNum">      22 </span>            : /// 2. Altered source versions must be plainly marked as such,
+<span class="lineNum">      23 </span>            : ///        and must not be misrepresented as being the original software.
+<span class="lineNum">      24 </span>            : ///
+<span class="lineNum">      25 </span>            : /// 3. The above copyright notice and this permission notice shall be included in
+<span class="lineNum">      26 </span>            : ///    all copies or substantial portions of the Software.
+<span class="lineNum">      27 </span>            : ///
+<span class="lineNum">      28 </span>            : 
+<span class="lineNum">      29 </span>            : #ifndef WINK_SLOT_HPP
+<span class="lineNum">      30 </span>            : #define WINK_SLOT_HPP
+<span class="lineNum">      31 </span>            : 
+<span class="lineNum">      32 </span>            : #include &lt;utility&gt;
+<span class="lineNum">      33 </span>            : 
+<span class="lineNum">      34 </span>            : #include &lt;wink/detail/FastDelegate.h&gt;
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            : namespace wink
+<span class="lineNum">      37 </span>            : {
+<span class="lineNum">      38 </span>            :         /// \brief Describes a slot that may be added to a signal, or used stand-alone for a call-back
+<span class="lineNum">      39 </span>            :         ///
+<span class="lineNum">      40 </span>            :         /// This can be used as an alternative to std::function, as it is much faster.
+<span class="lineNum">      41 </span>            :         ///
+<span class="lineNum">      42 </span>            :         /// \author Miguel Martin
+<span class="lineNum">      43 </span>            :         template &lt;typename Signature&gt;
+<span class="lineNum">      44 </span>            :         struct slot
+<span class="lineNum">      45 </span>            :         {
+<span class="lineNum">      46 </span>            :         private:
+<span class="lineNum">      47 </span>            :                 
+<span class="lineNum">      48 </span>            :                 typedef slot&lt;Signature&gt; this_type;
+<span class="lineNum">      49 </span>            :                 
+<span class="lineNum">      50 </span>            :         public:
+<span class="lineNum">      51 </span>            :                 
+<span class="lineNum">      52 </span>            :                 /// A static function pointer with the correct signature
+<span class="lineNum">      53 </span>            :                 typedef Signature FnPtr;
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span>            :                 
+<span class="lineNum">      56 </span>            :                 /// Construct a slot with no call-back
+<span class="lineNum">      57 </span>            :                 slot()
+<span class="lineNum">      58 </span>            :                 {}
+<span class="lineNum">      59 </span>            :                 
+<span class="lineNum">      60 </span>            :                 /// Construct a slot with a static/global function call-back
+<span class="lineNum">      61 </span>            :                 /// \param fn The static/global function
+<span class="lineNum">      62 </span>            :                 slot(FnPtr fn)
+<span class="lineNum">      63 </span>            :             : _delegate(fn)
+<span class="lineNum">      64 </span>            :                 {}
+<span class="lineNum">      65 </span>            :                 
+<span class="lineNum">      66 </span>            :                 /// Construct a slot with a member-function
+<span class="lineNum">      67 </span>            :                 /// \param obj The object that the member-function belongs to
+<a name="68"><span class="lineNum">      68 </span>            :                 /// \param fn The member function of the object</a>
+<span class="lineNum">      69 </span>            :                 template &lt;typename T, typename MemFnPtr&gt;
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 :                 slot(T* obj, MemFnPtr fn)</span>
+<span class="lineNum">      71 </span><span class="lineNoCov">          0 :                         : _delegate(obj, fn)</span>
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :                 {}</span>
+<a name="73"><span class="lineNum">      73 </span>            :                 </a>
+<span class="lineNum">      74 </span>            :                 /// Copy constructor
+<span class="lineNum">      75 </span><span class="lineNoCov">          0 :                 slot(const this_type&amp; slot)</span>
+<span class="lineNum">      76 </span><span class="lineNoCov">          0 :                         : _delegate(slot._delegate)</span>
+<span class="lineNum">      77 </span><span class="lineNoCov">          0 :                 {}</span>
+<a name="78"><span class="lineNum">      78 </span>            :                 </a>
+<span class="lineNum">      79 </span>            :                 /// Destructor
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :                 ~slot() {}</span>
+<span class="lineNum">      81 </span>            :                 
+<span class="lineNum">      82 </span>            :                 /// Assignment operator
+<span class="lineNum">      83 </span>            :                 /// \param slot The slot you wish to assign to
+<span class="lineNum">      84 </span>            :                 /// \return *this
+<span class="lineNum">      85 </span>            :                 this_type&amp; operator=(const this_type&amp; slot)
+<span class="lineNum">      86 </span>            :                 {
+<span class="lineNum">      87 </span>            :                         _delegate = slot._delegate;
+<span class="lineNum">      88 </span>            :                         return *this;
+<span class="lineNum">      89 </span>            :                 }
+<span class="lineNum">      90 </span>            :                 
+<span class="lineNum">      91 </span>            :                 /// Calls the slot
+<a name="92"><span class="lineNum">      92 </span>            :                 /// \param args Any arguments you want to pass to the slot</a>
+<span class="lineNum">      93 </span>            :                 template &lt;class ...Args&gt;
+<span class="lineNum">      94 </span><span class="lineNoCov">          0 :                 auto operator()(Args&amp;&amp;... args) const</span>
+<span class="lineNum">      95 </span>            :                 {
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :                         return _delegate(std::forward&lt;Args&gt;(args)...);</span>
+<span class="lineNum">      97 </span>            :                 }
+<span class="lineNum">      98 </span>            :                 
+<span class="lineNum">      99 </span>            :                 
+<span class="lineNum">     100 </span>            :                 // comparison operators for sorting and comparing
+<span class="lineNum">     101 </span>            :                 
+<span class="lineNum">     102 </span>            :                 bool operator==(const this_type&amp; slot) const
+<span class="lineNum">     103 </span>            :                 { return _delegate == slot._delegate; }
+<span class="lineNum">     104 </span>            :                 
+<span class="lineNum">     105 </span>            :                 bool operator!=(const this_type&amp; slot) const
+<span class="lineNum">     106 </span>            :                 { return !operator==(slot); }
+<span class="lineNum">     107 </span>            :                 
+<span class="lineNum">     108 </span>            :                 bool operator&lt;(const this_type&amp; slot) const
+<span class="lineNum">     109 </span>            :                 { return _delegate &lt; slot._delegate; }
+<span class="lineNum">     110 </span>            :                 
+<span class="lineNum">     111 </span>            :                 bool operator&gt;(const this_type&amp; slot) const
+<span class="lineNum">     112 </span>            :                 { return slot._delegate &gt; _delegate; }
+<span class="lineNum">     113 </span>            :                 
+<span class="lineNum">     114 </span>            :                 bool operator&lt;=(const this_type&amp; slot) const
+<span class="lineNum">     115 </span>            :                 { return !operator&gt;(slot); }
+<span class="lineNum">     116 </span>            :                 
+<span class="lineNum">     117 </span>            :                 bool operator&gt;=(const this_type&amp; slot) const
+<span class="lineNum">     118 </span>            :                 { return !operator&lt;(slot); }
+<span class="lineNum">     119 </span>            :                 
+<span class="lineNum">     120 </span>            :         private:
+<span class="lineNum">     121 </span>            :                 
+<span class="lineNum">     122 </span>            :                 /// The implementation of the slot, as a delegate.
+<span class="lineNum">     123 </span>            :                 typedef fastdelegate::FastDelegate&lt;Signature&gt; impl_delegate;
+<span class="lineNum">     124 </span>            :                 
+<span class="lineNum">     125 </span>            :                 impl_delegate _delegate;
+<span class="lineNum">     126 </span>            :         };
+<span class="lineNum">     127 </span>            : }
+<span class="lineNum">     128 </span>            : 
+<span class="lineNum">     129 </span>            : 
+<span class="lineNum">     130 </span>            : #endif // WINK_SLOT_HPP
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

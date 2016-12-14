@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/spdlog/src/spdlog_proj/include/spdlog/details/async_logger_impl.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../../index.html">top level</a> - <a href="index.html">build/spdlog/src/spdlog_proj/include/spdlog/details</a> - async_logger_impl.h<span style="font-size: 80%;"> (source / <a href="async_logger_impl.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">20</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Copyright(c) 2015 Gabi Melman.
+<span class="lineNum">       3 </span>            : // Distributed under the MIT License (http://opensource.org/licenses/MIT)
+<span class="lineNum">       4 </span>            : //
+<span class="lineNum">       5 </span>            : 
+<span class="lineNum">       6 </span>            : #pragma once
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : // Async Logger implementation
+<span class="lineNum">       9 </span>            : // Use an async_sink (queue per logger) to perform the logging in a worker thread
+<span class="lineNum">      10 </span>            : 
+<span class="lineNum">      11 </span>            : #include &lt;spdlog/details/async_log_helper.h&gt;
+<span class="lineNum">      12 </span>            : #include &lt;spdlog/async_logger.h&gt;
+<span class="lineNum">      13 </span>            : 
+<span class="lineNum">      14 </span>            : #include &lt;string&gt;
+<span class="lineNum">      15 </span>            : #include &lt;functional&gt;
+<span class="lineNum">      16 </span>            : #include &lt;chrono&gt;
+<span class="lineNum">      17 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            : template&lt;class It&gt;
+<span class="lineNum">      20 </span>            : inline spdlog::async_logger::async_logger(const std::string&amp; logger_name,
+<span class="lineNum">      21 </span>            :         const It&amp; begin,
+<span class="lineNum">      22 </span>            :         const It&amp; end,
+<span class="lineNum">      23 </span>            :         size_t queue_size,
+<span class="lineNum">      24 </span>            :         const  async_overflow_policy overflow_policy,
+<span class="lineNum">      25 </span>            :         const std::function&lt;void()&gt;&amp; worker_warmup_cb,
+<span class="lineNum">      26 </span>            :         const std::chrono::milliseconds&amp; flush_interval_ms,
+<span class="lineNum">      27 </span>            :         const std::function&lt;void()&gt;&amp; worker_teardown_cb) :
+<span class="lineNum">      28 </span>            :     logger(logger_name, begin, end),
+<span class="lineNum">      29 </span>            :     _async_log_helper(new details::async_log_helper(_formatter, _sinks, queue_size, _err_handler, overflow_policy, worker_warmup_cb, flush_interval_ms, worker_teardown_cb))
+<span class="lineNum">      30 </span>            : {
+<span class="lineNum">      31 </span>            : }
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            : inline spdlog::async_logger::async_logger(const std::string&amp; logger_name,
+<span class="lineNum">      34 </span>            :         sinks_init_list sinks,
+<span class="lineNum">      35 </span>            :         size_t queue_size,
+<span class="lineNum">      36 </span>            :         const  async_overflow_policy overflow_policy,
+<span class="lineNum">      37 </span>            :         const std::function&lt;void()&gt;&amp; worker_warmup_cb,
+<span class="lineNum">      38 </span>            :         const std::chrono::milliseconds&amp; flush_interval_ms,
+<span class="lineNum">      39 </span>            :         const std::function&lt;void()&gt;&amp; worker_teardown_cb) :
+<span class="lineNum">      40 </span>            :     async_logger(logger_name, sinks.begin(), sinks.end(), queue_size, overflow_policy, worker_warmup_cb, flush_interval_ms, worker_teardown_cb) {}
+<span class="lineNum">      41 </span>            : 
+<span class="lineNum">      42 </span>            : inline spdlog::async_logger::async_logger(const std::string&amp; logger_name,
+<span class="lineNum">      43 </span>            :         sink_ptr single_sink,
+<span class="lineNum">      44 </span>            :         size_t queue_size,
+<span class="lineNum">      45 </span>            :         const  async_overflow_policy overflow_policy,
+<span class="lineNum">      46 </span>            :         const std::function&lt;void()&gt;&amp; worker_warmup_cb,
+<span class="lineNum">      47 </span>            :         const std::chrono::milliseconds&amp; flush_interval_ms,
+<span class="lineNum">      48 </span>            :         const std::function&lt;void()&gt;&amp; worker_teardown_cb) :
+<span class="lineNum">      49 </span>            :     async_logger(logger_name,
+<span class="lineNum">      50 </span>            : {
+<span class="lineNum">      51 </span>            :     single_sink
+<span class="lineNum">      52 </span>            : }, queue_size, overflow_policy, worker_warmup_cb, flush_interval_ms, worker_teardown_cb) {}
+<a name="53"><span class="lineNum">      53 </span>            : </a>
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 : inline void spdlog::async_logger::flush()</span>
+<span class="lineNum">      56 </span>            : {
+<span class="lineNum">      57 </span><span class="lineNoCov">          0 :     _async_log_helper-&gt;flush(true);</span>
+<a name="58"><span class="lineNum">      58 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      59 </span>            : 
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 : inline void spdlog::async_logger::_set_formatter(spdlog::formatter_ptr msg_formatter)</span>
+<span class="lineNum">      61 </span>            : {
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :     _formatter = msg_formatter;</span>
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :     _async_log_helper-&gt;set_formatter(_formatter);</span>
+<a name="64"><span class="lineNum">      64 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span><span class="lineNoCov">          0 : inline void spdlog::async_logger::_set_pattern(const std::string&amp; pattern)</span>
+<span class="lineNum">      67 </span>            : {
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :     _formatter = std::make_shared&lt;pattern_formatter&gt;(pattern);</span>
+<span class="lineNum">      69 </span><span class="lineNoCov">          0 :     _async_log_helper-&gt;set_formatter(_formatter);</span>
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 : }</span>
+<a name="71"><span class="lineNum">      71 </span>            : </a>
+<span class="lineNum">      72 </span>            : 
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 : inline void spdlog::async_logger::_sink_it(details::log_msg&amp; msg)</span>
+<span class="lineNum">      74 </span>            : {
+<span class="lineNum">      75 </span>            :     try
+<span class="lineNum">      76 </span>            :     {
+<span class="lineNum">      77 </span><span class="lineNoCov">          0 :         _async_log_helper-&gt;log(msg);</span>
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 :         if (_should_flush_on(msg))</span>
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 :             _async_log_helper-&gt;flush(false); // do async flush</span>
+<span class="lineNum">      80 </span>            :     }
+<span class="lineNum">      81 </span><span class="lineNoCov">          0 :     catch (const std::exception &amp;ex)</span>
+<span class="lineNum">      82 </span>            :     {
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :         _err_handler(ex.what());</span>
+<span class="lineNum">      84 </span>            :     }
+<span class="lineNum">      85 </span><span class="lineNoCov">          0 :     catch (...)</span>
+<span class="lineNum">      86 </span>            :     {
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 :         _err_handler(&quot;Unknown exception&quot;);</span>
+<span class="lineNum">      88 </span>            :     }
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 : }</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

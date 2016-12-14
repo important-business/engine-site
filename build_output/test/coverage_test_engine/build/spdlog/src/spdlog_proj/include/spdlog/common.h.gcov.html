@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/spdlog/src/spdlog_proj/include/spdlog/common.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../index.html">top level</a> - <a href="index.html">build/spdlog/src/spdlog_proj/include/spdlog</a> - common.h<span style="font-size: 80%;"> (source / <a href="common.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntryLo">15.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntryLo">14.3 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Copyright(c) 2015 Gabi Melman.
+<span class="lineNum">       3 </span>            : // Distributed under the MIT License (http://opensource.org/licenses/MIT)
+<span class="lineNum">       4 </span>            : //
+<span class="lineNum">       5 </span>            : 
+<span class="lineNum">       6 </span>            : #pragma once
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : #include &lt;string&gt;
+<span class="lineNum">       9 </span>            : #include &lt;initializer_list&gt;
+<span class="lineNum">      10 </span>            : #include &lt;chrono&gt;
+<span class="lineNum">      11 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      12 </span>            : #include &lt;atomic&gt;
+<span class="lineNum">      13 </span>            : #include &lt;exception&gt;
+<span class="lineNum">      14 </span>            : #include&lt;functional&gt;
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span>            : #if defined(_WIN32) &amp;&amp; defined(SPDLOG_WCHAR_FILENAMES)
+<span class="lineNum">      17 </span>            : #include &lt;codecvt&gt;
+<span class="lineNum">      18 </span>            : #include &lt;locale&gt;
+<span class="lineNum">      19 </span>            : #endif
+<span class="lineNum">      20 </span>            : 
+<span class="lineNum">      21 </span>            : #include &lt;spdlog/details/null_mutex.h&gt;
+<span class="lineNum">      22 </span>            : 
+<span class="lineNum">      23 </span>            : //visual studio upto 2013 does not support noexcept nor constexpr
+<span class="lineNum">      24 </span>            : #if defined(_MSC_VER) &amp;&amp; (_MSC_VER &lt; 1900)
+<span class="lineNum">      25 </span>            : #define SPDLOG_NOEXCEPT throw()
+<span class="lineNum">      26 </span>            : #define SPDLOG_CONSTEXPR
+<span class="lineNum">      27 </span>            : #else
+<span class="lineNum">      28 </span>            : #define SPDLOG_NOEXCEPT noexcept
+<span class="lineNum">      29 </span>            : #define SPDLOG_CONSTEXPR constexpr
+<span class="lineNum">      30 </span>            : #endif
+<span class="lineNum">      31 </span>            : 
+<span class="lineNum">      32 </span>            : #if defined(__GNUC__)  || defined(__clang__)
+<span class="lineNum">      33 </span>            : #define DEPRECATED __attribute__((deprecated))
+<span class="lineNum">      34 </span>            : #elif defined(_MSC_VER)
+<span class="lineNum">      35 </span>            : #define DEPRECATED __declspec(deprecated)
+<span class="lineNum">      36 </span>            : #else
+<span class="lineNum">      37 </span>            : #define DEPRECATED
+<span class="lineNum">      38 </span>            : #endif
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            : 
+<span class="lineNum">      41 </span>            : #include &lt;spdlog/fmt/fmt.h&gt;
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            : namespace spdlog
+<span class="lineNum">      44 </span>            : {
+<span class="lineNum">      45 </span>            : 
+<span class="lineNum">      46 </span>            : class formatter;
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            : namespace sinks
+<span class="lineNum">      49 </span>            : {
+<span class="lineNum">      50 </span>            : class sink;
+<span class="lineNum">      51 </span>            : }
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            : using log_clock = std::chrono::system_clock;
+<span class="lineNum">      54 </span>            : using sink_ptr = std::shared_ptr &lt; sinks::sink &gt;;
+<span class="lineNum">      55 </span>            : using sinks_init_list = std::initializer_list &lt; sink_ptr &gt;;
+<span class="lineNum">      56 </span>            : using formatter_ptr = std::shared_ptr&lt;spdlog::formatter&gt;;
+<span class="lineNum">      57 </span>            : #if defined(SPDLOG_NO_ATOMIC_LEVELS)
+<span class="lineNum">      58 </span>            : using level_t = details::null_atomic_int;
+<span class="lineNum">      59 </span>            : #else
+<span class="lineNum">      60 </span>            : using level_t = std::atomic_int;
+<span class="lineNum">      61 </span>            : #endif
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span>            : using log_err_handler = std::function&lt;void(const std::string &amp;err_msg)&gt;;
+<span class="lineNum">      64 </span>            : 
+<span class="lineNum">      65 </span>            : //Log level enum
+<span class="lineNum">      66 </span>            : namespace level
+<span class="lineNum">      67 </span>            : {
+<span class="lineNum">      68 </span>            : typedef enum
+<span class="lineNum">      69 </span>            : {
+<span class="lineNum">      70 </span>            :     trace = 0,
+<span class="lineNum">      71 </span>            :     debug = 1,
+<span class="lineNum">      72 </span>            :     info = 2,
+<span class="lineNum">      73 </span>            :     warn = 3,
+<span class="lineNum">      74 </span>            :     err = 4,
+<span class="lineNum">      75 </span>            :     critical = 5,
+<span class="lineNum">      76 </span>            :     off = 6
+<span class="lineNum">      77 </span>            : } level_enum;
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span>            : static const char* level_names[] { &quot;trace&quot;, &quot;debug&quot;, &quot;info&quot;,  &quot;warning&quot;, &quot;error&quot;, &quot;critical&quot;, &quot;off&quot; };
+<span class="lineNum">      80 </span>            : 
+<a name="81"><span class="lineNum">      81 </span>            : static const char* short_level_names[] { &quot;T&quot;, &quot;D&quot;, &quot;I&quot;, &quot;W&quot;, &quot;E&quot;, &quot;C&quot;, &quot;O&quot; };</a>
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span><span class="lineCov">         12 : inline const char* to_str(spdlog::level::level_enum l)</span>
+<span class="lineNum">      84 </span>            : {
+<span class="lineNum">      85 </span><span class="lineCov">         12 :     return level_names[l];</span>
+<a name="86"><span class="lineNum">      86 </span>            : }</a>
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 : inline const char* to_short_str(spdlog::level::level_enum l)</span>
+<span class="lineNum">      89 </span>            : {
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :     return short_level_names[l];</span>
+<span class="lineNum">      91 </span>            : }
+<span class="lineNum">      92 </span>            : } //level
+<span class="lineNum">      93 </span>            : 
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span>            : //
+<span class="lineNum">      96 </span>            : // Async overflow policy - block by default.
+<span class="lineNum">      97 </span>            : //
+<span class="lineNum">      98 </span>            : enum class async_overflow_policy
+<span class="lineNum">      99 </span>            : {
+<span class="lineNum">     100 </span>            :     block_retry, // Block / yield / sleep until message can be enqueued
+<span class="lineNum">     101 </span>            :     discard_log_msg // Discard the message it enqueue fails
+<span class="lineNum">     102 </span>            : };
+<span class="lineNum">     103 </span>            : 
+<span class="lineNum">     104 </span>            : 
+<span class="lineNum">     105 </span>            : //
+<span class="lineNum">     106 </span>            : // Log exception
+<span class="lineNum">     107 </span>            : //
+<span class="lineNum">     108 </span>            : namespace details
+<span class="lineNum">     109 </span>            : {
+<span class="lineNum">     110 </span>            : namespace os
+<span class="lineNum">     111 </span>            : {
+<span class="lineNum">     112 </span>            : std::string errno_str(int err_num);
+<a name="113"><span class="lineNum">     113 </span>            : }</a>
+<span class="lineNum">     114 </span>            : }
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 : class spdlog_ex: public std::exception</span>
+<a name="116"><span class="lineNum">     116 </span>            : {</a>
+<span class="lineNum">     117 </span>            : public:
+<a name="118"><span class="lineNum">     118 </span><span class="lineNoCov">          0 :     spdlog_ex(const std::string&amp; msg):_msg(msg)</span></a>
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 :     {}</span>
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :     spdlog_ex(const std::string&amp; msg, int last_errno)</span>
+<span class="lineNum">     121 </span><span class="lineNoCov">          0 :     {</span>
+<a name="122"><span class="lineNum">     122 </span><span class="lineNoCov">          0 :         _msg = msg + &quot;: &quot; + details::os::errno_str(last_errno);</span></a>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :     }</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :     const char* what() const SPDLOG_NOEXCEPT override</span>
+<span class="lineNum">     125 </span>            :     {
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 :         return _msg.c_str();</span>
+<span class="lineNum">     127 </span>            :     }
+<span class="lineNum">     128 </span>            : private:
+<span class="lineNum">     129 </span>            :     std::string _msg;
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span>            : };
+<span class="lineNum">     132 </span>            : 
+<span class="lineNum">     133 </span>            : //
+<span class="lineNum">     134 </span>            : // wchar support for windows file names (SPDLOG_WCHAR_FILENAMES must be defined)
+<span class="lineNum">     135 </span>            : //
+<span class="lineNum">     136 </span>            : #if defined(_WIN32) &amp;&amp; defined(SPDLOG_WCHAR_FILENAMES)
+<span class="lineNum">     137 </span>            : using filename_t = std::wstring;
+<span class="lineNum">     138 </span>            : #else
+<span class="lineNum">     139 </span>            : using filename_t = std::string;
+<span class="lineNum">     140 </span>            : #endif
+<span class="lineNum">     141 </span>            : 
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span>            : } //spdlog
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/spdlog/src/spdlog_proj/include/spdlog/sinks/ansicolor_sink.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../../index.html">top level</a> - <a href="index.html">build/spdlog/src/spdlog_proj/include/spdlog/sinks</a> - ansicolor_sink.h<span style="font-size: 80%;"> (source / <a href="ansicolor_sink.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">18</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Copyright(c) 2016 Kevin M. Godby (a modified version by spdlog).
+<span class="lineNum">       3 </span>            : // Distributed under the MIT License (http://opensource.org/licenses/MIT)
+<span class="lineNum">       4 </span>            : //
+<span class="lineNum">       5 </span>            : 
+<span class="lineNum">       6 </span>            : #pragma once
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : #include &lt;spdlog/sinks/base_sink.h&gt;
+<span class="lineNum">       9 </span>            : #include &lt;spdlog/common.h&gt;
+<span class="lineNum">      10 </span>            : 
+<span class="lineNum">      11 </span>            : #include &lt;string&gt;
+<span class="lineNum">      12 </span>            : #include &lt;map&gt;
+<span class="lineNum">      13 </span>            : 
+<span class="lineNum">      14 </span>            : namespace spdlog
+<span class="lineNum">      15 </span>            : {
+<span class="lineNum">      16 </span>            : namespace sinks
+<span class="lineNum">      17 </span>            : {
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            : /**
+<span class="lineNum">      20 </span>            :  * @brief The ansi_color_sink is a decorator around another sink and prefixes
+<span class="lineNum">      21 </span>            :  * the output with an ANSI escape sequence color code depending on the severity
+<span class="lineNum">      22 </span>            :  * of the message.
+<span class="lineNum">      23 </span>            :  */
+<span class="lineNum">      24 </span>            : class ansicolor_sink : public sink
+<span class="lineNum">      25 </span>            : {
+<span class="lineNum">      26 </span>            : public:
+<span class="lineNum">      27 </span>            :     ansicolor_sink(sink_ptr wrapped_sink);
+<span class="lineNum">      28 </span>            :     virtual ~ansicolor_sink();
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span>            :     ansicolor_sink(const ansicolor_sink&amp; other) = delete;
+<span class="lineNum">      31 </span>            :     ansicolor_sink&amp; operator=(const ansicolor_sink&amp; other) = delete;
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            :     virtual void log(const details::log_msg&amp; msg) override;
+<span class="lineNum">      34 </span>            :     virtual void flush() override;
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            :     void set_color(level::level_enum level, const std::string&amp; color);
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span>            :     /// Formatting codes
+<span class="lineNum">      39 </span>            :     const std::string reset      = &quot;\033[00m&quot;;
+<span class="lineNum">      40 </span>            :     const std::string bold       = &quot;\033[1m&quot;;
+<span class="lineNum">      41 </span>            :     const std::string dark       = &quot;\033[2m&quot;;
+<span class="lineNum">      42 </span>            :     const std::string underline  = &quot;\033[4m&quot;;
+<span class="lineNum">      43 </span>            :     const std::string blink      = &quot;\033[5m&quot;;
+<span class="lineNum">      44 </span>            :     const std::string reverse    = &quot;\033[7m&quot;;
+<span class="lineNum">      45 </span>            :     const std::string concealed  = &quot;\033[8m&quot;;
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            :     // Foreground colors
+<span class="lineNum">      48 </span>            :     const std::string grey       = &quot;\033[30m&quot;;
+<span class="lineNum">      49 </span>            :     const std::string red        = &quot;\033[31m&quot;;
+<span class="lineNum">      50 </span>            :     const std::string green      = &quot;\033[32m&quot;;
+<span class="lineNum">      51 </span>            :     const std::string yellow     = &quot;\033[33m&quot;;
+<span class="lineNum">      52 </span>            :     const std::string blue       = &quot;\033[34m&quot;;
+<span class="lineNum">      53 </span>            :     const std::string magenta    = &quot;\033[35m&quot;;
+<span class="lineNum">      54 </span>            :     const std::string cyan       = &quot;\033[36m&quot;;
+<span class="lineNum">      55 </span>            :     const std::string white      = &quot;\033[37m&quot;;
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span>            :     /// Background colors
+<span class="lineNum">      58 </span>            :     const std::string on_grey    = &quot;\033[40m&quot;;
+<span class="lineNum">      59 </span>            :     const std::string on_red     = &quot;\033[41m&quot;;
+<span class="lineNum">      60 </span>            :     const std::string on_green   = &quot;\033[42m&quot;;
+<span class="lineNum">      61 </span>            :     const std::string on_yellow  = &quot;\033[43m&quot;;
+<span class="lineNum">      62 </span>            :     const std::string on_blue    = &quot;\033[44m&quot;;
+<span class="lineNum">      63 </span>            :     const std::string on_magenta = &quot;\033[45m&quot;;
+<span class="lineNum">      64 </span>            :     const std::string on_cyan    = &quot;\033[46m&quot;;
+<span class="lineNum">      65 </span>            :     const std::string on_white   = &quot;\033[47m&quot;;
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span>            : protected:
+<span class="lineNum">      69 </span>            :     sink_ptr sink_;
+<span class="lineNum">      70 </span>            :     std::map&lt;level::level_enum, std::string&gt; colors_;
+<span class="lineNum">      71 </span>            : };
+<span class="lineNum">      72 </span>            : 
+<span class="lineNum">      73 </span>            : inline ansicolor_sink::ansicolor_sink(sink_ptr wrapped_sink) : sink_(wrapped_sink)
+<span class="lineNum">      74 </span>            : {
+<span class="lineNum">      75 </span>            :     colors_[level::trace]   = cyan;
+<span class="lineNum">      76 </span>            :     colors_[level::debug]   = cyan;
+<span class="lineNum">      77 </span>            :     colors_[level::info]    = bold;
+<span class="lineNum">      78 </span>            :     colors_[level::warn]    = yellow + bold;
+<span class="lineNum">      79 </span>            :     colors_[level::err]     = red + bold;
+<span class="lineNum">      80 </span>            :     colors_[level::critical] = bold + on_red;
+<span class="lineNum">      81 </span>            :     colors_[level::off]      = reset;
+<a name="82"><span class="lineNum">      82 </span>            : }</a>
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span><span class="lineNoCov">          0 : inline void ansicolor_sink::log(const details::log_msg&amp; msg)</span>
+<span class="lineNum">      85 </span>            : {
+<span class="lineNum">      86 </span>            :     // Wrap the originally formatted message in color codes
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 :     const std::string&amp; prefix = colors_[msg.level];</span>
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 :     const std::string&amp; s = msg.formatted.str();</span>
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :     const std::string&amp; suffix = reset;</span>
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :     details::log_msg m;</span>
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :     m.level = msg.level;</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :     m.logger_name = msg.logger_name;</span>
+<span class="lineNum">      93 </span><span class="lineNoCov">          0 :     m.time = msg.time;</span>
+<span class="lineNum">      94 </span><span class="lineNoCov">          0 :     m.thread_id = msg.thread_id;</span>
+<span class="lineNum">      95 </span><span class="lineNoCov">          0 :     m.formatted &lt;&lt; prefix  &lt;&lt; s &lt;&lt; suffix;</span>
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :     sink_-&gt;log(m);</span>
+<a name="97"><span class="lineNum">      97 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span><span class="lineNoCov">          0 : inline void ansicolor_sink::flush()</span>
+<span class="lineNum">     100 </span>            : {
+<span class="lineNum">     101 </span><span class="lineNoCov">          0 :     sink_-&gt;flush();</span>
+<span class="lineNum">     102 </span><span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     103 </span>            : 
+<span class="lineNum">     104 </span>            : inline void ansicolor_sink::set_color(level::level_enum level, const std::string&amp; color)
+<span class="lineNum">     105 </span>            : {
+<span class="lineNum">     106 </span>            :     colors_[level] = color;
+<a name="107"><span class="lineNum">     107 </span>            : }</a>
+<span class="lineNum">     108 </span>            : 
+<span class="lineNum">     109 </span><span class="lineNoCov">          0 : inline ansicolor_sink::~ansicolor_sink()</span>
+<span class="lineNum">     110 </span>            : {
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :     flush();</span>
+<span class="lineNum">     112 </span><span class="lineNoCov">          0 : }</span>
+<span class="lineNum">     113 </span>            : 
+<span class="lineNum">     114 </span>            : } // namespace sinks
+<span class="lineNum">     115 </span>            : } // namespace spdlog
+<span class="lineNum">     116 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/anax/src/anax_proj/include/anax/Entity.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../index.html">top level</a> - <a href="index.html">build/anax/src/anax_proj/include/anax</a> - Entity.hpp<span style="font-size: 80%;"> (source / <a href="Entity.hpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">30</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : ///</a>
+<span class="lineNum">       2 </span>            : /// anax
+<span class="lineNum">       3 </span>            : /// An open source C++ entity system.
+<span class="lineNum">       4 </span>            : ///
+<span class="lineNum">       5 </span>            : /// Copyright (C) 2013-2014 Miguel Martin (miguel@miguel-martin.com)
+<span class="lineNum">       6 </span>            : ///
+<span class="lineNum">       7 </span>            : /// Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class="lineNum">       8 </span>            : /// of this software and associated documentation files (the &quot;Software&quot;), to deal
+<span class="lineNum">       9 </span>            : /// in the Software without restriction, including without limitation the rights
+<span class="lineNum">      10 </span>            : /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class="lineNum">      11 </span>            : /// copies of the Software, and to permit persons to whom the Software is
+<span class="lineNum">      12 </span>            : /// furnished to do so, subject to the following conditions:
+<span class="lineNum">      13 </span>            : ///
+<span class="lineNum">      14 </span>            : /// The above copyright notice and this permission notice shall be included in
+<span class="lineNum">      15 </span>            : /// all copies or substantial portions of the Software.
+<span class="lineNum">      16 </span>            : ///
+<span class="lineNum">      17 </span>            : /// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class="lineNum">      18 </span>            : /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class="lineNum">      19 </span>            : /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class="lineNum">      20 </span>            : /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class="lineNum">      21 </span>            : /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class="lineNum">      22 </span>            : /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class="lineNum">      23 </span>            : /// THE SOFTWARE.
+<span class="lineNum">      24 </span>            : ///
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            : #ifndef ANAX_ENTITY_HPP
+<span class="lineNum">      27 </span>            : #define ANAX_ENTITY_HPP
+<span class="lineNum">      28 </span>            : 
+<span class="lineNum">      29 </span>            : #include &lt;type_traits&gt;
+<span class="lineNum">      30 </span>            : #include &lt;utility&gt;
+<span class="lineNum">      31 </span>            : #include &lt;cstdint&gt;
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            : #include &lt;anax/detail/ClassTypeId.hpp&gt;
+<span class="lineNum">      34 </span>            : #include &lt;anax/detail/ComponentTypeList.hpp&gt;
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            : #include &lt;anax/Component.hpp&gt;
+<span class="lineNum">      37 </span>            : #include &lt;anax/Config.hpp&gt;
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            : namespace anax
+<span class="lineNum">      40 </span>            : {
+<span class="lineNum">      41 </span>            :     class World;
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            :     /// \brief A handle to an Entity within a World
+<span class="lineNum">      44 </span>            :     ///
+<span class="lineNum">      45 </span>            :     /// This class is used as a handle to an entity within a world.
+<span class="lineNum">      46 </span>            :     /// The handle can be invalid, as it &quot;handle&quot; no entity at all.
+<span class="lineNum">      47 </span>            :     ///
+<span class="lineNum">      48 </span>            :     /// \todo
+<span class="lineNum">      49 </span>            :     /// Benchmark this against a plain old 64-bit Id (as in just use
+<span class="lineNum">      50 </span>            :     /// the ID class)
+<span class="lineNum">      51 </span>            :     ///
+<span class="lineNum">      52 </span>            :     /// \author Miguel Martin
+<span class="lineNum">      53 </span>            :     class Entity
+<span class="lineNum">      54 </span>            :     {
+<span class="lineNum">      55 </span>            :     public:
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span>            :         /// \brief A class to describe an ID for an entity
+<span class="lineNum">      58 </span>            :         ///
+<span class="lineNum">      59 </span>            :         /// An ID for entity is composed of two values:
+<span class="lineNum">      60 </span>            :         /// - an index variable 
+<span class="lineNum">      61 </span>            :         /// - a counter variable
+<span class="lineNum">      62 </span>            :         ///
+<span class="lineNum">      63 </span>            :         /// The index variable is used to locate components/location
+<span class="lineNum">      64 </span>            :         /// in the entity ID pool. The counter variable is used to
+<span class="lineNum">      65 </span>            :         /// determine if this ID is valid, and has not been killed.
+<span class="lineNum">      66 </span>            :         ///
+<span class="lineNum">      67 </span>            :         /// \author Miguel Martin
+<span class="lineNum">      68 </span>            :         struct Id
+<span class="lineNum">      69 </span>            :         {
+<span class="lineNum">      70 </span>            :             typedef
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span>            : #   ifdef ANAX_32_BIT_ENTITY_IDS
+<span class="lineNum">      73 </span>            :             std::uint32_t
+<span class="lineNum">      74 </span>            : #   else
+<span class="lineNum">      75 </span>            :             std::uint64_t
+<span class="lineNum">      76 </span>            : #   endif // ANAX_32_BIT_ENTITY_IDS
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span>            :             int_type;
+<span class="lineNum">      79 </span>            : 
+<span class="lineNum">      80 </span>            :             /// Default constructor
+<span class="lineNum">      81 </span>            :             /// \note
+<span class="lineNum">      82 </span>            :             /// This constructor will automatically nullify the ID
+<span class="lineNum">      83 </span>            :             Id() : 
+<span class="lineNum">      84 </span>            :                 index(0),
+<span class="lineNum">      85 </span>            :                 counter(0)
+<span class="lineNum">      86 </span>            :             {
+<span class="lineNum">      87 </span>            :             }
+<span class="lineNum">      88 </span>            : 
+<span class="lineNum">      89 </span>            :             /// Sets the index and counter variables of the ID
+<span class="lineNum">      90 </span>            :             /// \param Index The value for the index you wish to set
+<span class="lineNum">      91 </span>            :             /// \param Counter The value for the counter you wish to set
+<span class="lineNum">      92 </span>            :             Id(int_type Index, int_type Counter) : 
+<span class="lineNum">      93 </span>            :                 index(Index),
+<span class="lineNum">      94 </span>            :                 counter(Counter)
+<span class="lineNum">      95 </span>            :             {
+<span class="lineNum">      96 </span>            :             }
+<span class="lineNum">      97 </span>            : 
+<span class="lineNum">      98 </span>            :             /// \return The value of the ID, as an integer
+<span class="lineNum">      99 </span>            :             inline operator int_type() const
+<span class="lineNum">     100 </span>            :             { return value(); }
+<span class="lineNum">     101 </span>            : 
+<span class="lineNum">     102 </span>            :             /// \return The value of the ID, as an integer
+<span class="lineNum">     103 </span>            :             inline int_type value() const
+<span class="lineNum">     104 </span>            :             { return (counter &lt;&lt; ANAX_ENTITY_ID_COUNTER_BIT_COUNT) | index; }
+<span class="lineNum">     105 </span>            : 
+<span class="lineNum">     106 </span>            :             /// Clears the ID by setting the index and counter to 0.
+<span class="lineNum">     107 </span>            :             void clear() { index = counter = 0; }
+<span class="lineNum">     108 </span>            : 
+<span class="lineNum">     109 </span>            :             /// Determines if the ID is null
+<span class="lineNum">     110 </span>            :             /// \return true if the ID is null
+<span class="lineNum">     111 </span>            :             bool isNull() const { return value() == 0; }
+<span class="lineNum">     112 </span>            : 
+<span class="lineNum">     113 </span>            :             int_type index : ANAX_ENTITY_ID_INDEX_BIT_COUNT;
+<span class="lineNum">     114 </span>            :             int_type counter : ANAX_ENTITY_ID_COUNTER_BIT_COUNT;
+<span class="lineNum">     115 </span>            :         };
+<span class="lineNum">     116 </span>            : 
+<span class="lineNum">     117 </span>            :         /// Default constructor
+<span class="lineNum">     118 </span>            :         Entity();
+<span class="lineNum">     119 </span>            : 
+<span class="lineNum">     120 </span>            :         /// \param world The World the entity belongs to
+<span class="lineNum">     121 </span>            :         /// \param id The designated ID of the Entity
+<span class="lineNum">     122 </span>            :         /// \note You should not call this ctor
+<span class="lineNum">     123 </span>            :         Entity(World&amp; world, Id id);
+<span class="lineNum">     124 </span>            : 
+<span class="lineNum">     125 </span>            :         /// Default copy/move ctors and assignment operators
+<span class="lineNum">     126 </span>            :         Entity(const Entity&amp;) = default;
+<span class="lineNum">     127 </span>            :         Entity(Entity&amp;&amp;) = default;
+<span class="lineNum">     128 </span>            :         Entity&amp; operator=(const Entity&amp;) = default;
+<span class="lineNum">     129 </span>            :         Entity&amp; operator=(Entity&amp;&amp;) = default;
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span>            :         /// Determines if this Entity handle is valid &amp; able to be used.
+<span class="lineNum">     132 </span>            :         /// \note You should only use this for DEBUG builds
+<span class="lineNum">     133 </span>            :         ///       as checking if an Entity is valid may/may not
+<span class="lineNum">     134 </span>            :         ///       impact your performance.
+<span class="lineNum">     135 </span>            :         /// \return true if this Entity is valid, false otherwise
+<span class="lineNum">     136 </span>            :         bool isValid() const;
+<span class="lineNum">     137 </span>            : 
+<span class="lineNum">     138 </span>            :         /// \return The Entity's ID
+<span class="lineNum">     139 </span>            :         const Id&amp; getId() const;
+<span class="lineNum">     140 </span>            : 
+<span class="lineNum">     141 </span>            :         /// \return The World that the Entity belongs to.
+<span class="lineNum">     142 </span>            :         /// \note This function will fail if the Entity is null.
+<span class="lineNum">     143 </span>            :         /// \see isNull() To check whether the Entity is null.
+<span class="lineNum">     144 </span>            :         World&amp; getWorld() const;
+<span class="lineNum">     145 </span>            : 
+<span class="lineNum">     146 </span>            :         /// \return true if this Entity is activated
+<span class="lineNum">     147 </span>            :         bool isActivated() const;
+<span class="lineNum">     148 </span>            : 
+<span class="lineNum">     149 </span>            :         /// Activates this Entity
+<span class="lineNum">     150 </span>            :         void activate();
+<span class="lineNum">     151 </span>            : 
+<span class="lineNum">     152 </span>            :         /// Deactivates this Entity
+<span class="lineNum">     153 </span>            :         void deactivate();
+<span class="lineNum">     154 </span>            : 
+<span class="lineNum">     155 </span>            :         /// Kills this Entity
+<span class="lineNum">     156 </span>            :         /// \see World::killEntity for an alternate way to kill an Entity
+<span class="lineNum">     157 </span>            :         void kill();
+<span class="lineNum">     158 </span>            : 
+<span class="lineNum">     159 </span>            :         /// Adds a component to the Entity
+<span class="lineNum">     160 </span>            :         /// \tparam The type of component you wish to add
+<span class="lineNum">     161 </span>            :         /// \param args The arguments for the constructor of the component
+<span class="lineNum">     162 </span>            :         template &lt;typename T, typename... Args&gt;
+<span class="lineNum">     163 </span>            :         T&amp; addComponent(Args&amp;&amp;... args);
+<span class="lineNum">     164 </span>            : 
+<span class="lineNum">     165 </span>            :         /// Removes a component
+<span class="lineNum">     166 </span>            :         /// \tparam The type of component you wish to remove
+<span class="lineNum">     167 </span>            :         template &lt;typename T&gt;
+<span class="lineNum">     168 </span>            :         void removeComponent();
+<span class="lineNum">     169 </span>            : 
+<span class="lineNum">     170 </span>            :         /// Removes all the components attached to the Entity
+<span class="lineNum">     171 </span>            :         void removeAllComponents();
+<span class="lineNum">     172 </span>            : 
+<span class="lineNum">     173 </span>            :         /// Retrives a component from this Entity
+<span class="lineNum">     174 </span>            :         /// \tparam The type of component you wish to retrieve
+<span class="lineNum">     175 </span>            :         /// \return A pointer to the component
+<span class="lineNum">     176 </span>            :         template &lt;typename T&gt;
+<span class="lineNum">     177 </span>            :         T&amp; getComponent() const;
+<span class="lineNum">     178 </span>            : 
+<span class="lineNum">     179 </span>            :         /// Determines if this Entity has a component or not
+<span class="lineNum">     180 </span>            :         /// \tparam The type of component you wish to check for
+<span class="lineNum">     181 </span>            :         /// \return true if this Entity contains a component
+<span class="lineNum">     182 </span>            :         template &lt;typename T&gt;
+<span class="lineNum">     183 </span>            :         bool hasComponent() const;
+<span class="lineNum">     184 </span>            : 
+<span class="lineNum">     185 </span>            :         /// \return All the components the Entity has
+<span class="lineNum">     186 </span>            :         ComponentArray getComponents() const;
+<span class="lineNum">     187 </span>            : 
+<span class="lineNum">     188 </span>            :         /// \return A component type list, which resembles the components
+<span class="lineNum">     189 </span>            :         /// this entity has attached to it
+<span class="lineNum">     190 </span>            :         detail::ComponentTypeList getComponentTypeList() const;
+<span class="lineNum">     191 </span>            : 
+<span class="lineNum">     192 </span>            :         /// Comparison operator
+<span class="lineNum">     193 </span>            :         bool operator==(const Entity&amp; entity) const;
+<span class="lineNum">     194 </span>            :         bool operator!=(const Entity&amp; entity) const { return !operator==(entity); }
+<span class="lineNum">     195 </span>            : 
+<span class="lineNum">     196 </span>            :     private:
+<span class="lineNum">     197 </span>            : 
+<span class="lineNum">     198 </span>            :         // wrappers to add components
+<span class="lineNum">     199 </span>            :         // so I may call them from templated public interfaces
+<span class="lineNum">     200 </span>            :         void addComponent(Component* component, detail::TypeId componentTypeId);
+<span class="lineNum">     201 </span>            :         void removeComponent(detail::TypeId componentTypeId);
+<span class="lineNum">     202 </span>            :         Component&amp; getComponent(detail::TypeId componentTypeId) const;
+<span class="lineNum">     203 </span>            :         bool hasComponent(detail::TypeId componentTypeId) const;
+<span class="lineNum">     204 </span>            : 
+<span class="lineNum">     205 </span>            : 
+<span class="lineNum">     206 </span>            :         /// The ID of the Entity
+<span class="lineNum">     207 </span>            :         Id m_id;
+<span class="lineNum">     208 </span>            : 
+<span class="lineNum">     209 </span>            :         /// The world that this Entity belongs to. This is guarenteed
+<span class="lineNum">     210 </span>            :         /// to not be null, as long as this entity is not null.
+<span class="lineNum">     211 </span>            :         /// \see isNull() To determine if the entity is null or not.
+<span class="lineNum">     212 </span>            :         World* m_world;
+<span class="lineNum">     213 </span>            :     };
+<a name="214"><span class="lineNum">     214 </span>            : </a>
+<span class="lineNum">     215 </span>            :     template &lt;typename T, typename... Args&gt;
+<span class="lineNum">     216 </span><span class="lineNoCov">          0 :     T&amp; Entity::addComponent(Args&amp;&amp;... args)</span>
+<span class="lineNum">     217 </span>            :     {
+<span class="lineNum">     218 </span>            :         static_assert(std::is_base_of&lt;Component, T&gt;(), &quot;T is not a component, cannot add T to entity&quot;);
+<span class="lineNum">     219 </span>            :         // TODO: align components by type
+<span class="lineNum">     220 </span><span class="lineNoCov">          0 :         auto component = new T{std::forward&lt;Args&gt;(args)...};</span>
+<span class="lineNum">     221 </span><span class="lineNoCov">          0 :         addComponent(component, ComponentTypeId&lt;T&gt;());</span>
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :         return *component;</span>
+<span class="lineNum">     223 </span>            :     }
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span>            :     template &lt;typename T&gt;
+<span class="lineNum">     226 </span>            :     void Entity::removeComponent()
+<span class="lineNum">     227 </span>            :     {
+<span class="lineNum">     228 </span>            :         static_assert(std::is_base_of&lt;Component, T&gt;(), &quot;T is not a component, cannot remove T from entity&quot;);
+<span class="lineNum">     229 </span>            :         removeComponent(ComponentTypeId&lt;T&gt;());
+<span class="lineNum">     230 </span>            :     }
+<a name="231"><span class="lineNum">     231 </span>            : </a>
+<span class="lineNum">     232 </span>            :     template &lt;typename T&gt;
+<span class="lineNum">     233 </span><span class="lineNoCov">          0 :     T&amp; Entity::getComponent() const</span>
+<span class="lineNum">     234 </span>            :     {
+<span class="lineNum">     235 </span>            :         static_assert(std::is_base_of&lt;Component, T&gt;(), &quot;T is not a component, cannot retrieve T from entity&quot;);
+<span class="lineNum">     236 </span><span class="lineNoCov">          0 :         return static_cast&lt;T&amp;&gt;(getComponent(ComponentTypeId&lt;T&gt;()));</span>
+<span class="lineNum">     237 </span>            :     }
+<a name="238"><span class="lineNum">     238 </span>            : </a>
+<span class="lineNum">     239 </span>            :     template &lt;typename T&gt;
+<span class="lineNum">     240 </span><span class="lineNoCov">          0 :     bool Entity::hasComponent() const</span>
+<span class="lineNum">     241 </span>            :     {
+<span class="lineNum">     242 </span>            :         static_assert(std::is_base_of&lt;Component, T&gt;(), &quot;T is not a component, cannot determine if entity has T&quot;);
+<span class="lineNum">     243 </span><span class="lineNoCov">          0 :         return hasComponent(ComponentTypeId&lt;T&gt;());</span>
+<span class="lineNum">     244 </span>            :     }
+<span class="lineNum">     245 </span>            : }
+<span class="lineNum">     246 </span>            : 
+<span class="lineNum">     247 </span>            : #endif // ANAX_ENTITY_HPP
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

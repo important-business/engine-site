@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - src/systems/render.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/systems</a> - render.cpp<span style="font-size: 80%;"> (source / <a href="render.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">93</td>
+            <td class="headerCovTableEntryLo">1.1 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntryLo">22.2 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;systems/render.hpp&quot;</a>
+<span class="lineNum">       2 </span>            : #include &quot;core/resource_manager.hpp&quot;
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #include &lt;cassert&gt;
+<span class="lineNum">       5 </span>            : 
+<span class="lineNum">       6 </span>            : namespace systems
+<a name="7"><span class="lineNum">       7 </span>            : {</a>
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span><span class="lineNoCov">          0 : Render::Render(sdl_wrap::Window* p_window,</span>
+<span class="lineNum">      10 </span>            :     Uint32 render_flags,
+<span class="lineNum">      11 </span>            :     Camera&amp; camerasystem,
+<span class="lineNum">      12 </span>            :     core::ResourceManagerTexture* p_resourcemanager)
+<span class="lineNum">      13 </span>            :     : m_up_window(p_window),
+<span class="lineNum">      14 </span>            :       m_camerasystem(camerasystem),
+<span class="lineNum">      15 </span><span class="lineNoCov">          0 :       m_up_resourcemanager(p_resourcemanager)</span>
+<span class="lineNum">      16 </span>            : {
+<span class="lineNum">      17 </span><span class="lineNoCov">          0 :     m_up_renderer =</span>
+<span class="lineNum">      18 </span><span class="lineNoCov">          0 :         std::make_unique&lt;sdl_wrap::Renderer&gt;(*m_up_window, -1, render_flags);</span>
+<span class="lineNum">      19 </span><span class="lineNoCov">          0 :     m_up_renderer-&gt;set_draw_color(150, 150, 150, 100);</span>
+<span class="lineNum">      20 </span>            : 
+<span class="lineNum">      21 </span><span class="lineNoCov">          0 :     m_sp_logger = core::logging_get_logger(&quot;render&quot;);</span>
+<a name="22"><span class="lineNum">      22 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      23 </span>            : 
+<span class="lineNum">      24 </span><span class="lineNoCov">          0 : void Render::render(core::Level* plevel)</span>
+<span class="lineNum">      25 </span>            : {
+<span class="lineNum">      26 </span>            :     float camera_min_x, camera_min_y, camera_max_x, camera_max_y, camera_zoom;
+<span class="lineNum">      27 </span>            :     get_camera_extents(
+<span class="lineNum">      28 </span><span class="lineNoCov">          0 :         camera_min_x, camera_min_y, camera_max_x, camera_max_y, camera_zoom);</span>
+<span class="lineNum">      29 </span>            :     /* m_sp_logger-&gt;info(&quot;Camera Extents: min_x{} min_y{} max_x{} max_y{}&quot;, */
+<span class="lineNum">      30 </span>            :     /*     camera_min_x, */
+<span class="lineNum">      31 </span>            :     /*     camera_min_y, */
+<span class="lineNum">      32 </span>            :     /*     camera_max_x, */
+<span class="lineNum">      33 </span>            :     /*     camera_max_y); */
+<span class="lineNum">      34 </span><span class="lineNoCov">          0 :     m_up_renderer-&gt;clear();</span>
+<span class="lineNum">      35 </span>            :     render_level(plevel,
+<span class="lineNum">      36 </span>            :         camera_min_x,
+<span class="lineNum">      37 </span>            :         camera_min_y,
+<span class="lineNum">      38 </span>            :         camera_max_x,
+<span class="lineNum">      39 </span>            :         camera_max_y,
+<span class="lineNum">      40 </span><span class="lineNoCov">          0 :         camera_zoom);</span>
+<span class="lineNum">      41 </span>            :     render_entities(
+<span class="lineNum">      42 </span><span class="lineNoCov">          0 :         camera_min_x, camera_min_y, camera_max_x, camera_max_y, camera_zoom);</span>
+<span class="lineNum">      43 </span><span class="lineNoCov">          0 :     m_up_renderer-&gt;present();</span>
+<a name="44"><span class="lineNum">      44 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      45 </span>            : 
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 : void Render::get_camera_extents(float&amp; camera_min_x,</span>
+<span class="lineNum">      47 </span>            :     float&amp; camera_min_y,
+<span class="lineNum">      48 </span>            :     float&amp; camera_max_x,
+<span class="lineNum">      49 </span>            :     float&amp; camera_max_y,
+<span class="lineNum">      50 </span>            :     float&amp; camera_zoom)
+<span class="lineNum">      51 </span>            : {
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :     auto cameraentities = m_camerasystem.getEntities();</span>
+<span class="lineNum">      53 </span><span class="lineNoCov">          0 :     auto&amp; cameraentity = cameraentities.front();</span>
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span>            :     // Only allow one camera
+<span class="lineNum">      56 </span><span class="lineNoCov">          0 :     assert(cameraentities.size() == 1);</span>
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            :     // No hasComponent check is needed since camera system does filtering
+<span class="lineNum">      59 </span>            :     auto&amp; camera_camera_component =
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 :         cameraentity.getComponent&lt;components::CameraComponent&gt;();</span>
+<span class="lineNum">      61 </span>            :     auto&amp; camera_transform_component =
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :         cameraentity.getComponent&lt;components::TransformComponent&gt;();</span>
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span>            :     int screen_w, screen_h;
+<span class="lineNum">      65 </span><span class="lineNoCov">          0 :     m_up_window-&gt;get_size(&amp;screen_w, &amp;screen_h);</span>
+<span class="lineNum">      66 </span><span class="lineNoCov">          0 :     camera_zoom = camera_camera_component.zoom;</span>
+<span class="lineNum">      67 </span>            :     camera_min_x =
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :         camera_transform_component.pos_x - screen_w / (2.0f * camera_zoom);</span>
+<span class="lineNum">      69 </span>            :     camera_max_x =
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 :         camera_transform_component.pos_x + screen_w / (2.0f * camera_zoom);</span>
+<span class="lineNum">      71 </span>            :     camera_min_y =
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :         camera_transform_component.pos_y - screen_h / (2.0f * camera_zoom);</span>
+<span class="lineNum">      73 </span>            :     camera_max_y =
+<span class="lineNum">      74 </span><span class="lineNoCov">          0 :         camera_transform_component.pos_y + screen_h / (2.0f * camera_zoom);</span>
+<a name="75"><span class="lineNum">      75 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span><span class="lineNoCov">          0 : void Render::render_entities(float camera_min_x,</span>
+<span class="lineNum">      78 </span>            :     float camera_min_y,
+<span class="lineNum">      79 </span>            :     float camera_max_x,
+<span class="lineNum">      80 </span>            :     float camera_max_y,
+<span class="lineNum">      81 </span>            :     float camera_zoom)
+<span class="lineNum">      82 </span>            : {
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :     auto entities = getEntities();</span>
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span><span class="lineNoCov">          0 :     for (auto&amp; entity : entities)</span>
+<span class="lineNum">      86 </span>            :     {
+<span class="lineNum">      87 </span>            :         // No hasComponent check is needed since render system does filtering
+<span class="lineNum">      88 </span>            :         auto&amp; texture_component =
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :             entity.getComponent&lt;components::TextureComponent&gt;();</span>
+<span class="lineNum">      90 </span>            :         auto&amp; transform_component =
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :             entity.getComponent&lt;components::TransformComponent&gt;();</span>
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span>            :         float x_center =
+<span class="lineNum">      94 </span><span class="lineNoCov">          0 :             camera_zoom * (-camera_min_x + transform_component.pos_x);</span>
+<span class="lineNum">      95 </span>            :         float y_center =
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :             camera_zoom * (-camera_min_y + transform_component.pos_y);</span>
+<span class="lineNum">      97 </span><span class="lineNoCov">          0 :         float w = camera_zoom * transform_component.size_x;</span>
+<span class="lineNum">      98 </span><span class="lineNoCov">          0 :         float h = camera_zoom * transform_component.size_y;</span>
+<span class="lineNum">      99 </span>            : 
+<span class="lineNum">     100 </span>            :         /* m_sp_logger-&gt;info(&quot;Entity transform results: world: X{} Y{} W{} H{}&quot;,
+<span class="lineNum">     101 </span>            :          */
+<span class="lineNum">     102 </span>            :         /*     transform_component.pos_x, */
+<span class="lineNum">     103 </span>            :         /*     transform_component.pos_y, */
+<span class="lineNum">     104 </span>            :         /*     transform_component.size_x, */
+<span class="lineNum">     105 </span>            :         /*     transform_component.size_y); */
+<span class="lineNum">     106 </span>            :         /* m_sp_logger-&gt;info(&quot;Entity transform results: camera: X{} Y{} W{}
+<span class="lineNum">     107 </span>            :          * H{}&quot;, */
+<span class="lineNum">     108 </span>            :         /*     x_center, */
+<span class="lineNum">     109 </span>            :         /*     y_center, */
+<span class="lineNum">     110 </span>            :         /*     w, */
+<span class="lineNum">     111 </span>            :         /*     h); */
+<span class="lineNum">     112 </span>            : 
+<span class="lineNum">     113 </span>            :         SDL_Rect dest_rect = {
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :             static_cast&lt;int&gt;(x_center - (w / 2.0f)),</span>
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :             static_cast&lt;int&gt;(y_center - (h / 2.0f)),</span>
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :             static_cast&lt;int&gt;(std::round(w)),</span>
+<span class="lineNum">     117 </span><span class="lineNoCov">          0 :             static_cast&lt;int&gt;(std::round(h)),</span>
+<span class="lineNum">     118 </span><span class="lineNoCov">          0 :         };</span>
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 :         SDL_RendererFlip flip = SDL_FLIP_NONE;</span>
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :         if (transform_component.flip_vert)</span>
+<span class="lineNum">     121 </span>            :         {
+<span class="lineNum">     122 </span>            :             flip = static_cast&lt;SDL_RendererFlip&gt;(
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :                 static_cast&lt;SDL_RendererFlip&gt;(SDL_FLIP_VERTICAL) | flip);</span>
+<span class="lineNum">     124 </span>            :         }
+<span class="lineNum">     125 </span><span class="lineNoCov">          0 :         if (transform_component.flip_horiz)</span>
+<span class="lineNum">     126 </span>            :         {
+<span class="lineNum">     127 </span>            :             flip = static_cast&lt;SDL_RendererFlip&gt;(
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :                 static_cast&lt;SDL_RendererFlip&gt;(SDL_FLIP_HORIZONTAL) | flip);</span>
+<span class="lineNum">     129 </span>            :         }
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span><span class="lineNoCov">          0 :         if (!texture_component.sp_texture)</span>
+<span class="lineNum">     132 </span>            :         {
+<span class="lineNum">     133 </span><span class="lineNoCov">          0 :             texture_component.sp_texture =</span>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :                 m_up_resourcemanager-&gt;get(texture_component.texture_path);</span>
+<span class="lineNum">     135 </span>            :         }
+<span class="lineNum">     136 </span><span class="lineNoCov">          0 :         m_up_renderer-&gt;copy(*texture_component.sp_texture,</span>
+<span class="lineNum">     137 </span>            :             nullptr,
+<span class="lineNum">     138 </span>            :             &amp;dest_rect,
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :             static_cast&lt;int&gt;(transform_component.rotation),</span>
+<span class="lineNum">     140 </span><span class="lineNoCov">          0 :             flip);</span>
+<span class="lineNum">     141 </span>            :     }
+<a name="142"><span class="lineNum">     142 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     143 </span>            : 
+<span class="lineNum">     144 </span><span class="lineNoCov">          0 : void Render::render_level(core::Level* plevel,</span>
+<span class="lineNum">     145 </span>            :     float camera_min_x,
+<span class="lineNum">     146 </span>            :     float camera_min_y,
+<span class="lineNum">     147 </span>            :     float camera_max_x,
+<span class="lineNum">     148 </span>            :     float camera_max_y,
+<span class="lineNum">     149 </span>            :     float camera_zoom)
+<span class="lineNum">     150 </span>            : {
+<span class="lineNum">     151 </span>            :     int size_x, size_y, size_layers;
+<span class="lineNum">     152 </span>            :     int level_min_x, level_min_y, level_max_x, level_max_y;
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span><span class="lineNoCov">          0 :     plevel-&gt;get_size(size_x, size_y, size_layers);</span>
+<span class="lineNum">     155 </span>            :     plevel-&gt;get_tile_coords(
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :         camera_min_x, camera_min_y, level_min_x, level_min_y);</span>
+<span class="lineNum">     157 </span>            :     plevel-&gt;get_tile_coords(
+<span class="lineNum">     158 </span><span class="lineNoCov">          0 :         camera_max_x, camera_max_y, level_max_x, level_max_y);</span>
+<span class="lineNum">     159 </span><span class="lineNoCov">          0 :     level_min_x -= 1;</span>
+<span class="lineNum">     160 </span><span class="lineNoCov">          0 :     level_min_y -= 1;</span>
+<span class="lineNum">     161 </span><span class="lineNoCov">          0 :     level_max_x += 1;</span>
+<span class="lineNum">     162 </span><span class="lineNoCov">          0 :     level_max_y += 1;</span>
+<span class="lineNum">     163 </span>            : 
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :     auto scale = plevel-&gt;get_scale();</span>
+<span class="lineNum">     165 </span>            : 
+<span class="lineNum">     166 </span><span class="lineNoCov">          0 :     for (int pos_y = level_min_y; pos_y &lt; level_max_y; pos_y++)</span>
+<span class="lineNum">     167 </span>            :     {
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :         for (int pos_x = level_min_x; pos_x &lt; level_max_x; pos_x++)</span>
+<span class="lineNum">     169 </span>            :         {
+<span class="lineNum">     170 </span><span class="lineNoCov">          0 :             for (int layer = 0; layer &lt; size_layers; layer++)</span>
+<span class="lineNum">     171 </span>            :             {
+<span class="lineNum">     172 </span>            :                 SDL_Rect dest_rect = {
+<span class="lineNum">     173 </span>            :                     static_cast&lt;int&gt;(
+<span class="lineNum">     174 </span><span class="lineNoCov">          0 :                         (pos_x * scale - camera_min_x) * camera_zoom),</span>
+<span class="lineNum">     175 </span>            :                     static_cast&lt;int&gt;(
+<span class="lineNum">     176 </span><span class="lineNoCov">          0 :                         (pos_y * scale - camera_min_y) * camera_zoom),</span>
+<span class="lineNum">     177 </span><span class="lineNoCov">          0 :                     static_cast&lt;int&gt;((1.0f) * scale * camera_zoom),</span>
+<span class="lineNum">     178 </span><span class="lineNoCov">          0 :                     static_cast&lt;int&gt;((1.0f) * scale * camera_zoom)};</span>
+<span class="lineNum">     179 </span>            : 
+<span class="lineNum">     180 </span><span class="lineNoCov">          0 :                 auto tile = plevel-&gt;get_tile(pos_x, pos_y, layer);</span>
+<span class="lineNum">     181 </span><span class="lineNoCov">          0 :                 if (tile == 0)</span>
+<span class="lineNum">     182 </span>            :                 {
+<span class="lineNum">     183 </span>            :                     // Do not draw
+<span class="lineNum">     184 </span>            :                 }
+<span class="lineNum">     185 </span><span class="lineNoCov">          0 :                 else if (tile != -1)</span>
+<span class="lineNum">     186 </span>            :                 {
+<span class="lineNum">     187 </span><span class="lineNoCov">          0 :                     core::LevelTileSet* p_tileset = nullptr;</span>
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 :                     int tileset_tile = -1;</span>
+<span class="lineNum">     189 </span><span class="lineNoCov">          0 :                     plevel-&gt;get_tileset(tile, p_tileset, tileset_tile);</span>
+<span class="lineNum">     190 </span><span class="lineNoCov">          0 :                     assert(p_tileset != nullptr);</span>
+<span class="lineNum">     191 </span><span class="lineNoCov">          0 :                     if (p_tileset == nullptr)</span>
+<span class="lineNum">     192 </span>            :                     {
+<span class="lineNum">     193 </span><span class="lineNoCov">          0 :                         continue;</span>
+<span class="lineNum">     194 </span>            :                     }
+<span class="lineNum">     195 </span><span class="lineNoCov">          0 :                     auto p_texture = p_tileset-&gt;get_texture();</span>
+<span class="lineNum">     196 </span><span class="lineNoCov">          0 :                     if (p_texture == nullptr)</span>
+<span class="lineNum">     197 </span>            :                     {
+<span class="lineNum">     198 </span>            :                         auto sp_texture = m_up_resourcemanager-&gt;get(
+<span class="lineNum">     199 </span><span class="lineNoCov">          0 :                             p_tileset-&gt;get_filename());</span>
+<span class="lineNum">     200 </span><span class="lineNoCov">          0 :                         p_texture = sp_texture.get();</span>
+<span class="lineNum">     201 </span><span class="lineNoCov">          0 :                         p_tileset-&gt;set_texture(sp_texture);</span>
+<span class="lineNum">     202 </span>            :                     }
+<span class="lineNum">     203 </span>            :                     SDL_Rect src_rect;
+<span class="lineNum">     204 </span><span class="lineNoCov">          0 :                     p_tileset-&gt;getTileClipping(tileset_tile,</span>
+<span class="lineNum">     205 </span>            :                         src_rect.x,
+<span class="lineNum">     206 </span>            :                         src_rect.y,
+<span class="lineNum">     207 </span>            :                         src_rect.w,
+<span class="lineNum">     208 </span><span class="lineNoCov">          0 :                         src_rect.h);</span>
+<span class="lineNum">     209 </span><span class="lineNoCov">          0 :                     m_up_renderer-&gt;copy(</span>
+<span class="lineNum">     210 </span><span class="lineNoCov">          0 :                         *p_texture, &amp;src_rect, &amp;dest_rect, 0, SDL_FLIP_NONE);</span>
+<span class="lineNum">     211 </span>            :                 }
+<span class="lineNum">     212 </span>            :                 else
+<span class="lineNum">     213 </span>            :                 {
+<span class="lineNum">     214 </span>            :                     /* m_sp_logger-&gt;error(&quot;Tile {},{} is invalid&quot;, pos_x,
+<span class="lineNum">     215 </span>            :                      * pos_y); */
+<span class="lineNum">     216 </span>            :                 }
+<span class="lineNum">     217 </span>            :             }
+<span class="lineNum">     218 </span>            :         }
+<span class="lineNum">     219 </span>            :     }
+<a name="220"><span class="lineNum">     220 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 : sdl_wrap::Renderer* Render::get_renderer()</span>
+<span class="lineNum">     223 </span>            : {
+<span class="lineNum">     224 </span><span class="lineNoCov">          0 :     return m_up_renderer.get();</span>
+<a name="225"><span class="lineNum">     225 </span>            : }</a>
+<span class="lineNum">     226 </span>            : 
+<span class="lineNum">     227 </span><span class="lineNoCov">          0 : sdl_wrap::Window* Render::get_window()</span>
+<span class="lineNum">     228 </span>            : {
+<span class="lineNum">     229 </span><span class="lineNoCov">          0 :     return m_up_window.get();</span>
+<a name="230"><span class="lineNum">     230 </span>            : }</a>
+<span class="lineNum">     231 </span>            : 
+<span class="lineNum">     232 </span><span class="lineCov">          3 : } // namespace systems</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

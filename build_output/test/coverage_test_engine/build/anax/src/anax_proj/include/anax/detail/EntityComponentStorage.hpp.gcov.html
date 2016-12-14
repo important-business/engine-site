@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/anax/src/anax_proj/include/anax/detail/EntityComponentStorage.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../../index.html">top level</a> - <a href="index.html">build/anax/src/anax_proj/include/anax/detail</a> - EntityComponentStorage.hpp<span style="font-size: 80%;"> (source / <a href="EntityComponentStorage.hpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : ///</a>
+<span class="lineNum">       2 </span>            : /// anax
+<span class="lineNum">       3 </span>            : /// An open source C++ entity system.
+<span class="lineNum">       4 </span>            : ///
+<span class="lineNum">       5 </span>            : /// Copyright (C) 2013-2014 Miguel Martin (miguel@miguel-martin.com)
+<span class="lineNum">       6 </span>            : ///
+<span class="lineNum">       7 </span>            : /// Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class="lineNum">       8 </span>            : /// of this software and associated documentation files (the &quot;Software&quot;), to deal
+<span class="lineNum">       9 </span>            : /// in the Software without restriction, including without limitation the rights
+<span class="lineNum">      10 </span>            : /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class="lineNum">      11 </span>            : /// copies of the Software, and to permit persons to whom the Software is
+<span class="lineNum">      12 </span>            : /// furnished to do so, subject to the following conditions:
+<span class="lineNum">      13 </span>            : ///
+<span class="lineNum">      14 </span>            : /// The above copyright notice and this permission notice shall be included in
+<span class="lineNum">      15 </span>            : /// all copies or substantial portions of the Software.
+<span class="lineNum">      16 </span>            : ///
+<span class="lineNum">      17 </span>            : /// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class="lineNum">      18 </span>            : /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class="lineNum">      19 </span>            : /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class="lineNum">      20 </span>            : /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class="lineNum">      21 </span>            : /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class="lineNum">      22 </span>            : /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class="lineNum">      23 </span>            : /// THE SOFTWARE.
+<span class="lineNum">      24 </span>            : ///
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            : #ifndef ANAX_DETAIL_ENTITYCOMPONENTSTORAGE_HPP
+<span class="lineNum">      27 </span>            : #define ANAX_DETAIL_ENTITYCOMPONENTSTORAGE_HPP
+<span class="lineNum">      28 </span>            : 
+<span class="lineNum">      29 </span>            : #include &lt;memory&gt;
+<span class="lineNum">      30 </span>            : #include &lt;array&gt;
+<span class="lineNum">      31 </span>            : 
+<span class="lineNum">      32 </span>            : #include &lt;anax/detail/ClassTypeId.hpp&gt;
+<span class="lineNum">      33 </span>            : #include &lt;anax/detail/ComponentTypeList.hpp&gt;
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #include &lt;anax/Entity.hpp&gt;
+<span class="lineNum">      36 </span>            : #include &lt;anax/Component.hpp&gt;
+<span class="lineNum">      37 </span>            : #include &lt;anax/Config.hpp&gt;
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            : namespace anax
+<span class="lineNum">      40 </span>            : {
+<span class="lineNum">      41 </span>            :     namespace detail
+<span class="lineNum">      42 </span>            :     {
+<span class="lineNum">      43 </span>            :         /// \brief A class to store components for entities within a world
+<span class="lineNum">      44 </span>            :         ///
+<span class="lineNum">      45 </span>            :         ///
+<span class="lineNum">      46 </span>            :         /// Used to store the components 
+<span class="lineNum">      47 </span>            :         ///
+<a name="48"><span class="lineNum">      48 </span>            :         ///</a>
+<span class="lineNum">      49 </span>            :         /// \author Miguel Martin
+<span class="lineNum">      50 </span><span class="lineNoCov">          0 :         class EntityComponentStorage</span>
+<span class="lineNum">      51 </span>            :         {
+<span class="lineNum">      52 </span>            :         public:
+<span class="lineNum">      53 </span>            : 
+<span class="lineNum">      54 </span>            :             explicit EntityComponentStorage(std::size_t entityAmount);
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span>            :             EntityComponentStorage(const EntityComponentStorage&amp;) = delete;
+<span class="lineNum">      57 </span>            :             EntityComponentStorage(EntityComponentStorage&amp;&amp;) = delete;
+<span class="lineNum">      58 </span>            :             EntityComponentStorage&amp; operator=(const EntityComponentStorage&amp;) = delete;
+<span class="lineNum">      59 </span>            :             EntityComponentStorage&amp; operator=(EntityComponentStorage&amp;&amp;) = delete;
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span>            :             void addComponent(Entity&amp; entity, Component* component, TypeId componentTypeId);
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span>            :             void removeComponent(Entity&amp; entity, TypeId componentTypeId);
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span>            :             void removeAllComponents(Entity&amp; entity);
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span>            :             Component&amp; getComponent(const Entity&amp; entity, TypeId componentTypeId) const;
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span>            :             ComponentTypeList getComponentTypeList(const Entity&amp; entity) const;
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span>            :             ComponentArray getComponents(const Entity&amp; entity) const;
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            :             bool hasComponent(const Entity&amp; entity, TypeId componentTypeId) const;
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span>            :             void resize(std::size_t entityAmount);
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span>            :             void clear();
+<span class="lineNum">      79 </span>            : 
+<span class="lineNum">      80 </span>            :         private:
+<span class="lineNum">      81 </span>            : 
+<span class="lineNum">      82 </span>            :             typedef std::array&lt;std::unique_ptr&lt;Component&gt;, anax::MAX_AMOUNT_OF_COMPONENTS&gt; ImplComponentArray;
+<span class="lineNum">      83 </span>            :             
+<span class="lineNum">      84 </span>            :             /// \brief A data structure to describe the components
+<span class="lineNum">      85 </span>            :             /// within an entity
+<a name="86"><span class="lineNum">      86 </span>            :             /// </a>
+<span class="lineNum">      87 </span>            :             /// \author Miguel Martin
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 :             struct EntityComponents</span>
+<span class="lineNum">      89 </span>            :             {
+<span class="lineNum">      90 </span>            :                 EntityComponents() = default;
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span>            :                 // bug in clang? won't work w/o this
+<span class="lineNum">      93 </span>            :                 // http://stackoverflow.com/questions/8560994/stdmake-shared-stdunique-ptr-and-move-constructors
+<span class="lineNum">      94 </span>            :                 // I think it's due to ComponentTypeList (may have to update boost)
+<span class="lineNum">      95 </span>            :                 EntityComponents(EntityComponents&amp;&amp; e) : 
+<span class="lineNum">      96 </span>            :                     components(std::move(e.components)), 
+<span class="lineNum">      97 </span>            :                     componentTypeList(std::move(e.componentTypeList))
+<span class="lineNum">      98 </span>            :                 {
+<span class="lineNum">      99 </span>            :                 }
+<span class="lineNum">     100 </span>            : 
+<span class="lineNum">     101 </span>            :                 /// The components of an entity. The
+<span class="lineNum">     102 </span>            :                 /// index of this array is the same as the TypeId
+<span class="lineNum">     103 </span>            :                 /// of the component.
+<span class="lineNum">     104 </span>            :                 ImplComponentArray components;
+<span class="lineNum">     105 </span>            : 
+<span class="lineNum">     106 </span>            :                 /// A list of component types, which resembles
+<span class="lineNum">     107 </span>            :                 /// what components an entity has
+<span class="lineNum">     108 </span>            :                 ComponentTypeList componentTypeList;
+<span class="lineNum">     109 </span>            :             };
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span>            :             /// All the components for every entity, which has
+<span class="lineNum">     112 </span>            :             /// an entity. The indices of this array is the same
+<span class="lineNum">     113 </span>            :             /// as the index component of an entity's ID.
+<span class="lineNum">     114 </span>            :             std::vector&lt;EntityComponents&gt; m_componentEntries;
+<span class="lineNum">     115 </span>            : 
+<span class="lineNum">     116 </span>            :             ImplComponentArray&amp; getComponentsImpl(const Entity&amp; e);
+<span class="lineNum">     117 </span>            :             const ImplComponentArray&amp; getComponentsImpl(const Entity&amp; e) const;
+<span class="lineNum">     118 </span>            :         };
+<span class="lineNum">     119 </span>            :     }
+<span class="lineNum">     120 </span>            : }
+<span class="lineNum">     121 </span>            : 
+<span class="lineNum">     122 </span>            : 
+<span class="lineNum">     123 </span>            : #endif // ANAX_DETAIL_ENTITYCOMPONENTSTORAGE_HPP
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

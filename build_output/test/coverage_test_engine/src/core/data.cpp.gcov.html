@@ -1,0 +1,648 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - src/core/data.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/core</a> - data.cpp<span style="font-size: 80%;"> (source / <a href="data.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">350</td>
+            <td class="headerCovTableEntryLo">0.3 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">24</td>
+            <td class="headerCovTableEntryLo">8.3 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;data.hpp&quot;</a>
+<span class="lineNum">       2 </span>            : #include &quot;components/ai.hpp&quot;
+<span class="lineNum">       3 </span>            : #include &quot;components/camera.hpp&quot;
+<span class="lineNum">       4 </span>            : #include &quot;components/collision.hpp&quot;
+<span class="lineNum">       5 </span>            : #include &quot;components/id.hpp&quot;
+<span class="lineNum">       6 </span>            : #include &quot;components/player.hpp&quot;
+<span class="lineNum">       7 </span>            : #include &quot;components/render.hpp&quot;
+<span class="lineNum">       8 </span>            : #include &quot;components/transform.hpp&quot;
+<span class="lineNum">       9 </span>            : #include &quot;components/velocity.hpp&quot;
+<span class="lineNum">      10 </span>            : #include &quot;exception.hpp&quot;
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : #include &lt;cassert&gt;
+<span class="lineNum">      13 </span>            : #include &lt;fstream&gt;
+<span class="lineNum">      14 </span>            : #include &lt;map&gt;
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span>            : namespace core
+<a name="17"><span class="lineNum">      17 </span>            : {</a>
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span><span class="lineNoCov">          0 : std::string basename(const std::string&amp; pathname)</span>
+<span class="lineNum">      20 </span>            : {
+<span class="lineNum">      21 </span>            :     // TODO(Keegan): Check if works on Windows)
+<span class="lineNum">      22 </span>            :     // TODO(Keegan): Test properly)
+<a name="23"><span class="lineNum">      23 </span><span class="lineNoCov">          0 :     return {std::find_if(pathname.rbegin(),</span></a>
+<span class="lineNum">      24 </span><span class="lineNoCov">          0 :                 pathname.rend(),</span>
+<span class="lineNum">      25 </span><span class="lineNoCov">          0 :                 [](char c) { return (c == '/' || c == '\\'); })</span>
+<span class="lineNum">      26 </span>            :                 .base(),
+<span class="lineNum">      27 </span><span class="lineNoCov">          0 :         pathname.end()};</span>
+<a name="28"><span class="lineNum">      28 </span>            : }</a>
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span><span class="lineNoCov">          0 : std::string pathname(const std::string&amp; pathname)</span>
+<span class="lineNum">      31 </span>            : {
+<span class="lineNum">      32 </span>            :     // TODO(Keegan); Check if works on Windows)
+<a name="33"><span class="lineNum">      33 </span>            :     // TODO(Keegan): Test properly)</a>
+<span class="lineNum">      34 </span>            :     return {pathname.begin(),
+<span class="lineNum">      35 </span><span class="lineNoCov">          0 :         std::find_if(pathname.rbegin(), pathname.rend(), [](char c) {</span>
+<span class="lineNum">      36 </span><span class="lineNoCov">          0 :             return (c == '/' || c == '\\');</span>
+<span class="lineNum">      37 </span><span class="lineNoCov">          0 :         }).base()};</span>
+<a name="38"><span class="lineNum">      38 </span>            : }</a>
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span><span class="lineNoCov">          0 : static std::string base64_decode(const std::string&amp; in)</span>
+<span class="lineNum">      41 </span>            : {
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span><span class="lineNoCov">          0 :     std::string out;</span>
+<span class="lineNum">      44 </span>            : 
+<span class="lineNum">      45 </span><span class="lineNoCov">          0 :     std::vector&lt;int&gt; T(256, -1);</span>
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 :     for (int i = 0; i &lt; 64; i++)</span>
+<span class="lineNum">      47 </span>            :     {
+<span class="lineNum">      48 </span>            :         T[&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;
+<span class="lineNum">      49 </span><span class="lineNoCov">          0 :                 [i]] = i;</span>
+<span class="lineNum">      50 </span>            :     }
+<span class="lineNum">      51 </span>            : 
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :     int val = 0, valb = -8;</span>
+<span class="lineNum">      53 </span><span class="lineNoCov">          0 :     for (unsigned char c : in)</span>
+<span class="lineNum">      54 </span>            :     {
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 :         if (T[c] == -1)</span>
+<span class="lineNum">      56 </span>            :         {
+<span class="lineNum">      57 </span><span class="lineNoCov">          0 :             break;</span>
+<span class="lineNum">      58 </span>            :         }
+<span class="lineNum">      59 </span><span class="lineNoCov">          0 :         val = (val &lt;&lt; 6) + T[c];</span>
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 :         valb += 6;</span>
+<span class="lineNum">      61 </span><span class="lineNoCov">          0 :         if (valb &gt;= 0)</span>
+<span class="lineNum">      62 </span>            :         {
+<span class="lineNum">      63 </span><span class="lineNoCov">          0 :             out.push_back(char((val &gt;&gt; valb) &amp; 0xFF));</span>
+<span class="lineNum">      64 </span><span class="lineNoCov">          0 :             valb -= 8;</span>
+<span class="lineNum">      65 </span>            :         }
+<span class="lineNum">      66 </span>            :     }
+<span class="lineNum">      67 </span><span class="lineNoCov">          0 :     return out;</span>
+<a name="68"><span class="lineNum">      68 </span>            : }</a>
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 : static std::vector&lt;int32_t&gt; string_decode(const std::string&amp; in)</span>
+<span class="lineNum">      71 </span>            : {
+<span class="lineNum">      72 </span><span class="lineNoCov">          0 :     std::vector&lt;int32_t&gt; result;</span>
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 :     if (in.size() % 4 != 0u)</span>
+<span class="lineNum">      74 </span>            :     {
+<span class="lineNum">      75 </span>            :         // TODO(Keegan): Handle error better)
+<span class="lineNum">      76 </span><span class="lineNoCov">          0 :         assert(false);</span>
+<span class="lineNum">      77 </span>            :     }
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 :     for (auto it = in.begin(); it &lt; in.end(); it += 4)</span>
+<span class="lineNum">      79 </span>            :     {
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :         auto b1 = *(it);</span>
+<span class="lineNum">      81 </span><span class="lineNoCov">          0 :         auto b2 = *(it + 1);</span>
+<span class="lineNum">      82 </span><span class="lineNoCov">          0 :         auto b3 = *(it + 2);</span>
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :         auto b4 = *(it + 3);</span>
+<span class="lineNum">      84 </span><span class="lineNoCov">          0 :         int32_t val = b1;</span>
+<span class="lineNum">      85 </span>            :         // TODO(Keegan): This is awfully endian dependent...)
+<span class="lineNum">      86 </span><span class="lineNoCov">          0 :         val |= b2 &lt;&lt; 8;</span>
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 :         val |= b3 &lt;&lt; 16;</span>
+<span class="lineNum">      88 </span><span class="lineNoCov">          0 :         val |= b4 &lt;&lt; 24;</span>
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :         result.push_back(val);</span>
+<span class="lineNum">      90 </span>            :     }
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :     return result;</span>
+<a name="92"><span class="lineNum">      92 </span>            : }</a>
+<span class="lineNum">      93 </span>            : 
+<span class="lineNum">      94 </span><span class="lineNoCov">          0 : void DataReader::factory_component_ai(</span>
+<span class="lineNum">      95 </span>            :     const Json::Value&amp; data, anax::Entity entity)
+<span class="lineNum">      96 </span>            : {
+<span class="lineNum">      97 </span><span class="lineNoCov">          0 :     const std::string prop_root_node{&quot;root_node&quot;};</span>
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     100 </span><span class="lineNoCov">          0 :         data, components::AiComponent::name, prop_root_node);</span>
+<span class="lineNum">     101 </span>            :     // TODO(Keegan): use real root node data)
+<span class="lineNum">     102 </span><span class="lineNoCov">          0 :     auto p_root_node = factory_ai_node(data[prop_root_node]);</span>
+<span class="lineNum">     103 </span><span class="lineNoCov">          0 :     entity.addComponent&lt;components::AiComponent&gt;(p_root_node);</span>
+<a name="104"><span class="lineNum">     104 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     105 </span>            : 
+<span class="lineNum">     106 </span><span class="lineNoCov">          0 : systems::AiNode* DataReader::factory_ai_node(const Json::Value&amp; data)</span>
+<span class="lineNum">     107 </span>            : {
+<span class="lineNum">     108 </span><span class="lineNoCov">          0 :     const std::string prop_type{&quot;type&quot;};</span>
+<span class="lineNum">     109 </span><span class="lineNoCov">          0 :     const std::string prop_type_node{&quot;node&quot;};</span>
+<span class="lineNum">     110 </span><span class="lineNoCov">          0 :     const std::string prop_type_sequence{&quot;sequence&quot;};</span>
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :     const std::string prop_type_loop{&quot;loop&quot;};</span>
+<span class="lineNum">     112 </span><span class="lineNoCov">          0 :     const std::string prop_type_selector{&quot;selector&quot;};</span>
+<span class="lineNum">     113 </span><span class="lineNoCov">          0 :     const std::string prop_type_invert{&quot;invert&quot;};</span>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :     const std::string prop_type_moveto{&quot;moveto&quot;};</span>
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :     const std::string prop_type_follow{&quot;follow&quot;};</span>
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :     const std::string prop_children{&quot;children&quot;};</span>
+<span class="lineNum">     117 </span><span class="lineNoCov">          0 :     const std::string prop_decoratee{&quot;decoratee&quot;};</span>
+<span class="lineNum">     118 </span><span class="lineNoCov">          0 :     const std::string prop_pos_x{&quot;pos_x&quot;};</span>
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 :     const std::string prop_pos_y{&quot;pos_y&quot;};</span>
+<span class="lineNum">     120 </span><span class="lineNoCov">          0 :     const std::string prop_target{&quot;target&quot;};</span>
+<span class="lineNum">     121 </span><span class="lineNoCov">          0 :     const std::string prop_follow_x{&quot;follow_x&quot;};</span>
+<span class="lineNum">     122 </span><span class="lineNoCov">          0 :     const std::string prop_follow_y{&quot;follow_y&quot;};</span>
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :     const std::string prop_tolerance{&quot;tolerance&quot;};</span>
+<span class="lineNum">     124 </span>            : 
+<span class="lineNum">     125 </span><span class="lineNoCov">          0 :     const std::string type = data[&quot;type&quot;].asString();</span>
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :     m_sp_logger-&gt;info(&quot;Found node {}&quot;, type);</span>
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :     systems::AiNode* p_to_return = nullptr;</span>
+<span class="lineNum">     129 </span><span class="lineNoCov">          0 :     if (type.compare(prop_type_node) == 0)</span>
+<span class="lineNum">     130 </span>            :     {
+<span class="lineNum">     131 </span><span class="lineNoCov">          0 :         p_to_return = new systems::AiNode();</span>
+<span class="lineNum">     132 </span>            :     }
+<span class="lineNum">     133 </span><span class="lineNoCov">          0 :     else if (type.compare(prop_type_sequence) == 0)</span>
+<span class="lineNum">     134 </span>            :     {
+<span class="lineNum">     135 </span><span class="lineNoCov">          0 :         auto p_node = new systems::AiNodeSequence();</span>
+<span class="lineNum">     136 </span><span class="lineNoCov">          0 :         for (auto child : data[prop_children])</span>
+<span class="lineNum">     137 </span>            :         {
+<span class="lineNum">     138 </span><span class="lineNoCov">          0 :             m_sp_logger-&gt;info(&quot;Building child node&quot;);</span>
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :             auto p_child_node = factory_ai_node(child);</span>
+<span class="lineNum">     140 </span><span class="lineNoCov">          0 :             p_node-&gt;add_child(p_child_node);</span>
+<span class="lineNum">     141 </span>            :         }
+<span class="lineNum">     142 </span><span class="lineNoCov">          0 :         p_to_return = p_node;</span>
+<span class="lineNum">     143 </span>            :     }
+<span class="lineNum">     144 </span><span class="lineNoCov">          0 :     else if (type.compare(prop_type_selector) == 0)</span>
+<span class="lineNum">     145 </span>            :     {
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :         auto p_node = new systems::AiNodeSelector();</span>
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :         for (auto child : data[prop_children])</span>
+<span class="lineNum">     148 </span>            :         {
+<span class="lineNum">     149 </span><span class="lineNoCov">          0 :             m_sp_logger-&gt;info(&quot;Building child node&quot;);</span>
+<span class="lineNum">     150 </span><span class="lineNoCov">          0 :             auto p_child_node = factory_ai_node(child);</span>
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :             p_node-&gt;add_child(p_child_node);</span>
+<span class="lineNum">     152 </span>            :         }
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :         p_to_return = p_node;</span>
+<span class="lineNum">     154 </span>            :     }
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :     else if (type.compare(prop_type_loop) == 0)</span>
+<span class="lineNum">     156 </span>            :     {
+<span class="lineNum">     157 </span><span class="lineNoCov">          0 :         auto p_node = new systems::AiNodeLoop();</span>
+<span class="lineNum">     158 </span><span class="lineNoCov">          0 :         for (auto child : data[prop_children])</span>
+<span class="lineNum">     159 </span>            :         {
+<span class="lineNum">     160 </span><span class="lineNoCov">          0 :             m_sp_logger-&gt;info(&quot;Building child node&quot;);</span>
+<span class="lineNum">     161 </span><span class="lineNoCov">          0 :             auto p_child_node = factory_ai_node(child);</span>
+<span class="lineNum">     162 </span><span class="lineNoCov">          0 :             p_node-&gt;add_child(p_child_node);</span>
+<span class="lineNum">     163 </span>            :         }
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :         p_to_return = p_node;</span>
+<span class="lineNum">     165 </span>            :     }
+<span class="lineNum">     166 </span><span class="lineNoCov">          0 :     else if (type.compare(prop_type_invert) == 0)</span>
+<span class="lineNum">     167 </span>            :     {
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :         auto p_decoratee = factory_ai_node(data[prop_decoratee]);</span>
+<span class="lineNum">     169 </span><span class="lineNoCov">          0 :         auto p_node = new systems::AiNodeDecoratorInvert(p_decoratee);</span>
+<span class="lineNum">     170 </span><span class="lineNoCov">          0 :         p_to_return = p_node;</span>
+<span class="lineNum">     171 </span>            :     }
+<span class="lineNum">     172 </span><span class="lineNoCov">          0 :     else if (type.compare(prop_type_moveto) == 0)</span>
+<span class="lineNum">     173 </span>            :     {
+<span class="lineNum">     174 </span><span class="lineNoCov">          0 :         auto pos_x = data[prop_pos_x].asDouble();</span>
+<span class="lineNum">     175 </span><span class="lineNoCov">          0 :         auto pos_y = data[prop_pos_y].asDouble();</span>
+<span class="lineNum">     176 </span><span class="lineNoCov">          0 :         auto tolerance = data[prop_tolerance].asDouble();</span>
+<span class="lineNum">     177 </span><span class="lineNoCov">          0 :         auto p_node = new systems::AiNodeMoveTo(pos_x, pos_y, tolerance);</span>
+<span class="lineNum">     178 </span><span class="lineNoCov">          0 :         p_to_return = p_node;</span>
+<span class="lineNum">     179 </span>            :     }
+<span class="lineNum">     180 </span><span class="lineNoCov">          0 :     else if (type.compare(prop_type_follow) == 0)</span>
+<span class="lineNum">     181 </span>            :     {
+<span class="lineNum">     182 </span><span class="lineNoCov">          0 :         auto follow_x = data[prop_follow_x].asBool();</span>
+<span class="lineNum">     183 </span><span class="lineNoCov">          0 :         auto follow_y = data[prop_follow_y].asBool();</span>
+<span class="lineNum">     184 </span><span class="lineNoCov">          0 :         auto tolerance = data[prop_tolerance].asDouble();</span>
+<span class="lineNum">     185 </span><span class="lineNoCov">          0 :         check_required_component_property(</span>
+<span class="lineNum">     186 </span><span class="lineNoCov">          0 :             data, components::CameraComponent::name, prop_target);</span>
+<span class="lineNum">     187 </span><span class="lineNoCov">          0 :         std::string target = data[prop_target].asString();</span>
+<span class="lineNum">     188 </span>            : 
+<span class="lineNum">     189 </span><span class="lineNoCov">          0 :         auto ent_target = m_map_entities[target];</span>
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span>            :         auto p_node = new systems::AiNodeFollow(
+<span class="lineNum">     192 </span><span class="lineNoCov">          0 :             ent_target, tolerance, follow_x, follow_y);</span>
+<span class="lineNum">     193 </span><span class="lineNoCov">          0 :         p_to_return = p_node;</span>
+<span class="lineNum">     194 </span>            :     }
+<a name="195"><span class="lineNum">     195 </span><span class="lineNoCov">          0 :     return p_to_return;</span></a>
+<span class="lineNum">     196 </span>            : }
+<span class="lineNum">     197 </span><span class="lineNoCov">          0 : void DataReader::factory_component_player(</span>
+<span class="lineNum">     198 </span>            :     const Json::Value&amp; data, anax::Entity entity)
+<span class="lineNum">     199 </span>            : {
+<span class="lineNum">     200 </span><span class="lineNoCov">          0 :     entity.addComponent&lt;components::PlayerComponent&gt;();</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span><span class="lineNoCov">          0 : void DataReader::factory_component_camera(</span>
+<span class="lineNum">     204 </span>            :     const Json::Value&amp; data, anax::Entity entity)
+<span class="lineNum">     205 </span>            : {
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 :     const std::string prop_zoom{&quot;zoom&quot;};</span>
+<span class="lineNum">     207 </span>            : 
+<span class="lineNum">     208 </span><span class="lineNoCov">          0 :     float zoom = data.get(prop_zoom, 1.0f).asFloat();</span>
+<span class="lineNum">     209 </span>            : 
+<span class="lineNum">     210 </span><span class="lineNoCov">          0 :     entity.addComponent&lt;components::CameraComponent&gt;(zoom);</span>
+<a name="211"><span class="lineNum">     211 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     212 </span>            : 
+<span class="lineNum">     213 </span><span class="lineNoCov">          0 : void DataReader::factory_component_collision(</span>
+<span class="lineNum">     214 </span>            :     const Json::Value&amp; data, anax::Entity entity)
+<span class="lineNum">     215 </span>            : {
+<span class="lineNum">     216 </span><span class="lineNoCov">          0 :     const std::string prop_x{&quot;x&quot;};</span>
+<span class="lineNum">     217 </span><span class="lineNoCov">          0 :     const std::string prop_y{&quot;y&quot;};</span>
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 :     const std::string prop_h{&quot;h&quot;};</span>
+<span class="lineNum">     219 </span><span class="lineNoCov">          0 :     const std::string prop_w{&quot;w&quot;};</span>
+<span class="lineNum">     220 </span><span class="lineNoCov">          0 :     const std::string prop_causeevents{&quot;cancauseevents&quot;};</span>
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :     int x = data.get(prop_x, 0).asInt();</span>
+<span class="lineNum">     223 </span><span class="lineNoCov">          0 :     int y = data.get(prop_y, 0).asInt();</span>
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     226 </span><span class="lineNoCov">          0 :         data, components::Collision::name, prop_w);</span>
+<span class="lineNum">     227 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     228 </span><span class="lineNoCov">          0 :         data, components::Collision::name, prop_h);</span>
+<span class="lineNum">     229 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     230 </span><span class="lineNoCov">          0 :         data, components::Collision::name, prop_causeevents);</span>
+<span class="lineNum">     231 </span><span class="lineNoCov">          0 :     int h = data[prop_h].asInt();</span>
+<span class="lineNum">     232 </span><span class="lineNoCov">          0 :     int w = data[prop_w].asInt();</span>
+<span class="lineNum">     233 </span><span class="lineNoCov">          0 :     bool cancauseevents = data[prop_causeevents].asBool();</span>
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span><span class="lineNoCov">          0 :     entity.addComponent&lt;components::Collision&gt;(x, y, h, w, cancauseevents);</span>
+<a name="236"><span class="lineNum">     236 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     237 </span>            : 
+<span class="lineNum">     238 </span><span class="lineNoCov">          0 : void DataReader::factory_component_texture(</span>
+<span class="lineNum">     239 </span>            :     const Json::Value&amp; data, anax::Entity entity)
+<span class="lineNum">     240 </span>            : {
+<span class="lineNum">     241 </span><span class="lineNoCov">          0 :     const std::string prop_texture_path{&quot;texture_path&quot;};</span>
+<span class="lineNum">     242 </span>            : 
+<span class="lineNum">     243 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :         data, components::TextureComponent::name, prop_texture_path);</span>
+<span class="lineNum">     245 </span><span class="lineNoCov">          0 :     std::string texture_path = data[prop_texture_path].asString();</span>
+<span class="lineNum">     246 </span>            : 
+<span class="lineNum">     247 </span><span class="lineNoCov">          0 :     entity.addComponent&lt;components::TextureComponent&gt;(texture_path);</span>
+<a name="248"><span class="lineNum">     248 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     249 </span>            : 
+<span class="lineNum">     250 </span><span class="lineNoCov">          0 : void DataReader::factory_component_transform(</span>
+<span class="lineNum">     251 </span>            :     const Json::Value&amp; data, anax::Entity entity)
+<span class="lineNum">     252 </span>            : {
+<span class="lineNum">     253 </span><span class="lineNoCov">          0 :     const std::string prop_pos_x{&quot;pos_x&quot;};</span>
+<span class="lineNum">     254 </span><span class="lineNoCov">          0 :     const std::string prop_pos_y{&quot;pos_y&quot;};</span>
+<span class="lineNum">     255 </span><span class="lineNoCov">          0 :     const std::string prop_size_x{&quot;size_x&quot;};</span>
+<span class="lineNum">     256 </span><span class="lineNoCov">          0 :     const std::string prop_size_y{&quot;size_y&quot;};</span>
+<span class="lineNum">     257 </span><span class="lineNoCov">          0 :     const std::string prop_rotation{&quot;rotation&quot;};</span>
+<span class="lineNum">     258 </span><span class="lineNoCov">          0 :     const std::string prop_flip_horiz{&quot;flip_horiz&quot;};</span>
+<span class="lineNum">     259 </span><span class="lineNoCov">          0 :     const std::string prop_flip_vert{&quot;flip_vert&quot;};</span>
+<span class="lineNum">     260 </span>            : 
+<span class="lineNum">     261 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     262 </span><span class="lineNoCov">          0 :         data, components::TransformComponent::name, prop_pos_x);</span>
+<span class="lineNum">     263 </span><span class="lineNoCov">          0 :     float pos_x = data[prop_pos_x].asFloat();</span>
+<span class="lineNum">     264 </span>            : 
+<span class="lineNum">     265 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     266 </span><span class="lineNoCov">          0 :         data, components::TransformComponent::name, prop_pos_y);</span>
+<span class="lineNum">     267 </span><span class="lineNoCov">          0 :     float pos_y = data[prop_pos_y].asFloat();</span>
+<span class="lineNum">     268 </span>            : 
+<span class="lineNum">     269 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     270 </span><span class="lineNoCov">          0 :         data, components::TransformComponent::name, prop_size_x);</span>
+<span class="lineNum">     271 </span><span class="lineNoCov">          0 :     float size_x = data[prop_size_x].asFloat();</span>
+<span class="lineNum">     272 </span>            : 
+<span class="lineNum">     273 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     274 </span><span class="lineNoCov">          0 :         data, components::TransformComponent::name, prop_size_y);</span>
+<span class="lineNum">     275 </span><span class="lineNoCov">          0 :     float size_y = data[prop_size_y].asFloat();</span>
+<span class="lineNum">     276 </span>            : 
+<span class="lineNum">     277 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     278 </span><span class="lineNoCov">          0 :         data, components::TransformComponent::name, prop_rotation);</span>
+<span class="lineNum">     279 </span><span class="lineNoCov">          0 :     float rotation = data[prop_rotation].asFloat();</span>
+<span class="lineNum">     280 </span>            : 
+<span class="lineNum">     281 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     282 </span><span class="lineNoCov">          0 :         data, components::TransformComponent::name, prop_flip_vert);</span>
+<span class="lineNum">     283 </span><span class="lineNoCov">          0 :     bool flip_vert = data[prop_flip_vert].asBool();</span>
+<span class="lineNum">     284 </span>            : 
+<span class="lineNum">     285 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     286 </span><span class="lineNoCov">          0 :         data, components::TransformComponent::name, prop_flip_horiz);</span>
+<span class="lineNum">     287 </span><span class="lineNoCov">          0 :     bool flip_horiz = data[prop_flip_horiz].asBool();</span>
+<span class="lineNum">     288 </span>            : 
+<span class="lineNum">     289 </span>            :     entity.addComponent&lt;components::TransformComponent&gt;(
+<span class="lineNum">     290 </span><span class="lineNoCov">          0 :         pos_x, pos_y, size_x, size_y, rotation, flip_vert, flip_horiz);</span>
+<a name="291"><span class="lineNum">     291 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     292 </span>            : 
+<span class="lineNum">     293 </span><span class="lineNoCov">          0 : void DataReader::factory_component_trigger(</span>
+<span class="lineNum">     294 </span>            :     const Json::Value&amp; data, anax::Entity entity)
+<span class="lineNum">     295 </span>            : {
+<span class="lineNum">     296 </span><span class="lineNoCov">          0 :     const std::string prop_msg{&quot;msg&quot;};</span>
+<span class="lineNum">     297 </span>            : 
+<span class="lineNum">     298 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     299 </span><span class="lineNoCov">          0 :         data, components::Trigger::name, prop_msg);</span>
+<span class="lineNum">     300 </span><span class="lineNoCov">          0 :     std::string msg = data[prop_msg].asString();</span>
+<span class="lineNum">     301 </span>            : 
+<span class="lineNum">     302 </span><span class="lineNoCov">          0 :     entity.addComponent&lt;components::Trigger&gt;(msg);</span>
+<a name="303"><span class="lineNum">     303 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     304 </span>            : 
+<span class="lineNum">     305 </span><span class="lineNoCov">          0 : void DataReader::factory_component_movement(</span>
+<span class="lineNum">     306 </span>            :     const Json::Value&amp; data, anax::Entity entity)
+<span class="lineNum">     307 </span>            : {
+<span class="lineNum">     308 </span><span class="lineNoCov">          0 :     const std::string prop_accel{&quot;accel&quot;};</span>
+<span class="lineNum">     309 </span><span class="lineNoCov">          0 :     const std::string prop_top_speed{&quot;top_speed&quot;};</span>
+<span class="lineNum">     310 </span>            : 
+<span class="lineNum">     311 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     312 </span><span class="lineNoCov">          0 :         data, components::MovementComponent::name, prop_accel);</span>
+<span class="lineNum">     313 </span><span class="lineNoCov">          0 :     float accel = data[prop_accel].asFloat();</span>
+<span class="lineNum">     314 </span>            : 
+<span class="lineNum">     315 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     316 </span><span class="lineNoCov">          0 :         data, components::MovementComponent::name, prop_top_speed);</span>
+<span class="lineNum">     317 </span><span class="lineNoCov">          0 :     float top_speed = data[prop_top_speed].asFloat();</span>
+<span class="lineNum">     318 </span>            : 
+<span class="lineNum">     319 </span><span class="lineNoCov">          0 :     entity.addComponent&lt;components::MovementComponent&gt;(accel, top_speed);</span>
+<a name="320"><span class="lineNum">     320 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     321 </span>            : 
+<span class="lineNum">     322 </span><span class="lineNoCov">          0 : void DataReader::factory_component_physics(</span>
+<span class="lineNum">     323 </span>            :     const Json::Value&amp; data, anax::Entity entity)
+<span class="lineNum">     324 </span>            : {
+<span class="lineNum">     325 </span><span class="lineNoCov">          0 :     const std::string prop_mass{&quot;mass&quot;};</span>
+<span class="lineNum">     326 </span><span class="lineNoCov">          0 :     const std::string prop_friction{&quot;friction&quot;};</span>
+<span class="lineNum">     327 </span><span class="lineNoCov">          0 :     const std::string prop_force_x{&quot;force_x&quot;};</span>
+<span class="lineNum">     328 </span><span class="lineNoCov">          0 :     const std::string prop_force_y{&quot;force_y&quot;};</span>
+<span class="lineNum">     329 </span><span class="lineNoCov">          0 :     const float prop_force_x_default = 0.0f;</span>
+<span class="lineNum">     330 </span><span class="lineNoCov">          0 :     const float prop_force_y_default = 0.0f;</span>
+<span class="lineNum">     331 </span><span class="lineNoCov">          0 :     const std::string prop_vel_x{&quot;vel_x&quot;};</span>
+<span class="lineNum">     332 </span><span class="lineNoCov">          0 :     const std::string prop_vel_y{&quot;vel_y&quot;};</span>
+<span class="lineNum">     333 </span><span class="lineNoCov">          0 :     const float prop_vel_x_default = 0.0f;</span>
+<span class="lineNum">     334 </span><span class="lineNoCov">          0 :     const float prop_vel_y_default = 0.0f;</span>
+<span class="lineNum">     335 </span><span class="lineNoCov">          0 :     const std::string prop_restitution{&quot;restitution&quot;};</span>
+<span class="lineNum">     336 </span>            : 
+<span class="lineNum">     337 </span><span class="lineNoCov">          0 :     float velocity_x = data.get(prop_vel_x, prop_vel_x_default).asFloat();</span>
+<span class="lineNum">     338 </span><span class="lineNoCov">          0 :     float velocity_y = data.get(prop_vel_y, prop_vel_y_default).asFloat();</span>
+<span class="lineNum">     339 </span><span class="lineNoCov">          0 :     float force_x = data.get(prop_force_x, prop_force_x_default).asFloat();</span>
+<span class="lineNum">     340 </span><span class="lineNoCov">          0 :     float force_y = data.get(prop_force_y, prop_force_y_default).asFloat();</span>
+<span class="lineNum">     341 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     342 </span><span class="lineNoCov">          0 :         data, components::PhysicsComponent::name, prop_mass);</span>
+<span class="lineNum">     343 </span><span class="lineNoCov">          0 :     float mass = data[prop_mass].asFloat();</span>
+<span class="lineNum">     344 </span>            : 
+<span class="lineNum">     345 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     346 </span><span class="lineNoCov">          0 :         data, components::PhysicsComponent::name, prop_friction);</span>
+<span class="lineNum">     347 </span><span class="lineNoCov">          0 :     float friction = data[prop_friction].asFloat();</span>
+<span class="lineNum">     348 </span>            : 
+<span class="lineNum">     349 </span><span class="lineNoCov">          0 :     check_required_component_property(</span>
+<span class="lineNum">     350 </span><span class="lineNoCov">          0 :         data, components::PhysicsComponent::name, prop_restitution);</span>
+<span class="lineNum">     351 </span><span class="lineNoCov">          0 :     float restitution = data[prop_restitution].asFloat();</span>
+<span class="lineNum">     352 </span>            : 
+<span class="lineNum">     353 </span>            :     entity.addComponent&lt;components::PhysicsComponent&gt;(
+<span class="lineNum">     354 </span><span class="lineNoCov">          0 :         mass, friction, restitution, velocity_x, velocity_y, force_x, force_y);</span>
+<a name="355"><span class="lineNum">     355 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     356 </span>            : 
+<span class="lineNum">     357 </span><span class="lineNoCov">          0 : DataReader::DataReader(std::string filename) : JsonFileReader(filename)</span>
+<span class="lineNum">     358 </span>            : {
+<span class="lineNum">     359 </span><span class="lineNoCov">          0 :     m_sp_logger = logging_get_logger(&quot;data&quot;);</span>
+<span class="lineNum">     360 </span>            : 
+<span class="lineNum">     361 </span><span class="lineNoCov">          0 :     component_factories.insert(std::make_pair(</span>
+<span class="lineNum">     362 </span><span class="lineNoCov">          0 :         components::AiComponent::name, &amp;DataReader::factory_component_ai));</span>
+<span class="lineNum">     363 </span><span class="lineNoCov">          0 :     component_factories.insert(std::make_pair(components::CameraComponent::name,</span>
+<span class="lineNum">     364 </span><span class="lineNoCov">          0 :         &amp;DataReader::factory_component_camera));</span>
+<span class="lineNum">     365 </span><span class="lineNoCov">          0 :     component_factories.insert(std::make_pair(</span>
+<span class="lineNum">     366 </span><span class="lineNoCov">          0 :         components::Collision::name, &amp;DataReader::factory_component_collision));</span>
+<span class="lineNum">     367 </span><span class="lineNoCov">          0 :     component_factories.insert(std::make_pair(components::PlayerComponent::name,</span>
+<span class="lineNum">     368 </span><span class="lineNoCov">          0 :         &amp;DataReader::factory_component_player));</span>
+<span class="lineNum">     369 </span>            :     component_factories.insert(
+<span class="lineNum">     370 </span><span class="lineNoCov">          0 :         std::make_pair(components::TextureComponent::name,</span>
+<span class="lineNum">     371 </span><span class="lineNoCov">          0 :             &amp;DataReader::factory_component_texture));</span>
+<span class="lineNum">     372 </span>            :     component_factories.insert(
+<span class="lineNum">     373 </span><span class="lineNoCov">          0 :         std::make_pair(components::TransformComponent::name,</span>
+<span class="lineNum">     374 </span><span class="lineNoCov">          0 :             &amp;DataReader::factory_component_transform));</span>
+<span class="lineNum">     375 </span><span class="lineNoCov">          0 :     component_factories.insert(std::make_pair(</span>
+<span class="lineNum">     376 </span><span class="lineNoCov">          0 :         components::Trigger::name, &amp;DataReader::factory_component_trigger));</span>
+<span class="lineNum">     377 </span>            :     component_factories.insert(
+<span class="lineNum">     378 </span><span class="lineNoCov">          0 :         std::make_pair(components::PhysicsComponent::name,</span>
+<span class="lineNum">     379 </span><span class="lineNoCov">          0 :             &amp;DataReader::factory_component_physics));</span>
+<span class="lineNum">     380 </span>            :     component_factories.insert(
+<span class="lineNum">     381 </span><span class="lineNoCov">          0 :         std::make_pair(components::MovementComponent::name,</span>
+<span class="lineNum">     382 </span><span class="lineNoCov">          0 :             &amp;DataReader::factory_component_movement));</span>
+<a name="383"><span class="lineNum">     383 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     384 </span>            : 
+<span class="lineNum">     385 </span><span class="lineNoCov">          0 : anax::Entity DataReader::makeEntity(std::string entityname, anax::World&amp; world)</span>
+<span class="lineNum">     386 </span>            : {
+<span class="lineNum">     387 </span><span class="lineNoCov">          0 :     const std::string prop_name_components{&quot;components&quot;};</span>
+<span class="lineNum">     388 </span><span class="lineNoCov">          0 :     const std::string prop_name_template{&quot;template&quot;};</span>
+<span class="lineNum">     389 </span>            : 
+<span class="lineNum">     390 </span><span class="lineNoCov">          0 :     if (!m_json_data.isMember(entityname))</span>
+<span class="lineNum">     391 </span>            :     {
+<span class="lineNum">     392 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;error(&quot;JSON data {} missing referenced entity {}&quot;,</span>
+<span class="lineNum">     393 </span>            :             m_str_description,
+<span class="lineNum">     394 </span><span class="lineNoCov">          0 :             entityname);</span>
+<span class="lineNum">     395 </span>            :         throw ExceptionParseFailure(
+<span class="lineNum">     396 </span><span class="lineNoCov">          0 :             m_str_description, &quot;Missing referenced entity&quot;);</span>
+<span class="lineNum">     397 </span>            :     }
+<span class="lineNum">     398 </span>            : 
+<span class="lineNum">     399 </span><span class="lineNoCov">          0 :     auto entity = world.createEntity();</span>
+<span class="lineNum">     400 </span>            : 
+<span class="lineNum">     401 </span><span class="lineNoCov">          0 :     Json::Value entity_data;</span>
+<span class="lineNum">     402 </span><span class="lineNoCov">          0 :     if (m_json_data[entityname].isMember(prop_name_template))</span>
+<span class="lineNum">     403 </span>            :     {
+<span class="lineNum">     404 </span>            :         std::string templatename =
+<span class="lineNum">     405 </span><span class="lineNoCov">          0 :             m_json_data[entityname][prop_name_template].asString();</span>
+<span class="lineNum">     406 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;info(</span>
+<span class="lineNum">     407 </span><span class="lineNoCov">          0 :             &quot;Using template {} for entity {}&quot;, templatename, entityname);</span>
+<span class="lineNum">     408 </span><span class="lineNoCov">          0 :         entity_data = merge_values(</span>
+<span class="lineNum">     409 </span><span class="lineNoCov">          0 :             m_map_references[templatename], m_json_data[entityname]);</span>
+<span class="lineNum">     410 </span>            :     }
+<span class="lineNum">     411 </span>            :     else
+<span class="lineNum">     412 </span>            :     {
+<span class="lineNum">     413 </span><span class="lineNoCov">          0 :         entity_data = m_json_data[entityname];</span>
+<span class="lineNum">     414 </span>            :     }
+<span class="lineNum">     415 </span>            : 
+<span class="lineNum">     416 </span><span class="lineNoCov">          0 :     if (!entity_data.isMember(prop_name_components))</span>
+<span class="lineNum">     417 </span>            :     {
+<span class="lineNum">     418 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;error(&quot;JSON data {} entity {} missing {}&quot;,</span>
+<span class="lineNum">     419 </span>            :             m_str_description,
+<span class="lineNum">     420 </span>            :             entityname,
+<span class="lineNum">     421 </span><span class="lineNoCov">          0 :             prop_name_components);</span>
+<span class="lineNum">     422 </span>            :         throw ExceptionParseFailure(
+<span class="lineNum">     423 </span><span class="lineNoCov">          0 :             m_str_description, &quot;JSON data entity missing components&quot;);</span>
+<span class="lineNum">     424 </span>            :     }
+<span class="lineNum">     425 </span>            : 
+<span class="lineNum">     426 </span><span class="lineNoCov">          0 :     auto components = entity_data[prop_name_components];</span>
+<span class="lineNum">     427 </span><span class="lineNoCov">          0 :     entity.addComponent&lt;components::IdComponent&gt;(entityname);</span>
+<span class="lineNum">     428 </span><span class="lineNoCov">          0 :     m_sp_logger-&gt;info(&quot;Components list for entity name {} size {}&quot;,</span>
+<span class="lineNum">     429 </span>            :         entityname,
+<span class="lineNum">     430 </span><span class="lineNoCov">          0 :         components.size());</span>
+<span class="lineNum">     431 </span>            : 
+<span class="lineNum">     432 </span><span class="lineNoCov">          0 :     Json::Value::Members member_names = components.getMemberNames();</span>
+<span class="lineNum">     433 </span><span class="lineNoCov">          0 :     for (auto type : member_names)</span>
+<span class="lineNum">     434 </span>            :     {
+<span class="lineNum">     435 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;info(&quot;Creating component {}&quot;, type);</span>
+<span class="lineNum">     436 </span>            : 
+<span class="lineNum">     437 </span><span class="lineNoCov">          0 :         factory_method fp = component_factories[type];</span>
+<span class="lineNum">     438 </span><span class="lineNoCov">          0 :         (this-&gt;*fp)(components[type], entity);</span>
+<span class="lineNum">     439 </span>            :     }
+<span class="lineNum">     440 </span>            : 
+<span class="lineNum">     441 </span><span class="lineNoCov">          0 :     entity.activate();</span>
+<span class="lineNum">     442 </span><span class="lineNoCov">          0 :     return entity;</span>
+<a name="443"><span class="lineNum">     443 </span>            : }</a>
+<span class="lineNum">     444 </span>            : 
+<span class="lineNum">     445 </span><span class="lineNoCov">          0 : void DataReader::makeEntities(anax::World&amp; world)</span>
+<span class="lineNum">     446 </span>            : {
+<span class="lineNum">     447 </span><span class="lineNoCov">          0 :     const std::string object_name_world{&quot;world&quot;};</span>
+<span class="lineNum">     448 </span><span class="lineNoCov">          0 :     const std::string prop_name_entities{&quot;entities&quot;};</span>
+<span class="lineNum">     449 </span>            : 
+<span class="lineNum">     450 </span><span class="lineNoCov">          0 :     scan_references(m_json_data);</span>
+<span class="lineNum">     451 </span>            : 
+<span class="lineNum">     452 </span><span class="lineNoCov">          0 :     if (!m_json_data.isMember(object_name_world))</span>
+<span class="lineNum">     453 </span>            :     {
+<span class="lineNum">     454 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;error(</span>
+<span class="lineNum">     455 </span><span class="lineNoCov">          0 :             &quot;JSON data {} missing {}&quot;, m_str_description, object_name_world);</span>
+<span class="lineNum">     456 </span>            :         throw ExceptionParseFailure(
+<span class="lineNum">     457 </span><span class="lineNoCov">          0 :             m_str_description, &quot;JSON Data missing world&quot;);</span>
+<span class="lineNum">     458 </span>            :     }
+<span class="lineNum">     459 </span><span class="lineNoCov">          0 :     if (!m_json_data[object_name_world].isMember(prop_name_entities))</span>
+<span class="lineNum">     460 </span>            :     {
+<span class="lineNum">     461 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;error(&quot;JSON data {} world missing {}&quot;,</span>
+<span class="lineNum">     462 </span>            :             m_str_description,
+<span class="lineNum">     463 </span><span class="lineNoCov">          0 :             prop_name_entities);</span>
+<span class="lineNum">     464 </span>            :         throw ExceptionParseFailure(
+<span class="lineNum">     465 </span><span class="lineNoCov">          0 :             m_str_description, &quot;JSON Data world missing entities&quot;);</span>
+<span class="lineNum">     466 </span>            :     }
+<span class="lineNum">     467 </span>            : 
+<span class="lineNum">     468 </span><span class="lineNoCov">          0 :     auto entities = m_json_data[object_name_world][prop_name_entities];</span>
+<span class="lineNum">     469 </span><span class="lineNoCov">          0 :     m_sp_logger-&gt;info(&quot;Entities list for world size {}&quot;, entities.size());</span>
+<span class="lineNum">     470 </span><span class="lineNoCov">          0 :     for (auto value : entities)</span>
+<span class="lineNum">     471 </span>            :     {
+<span class="lineNum">     472 </span><span class="lineNoCov">          0 :         std::string name = value.asString();</span>
+<span class="lineNum">     473 </span><span class="lineNoCov">          0 :         auto entity = makeEntity(name, world);</span>
+<span class="lineNum">     474 </span><span class="lineNoCov">          0 :         m_map_entities.insert({name, entity});</span>
+<span class="lineNum">     475 </span>            :     }
+<a name="476"><span class="lineNum">     476 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     477 </span>            : 
+<span class="lineNum">     478 </span><span class="lineNoCov">          0 : LevelReader::LevelReader(std::string filename) : JsonFileReader(filename)</span>
+<span class="lineNum">     479 </span>            : {
+<span class="lineNum">     480 </span><span class="lineNoCov">          0 :     m_sp_logger = logging_get_logger(&quot;data&quot;);</span>
+<a name="481"><span class="lineNum">     481 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     482 </span>            : 
+<span class="lineNum">     483 </span><span class="lineNoCov">          0 : void LevelReader::build_level(std::unique_ptr&lt;Level&gt;&amp; up_level)</span>
+<span class="lineNum">     484 </span>            : {
+<span class="lineNum">     485 </span><span class="lineNoCov">          0 :     unsigned int size_x = m_json_data[&quot;width&quot;].asInt();</span>
+<span class="lineNum">     486 </span><span class="lineNoCov">          0 :     unsigned int size_y = m_json_data[&quot;height&quot;].asInt();</span>
+<span class="lineNum">     487 </span><span class="lineNoCov">          0 :     unsigned int layer_count = m_json_data[&quot;layers&quot;].size();</span>
+<span class="lineNum">     488 </span><span class="lineNoCov">          0 :     float tileheight = m_json_data[&quot;tileheight&quot;].asFloat();</span>
+<span class="lineNum">     489 </span><span class="lineNoCov">          0 :     float scale = m_json_data[&quot;properties&quot;].get(&quot;scale&quot;, 1.0).asFloat();</span>
+<span class="lineNum">     490 </span><span class="lineNoCov">          0 :     int default_tile = m_json_data[&quot;properties&quot;].get(&quot;defaulttile&quot;, 1).asInt();</span>
+<span class="lineNum">     491 </span>            : 
+<span class="lineNum">     492 </span><span class="lineNoCov">          0 :     up_level = std::make_unique&lt;Level&gt;(</span>
+<span class="lineNum">     493 </span><span class="lineNoCov">          0 :         size_x, size_y, layer_count, tileheight * scale, default_tile);</span>
+<span class="lineNum">     494 </span><span class="lineNoCov">          0 :     auto p_level = up_level.get();</span>
+<span class="lineNum">     495 </span>            : 
+<span class="lineNum">     496 </span>            :     // TODO(Keegan): Use tilewidth as well
+<span class="lineNum">     497 </span><span class="lineNoCov">          0 :     auto tilesets = m_json_data[&quot;tilesets&quot;];</span>
+<span class="lineNum">     498 </span><span class="lineNoCov">          0 :     std::string cur_path = pathname(m_str_description);</span>
+<span class="lineNum">     499 </span><span class="lineNoCov">          0 :     std::string tileset_source;</span>
+<span class="lineNum">     500 </span><span class="lineNoCov">          0 :     for (auto&amp; tileset : tilesets)</span>
+<span class="lineNum">     501 </span>            :     {
+<span class="lineNum">     502 </span><span class="lineNoCov">          0 :         int firstgid = tileset[&quot;firstgid&quot;].asInt();</span>
+<span class="lineNum">     503 </span><span class="lineNoCov">          0 :         tileset_source = cur_path + tileset[&quot;source&quot;].asString();</span>
+<span class="lineNum">     504 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;info(</span>
+<span class="lineNum">     505 </span><span class="lineNoCov">          0 :             &quot;Found a tileset gid {} source {}&quot;, firstgid, tileset_source);</span>
+<span class="lineNum">     506 </span><span class="lineNoCov">          0 :         auto p_tileset = load_tileset(tileset_source);</span>
+<span class="lineNum">     507 </span><span class="lineNoCov">          0 :         p_level-&gt;add_tileset(firstgid, p_tileset);</span>
+<span class="lineNum">     508 </span>            :     }
+<span class="lineNum">     509 </span>            :     // Only load last tileset for now
+<span class="lineNum">     510 </span>            : 
+<span class="lineNum">     511 </span><span class="lineNoCov">          0 :     auto layers = m_json_data[&quot;layers&quot;];</span>
+<span class="lineNum">     512 </span><span class="lineNoCov">          0 :     for (unsigned int layerindex = 0; layerindex &lt; layers.size(); ++layerindex)</span>
+<span class="lineNum">     513 </span>            :     {
+<span class="lineNum">     514 </span><span class="lineNoCov">          0 :         auto&amp; val = layers[layerindex];</span>
+<span class="lineNum">     515 </span><span class="lineNoCov">          0 :         int height = val[&quot;height&quot;].asInt();</span>
+<span class="lineNum">     516 </span><span class="lineNoCov">          0 :         int width = val[&quot;width&quot;].asInt();</span>
+<span class="lineNum">     517 </span><span class="lineNoCov">          0 :         float opacity = val[&quot;opacity&quot;].asFloat();</span>
+<span class="lineNum">     518 </span><span class="lineNoCov">          0 :         std::string name = val[&quot;name&quot;].asString();</span>
+<span class="lineNum">     519 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;info(</span>
+<span class="lineNum">     520 </span>            :             &quot;found a layer named {} width {} height {} opacity {}&quot;,
+<span class="lineNum">     521 </span>            :             name,
+<span class="lineNum">     522 </span>            :             width,
+<span class="lineNum">     523 </span>            :             height,
+<span class="lineNum">     524 </span><span class="lineNoCov">          0 :             opacity);</span>
+<span class="lineNum">     525 </span><span class="lineNoCov">          0 :         auto data = val[&quot;data&quot;];</span>
+<span class="lineNum">     526 </span>            :         // TODO(Keegan): check encoding, don't just assume)
+<span class="lineNum">     527 </span><span class="lineNoCov">          0 :         auto decoded = string_decode(base64_decode(data.asString()));</span>
+<span class="lineNum">     528 </span><span class="lineNoCov">          0 :         for (unsigned int index = 0; index &lt; decoded.size(); ++index)</span>
+<span class="lineNum">     529 </span>            :         {
+<span class="lineNum">     530 </span><span class="lineNoCov">          0 :             int tile_x = index % width;</span>
+<span class="lineNum">     531 </span><span class="lineNoCov">          0 :             int tile_y = index / width;</span>
+<span class="lineNum">     532 </span><span class="lineNoCov">          0 :             int tilegid = decoded[index];</span>
+<span class="lineNum">     533 </span><span class="lineNoCov">          0 :             p_level-&gt;set(tile_x, tile_y, layerindex, tilegid);</span>
+<span class="lineNum">     534 </span>            :         }
+<span class="lineNum">     535 </span>            :     }
+<span class="lineNum">     536 </span>            : 
+<span class="lineNum">     537 </span><span class="lineNoCov">          0 :     return;</span>
+<a name="538"><span class="lineNum">     538 </span>            : }</a>
+<span class="lineNum">     539 </span>            : 
+<span class="lineNum">     540 </span><span class="lineNoCov">          0 : LevelTileSet* LevelReader::load_tileset(std::string filename)</span>
+<span class="lineNum">     541 </span>            : {
+<span class="lineNum">     542 </span><span class="lineNoCov">          0 :     Json::Reader reader_json;</span>
+<span class="lineNum">     543 </span><span class="lineNoCov">          0 :     m_sp_logger-&gt;info(&quot;Loading data from {}&quot;, filename);</span>
+<span class="lineNum">     544 </span><span class="lineNoCov">          0 :     std::ifstream config_file(filename, std::ifstream::binary);</span>
+<span class="lineNum">     545 </span><span class="lineNoCov">          0 :     if (!reader_json.parse(config_file, m_json_tileset))</span>
+<span class="lineNum">     546 </span>            :     {
+<span class="lineNum">     547 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;error(</span>
+<span class="lineNum">     548 </span><span class="lineNoCov">          0 :             &quot;Failed to parse JSON file {}:&quot;, filename, &quot;JSON format error&quot;);</span>
+<span class="lineNum">     549 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;error(reader_json.getFormattedErrorMessages());</span>
+<span class="lineNum">     550 </span>            :         throw ExceptionParseFailure(
+<span class="lineNum">     551 </span><span class="lineNoCov">          0 :             m_str_description, std::string(&quot;JSON format error&quot;));</span>
+<span class="lineNum">     552 </span>            :     }
+<span class="lineNum">     553 </span>            :     std::string image_filename =
+<span class="lineNum">     554 </span><span class="lineNoCov">          0 :         pathname(filename) + m_json_tileset[&quot;image&quot;].asString();</span>
+<span class="lineNum">     555 </span><span class="lineNoCov">          0 :     std::string name = m_json_tileset[&quot;name&quot;].asString();</span>
+<span class="lineNum">     556 </span><span class="lineNoCov">          0 :     unsigned int tilewidth = m_json_tileset[&quot;tilewidth&quot;].asInt();</span>
+<span class="lineNum">     557 </span><span class="lineNoCov">          0 :     unsigned int tileheight = m_json_tileset[&quot;tilewidth&quot;].asInt();</span>
+<span class="lineNum">     558 </span><span class="lineNoCov">          0 :     unsigned int tilecount = m_json_tileset[&quot;tilecount&quot;].asInt();</span>
+<span class="lineNum">     559 </span><span class="lineNoCov">          0 :     unsigned int columns = m_json_tileset[&quot;columns&quot;].asInt();</span>
+<span class="lineNum">     560 </span><span class="lineNoCov">          0 :     unsigned int margin = m_json_tileset[&quot;margin&quot;].asInt();</span>
+<span class="lineNum">     561 </span><span class="lineNoCov">          0 :     unsigned int spacing = m_json_tileset[&quot;spacing&quot;].asInt();</span>
+<span class="lineNum">     562 </span>            :     return new LevelTileSet{name,
+<span class="lineNum">     563 </span>            :         image_filename,
+<span class="lineNum">     564 </span>            :         columns,
+<span class="lineNum">     565 </span>            :         tilecount,
+<span class="lineNum">     566 </span>            :         tilewidth,
+<span class="lineNum">     567 </span>            :         tileheight,
+<span class="lineNum">     568 </span>            :         spacing,
+<span class="lineNum">     569 </span><span class="lineNoCov">          0 :         margin};</span>
+<a name="570"><span class="lineNum">     570 </span>            : }</a>
+<span class="lineNum">     571 </span>            : 
+<span class="lineNum">     572 </span><span class="lineCov">          3 : } // namespace core</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

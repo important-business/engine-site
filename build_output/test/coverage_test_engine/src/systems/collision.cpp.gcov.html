@@ -1,0 +1,398 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - src/systems/collision.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/systems</a> - collision.cpp<span style="font-size: 80%;"> (source / <a href="collision.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">172</td>
+            <td class="headerCovTableEntryLo">0.6 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntryLo">20.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;systems/collision.hpp&quot;</a>
+<span class="lineNum">       2 </span>            : #include &quot;components/id.hpp&quot;
+<span class="lineNum">       3 </span>            : #include &quot;core/exception.hpp&quot;
+<span class="lineNum">       4 </span>            : 
+<span class="lineNum">       5 </span>            : #include &lt;anax/System.hpp&gt;
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : #include &lt;cassert&gt;
+<span class="lineNum">       8 </span>            : #include &lt;cmath&gt;
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : namespace systems
+<a name="11"><span class="lineNum">      11 </span>            : {</a>
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span><span class="lineNoCov">          0 : Collision::Collision()</span>
+<span class="lineNum">      14 </span>            : {
+<span class="lineNum">      15 </span><span class="lineNoCov">          0 :     m_sp_logger = core::logging_get_logger(&quot;collision&quot;);</span>
+<a name="16"><span class="lineNum">      16 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span><span class="lineNoCov">          0 : Manifold* systems::Collision::check_collision(</span>
+<span class="lineNum">      19 </span>            :     anax::Entity&amp; e1, anax::Entity&amp; e2)
+<span class="lineNum">      20 </span>            : {
+<span class="lineNum">      21 </span><span class="lineNoCov">          0 :     throw_if_missing_component&lt;components::TransformComponent&gt;(e1);</span>
+<span class="lineNum">      22 </span><span class="lineNoCov">          0 :     auto&amp; transform1 = e1.getComponent&lt;components::TransformComponent&gt;();</span>
+<span class="lineNum">      23 </span>            : 
+<span class="lineNum">      24 </span><span class="lineNoCov">          0 :     throw_if_missing_component&lt;components::TransformComponent&gt;(e2);</span>
+<span class="lineNum">      25 </span><span class="lineNoCov">          0 :     auto&amp; transform2 = e2.getComponent&lt;components::TransformComponent&gt;();</span>
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span><span class="lineNoCov">          0 :     throw_if_missing_component&lt;components::Collision&gt;(e1);</span>
+<span class="lineNum">      28 </span><span class="lineNoCov">          0 :     auto&amp; bbox1 = e1.getComponent&lt;components::Collision&gt;().bounding_box;</span>
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span><span class="lineNoCov">          0 :     throw_if_missing_component&lt;components::Collision&gt;(e2);</span>
+<span class="lineNum">      31 </span><span class="lineNoCov">          0 :     auto&amp; bbox2 = e2.getComponent&lt;components::Collision&gt;().bounding_box;</span>
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span><span class="lineNoCov">          0 :     Manifold* p_manifold = nullptr;</span>
+<span class="lineNum">      34 </span>            :     // TODO(Keegan): Don't ignore bounding box x/y positions)
+<span class="lineNum">      35 </span><span class="lineNoCov">          0 :     float pos_dx = transform1.pos_x - transform2.pos_x;</span>
+<span class="lineNum">      36 </span><span class="lineNoCov">          0 :     float pos_dy = transform1.pos_y - transform2.pos_y;</span>
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span><span class="lineNoCov">          0 :     float x_overlap = bbox1.w / 2.0f + bbox2.w / 2.0f - std::abs(pos_dx);</span>
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span><span class="lineNoCov">          0 :     if (x_overlap &gt; 0.0f)</span>
+<span class="lineNum">      41 </span>            :     {
+<span class="lineNum">      42 </span><span class="lineNoCov">          0 :         float y_overlap = bbox1.h / 2.0f + bbox2.h / 2.0f - std::abs(pos_dy);</span>
+<span class="lineNum">      43 </span><span class="lineNoCov">          0 :         if (y_overlap &gt; 0.0f)</span>
+<span class="lineNum">      44 </span>            :         {
+<span class="lineNum">      45 </span><span class="lineNoCov">          0 :             m_sp_logger-&gt;debug(</span>
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 :                 &quot; collision - x overlap {} y overlap {}&quot;, x_overlap, y_overlap);</span>
+<span class="lineNum">      47 </span><span class="lineNoCov">          0 :             p_manifold = new Manifold();</span>
+<span class="lineNum">      48 </span><span class="lineNoCov">          0 :             if (x_overlap &lt; y_overlap)</span>
+<span class="lineNum">      49 </span>            :             {
+<span class="lineNum">      50 </span><span class="lineNoCov">          0 :                 if (pos_dx &lt; 0)</span>
+<span class="lineNum">      51 </span>            :                 {
+<span class="lineNum">      52 </span><span class="lineNoCov">          0 :                     m_sp_logger-&gt;debug(&quot;Normal in -y&quot;);</span>
+<span class="lineNum">      53 </span><span class="lineNoCov">          0 :                     p_manifold-&gt;normal.x = 1;</span>
+<span class="lineNum">      54 </span><span class="lineNoCov">          0 :                     p_manifold-&gt;normal.y = 0;</span>
+<span class="lineNum">      55 </span>            :                 }
+<span class="lineNum">      56 </span>            :                 else
+<span class="lineNum">      57 </span>            :                 {
+<span class="lineNum">      58 </span><span class="lineNoCov">          0 :                     m_sp_logger-&gt;debug(&quot;Normal in +y&quot;);</span>
+<span class="lineNum">      59 </span><span class="lineNoCov">          0 :                     p_manifold-&gt;normal.x = -1;</span>
+<span class="lineNum">      60 </span><span class="lineNoCov">          0 :                     p_manifold-&gt;normal.y = 0;</span>
+<span class="lineNum">      61 </span>            :                 }
+<span class="lineNum">      62 </span><span class="lineNoCov">          0 :                 p_manifold-&gt;penetration.x = x_overlap;</span>
+<span class="lineNum">      63 </span>            :             }
+<span class="lineNum">      64 </span>            :             else
+<span class="lineNum">      65 </span>            :             {
+<span class="lineNum">      66 </span><span class="lineNoCov">          0 :                 if (pos_dy &lt; 0)</span>
+<span class="lineNum">      67 </span>            :                 {
+<span class="lineNum">      68 </span><span class="lineNoCov">          0 :                     m_sp_logger-&gt;debug(&quot;Normal in -x&quot;);</span>
+<span class="lineNum">      69 </span><span class="lineNoCov">          0 :                     p_manifold-&gt;normal.x = 0;</span>
+<span class="lineNum">      70 </span><span class="lineNoCov">          0 :                     p_manifold-&gt;normal.y = 1;</span>
+<span class="lineNum">      71 </span>            :                 }
+<span class="lineNum">      72 </span>            :                 else
+<span class="lineNum">      73 </span>            :                 {
+<span class="lineNum">      74 </span><span class="lineNoCov">          0 :                     m_sp_logger-&gt;debug(&quot;Normal in +x&quot;);</span>
+<span class="lineNum">      75 </span><span class="lineNoCov">          0 :                     p_manifold-&gt;normal.x = 0;</span>
+<span class="lineNum">      76 </span><span class="lineNoCov">          0 :                     p_manifold-&gt;normal.y = -1;</span>
+<span class="lineNum">      77 </span>            :                 }
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 :                 p_manifold-&gt;penetration.y = y_overlap;</span>
+<span class="lineNum">      79 </span>            :             }
+<span class="lineNum">      80 </span>            :         }
+<span class="lineNum">      81 </span>            :     }
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :     return p_manifold;</span>
+<a name="84"><span class="lineNum">      84 </span>            : }</a>
+<span class="lineNum">      85 </span>            : 
+<span class="lineNum">      86 </span><span class="lineNoCov">          0 : Manifold* Collision::check_level_collision(</span>
+<span class="lineNum">      87 </span>            :     anax::Entity&amp; e, core::Level* p_level)
+<span class="lineNum">      88 </span>            : {
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :     throw_if_missing_component&lt;components::TransformComponent&gt;(e);</span>
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :     auto&amp; transform = e.getComponent&lt;components::TransformComponent&gt;();</span>
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :     throw_if_missing_component&lt;components::Collision&gt;(e);</span>
+<span class="lineNum">      93 </span><span class="lineNoCov">          0 :     auto&amp; bbox = e.getComponent&lt;components::Collision&gt;().bounding_box;</span>
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span><span class="lineNoCov">          0 :     auto p_manifold = new Manifold();</span>
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :     bool collision = false;</span>
+<span class="lineNum">      97 </span>            : 
+<span class="lineNum">      98 </span>            :     int level_x, level_y, level_layers;
+<span class="lineNum">      99 </span><span class="lineNoCov">          0 :     assert(p_level != nullptr);</span>
+<span class="lineNum">     100 </span><span class="lineNoCov">          0 :     p_level-&gt;get_size(level_x, level_y, level_layers);</span>
+<span class="lineNum">     101 </span><span class="lineNoCov">          0 :     level_x *= p_level-&gt;get_scale();</span>
+<span class="lineNum">     102 </span><span class="lineNoCov">          0 :     level_y *= p_level-&gt;get_scale();</span>
+<span class="lineNum">     103 </span><span class="lineNoCov">          0 :     if (transform.pos_x - bbox.w / 2.0f &lt; 0.0f)</span>
+<span class="lineNum">     104 </span>            :     {
+<span class="lineNum">     105 </span><span class="lineNoCov">          0 :         collision = true;</span>
+<span class="lineNum">     106 </span><span class="lineNoCov">          0 :         p_manifold-&gt;normal.x = -1.0f;</span>
+<span class="lineNum">     107 </span><span class="lineNoCov">          0 :         p_manifold-&gt;penetration.x = 0.0 - (transform.pos_x - bbox.w / 2.0f);</span>
+<span class="lineNum">     108 </span>            :     }
+<span class="lineNum">     109 </span><span class="lineNoCov">          0 :     else if (transform.pos_x + bbox.w / 2.0f &gt; level_x)</span>
+<span class="lineNum">     110 </span>            :     {
+<span class="lineNum">     111 </span><span class="lineNoCov">          0 :         collision = true;</span>
+<span class="lineNum">     112 </span><span class="lineNoCov">          0 :         p_manifold-&gt;normal.x = 1.0f;</span>
+<span class="lineNum">     113 </span><span class="lineNoCov">          0 :         p_manifold-&gt;penetration.x = level_x - transform.pos_x + bbox.w / 2.0f;</span>
+<span class="lineNum">     114 </span>            :     }
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :     if (transform.pos_y - bbox.h / 2.0f &lt; 0.0f)</span>
+<span class="lineNum">     116 </span>            :     {
+<span class="lineNum">     117 </span><span class="lineNoCov">          0 :         collision = true;</span>
+<span class="lineNum">     118 </span><span class="lineNoCov">          0 :         p_manifold-&gt;normal.y = -1.0f;</span>
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 :         p_manifold-&gt;penetration.y = 0.0f - transform.pos_y - bbox.h / 2.0f;</span>
+<span class="lineNum">     120 </span>            :     }
+<span class="lineNum">     121 </span><span class="lineNoCov">          0 :     else if (transform.pos_y + bbox.h / 2.0f &gt; level_y)</span>
+<span class="lineNum">     122 </span>            :     {
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :         collision = true;</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :         p_manifold-&gt;normal.y = 1.0f;</span>
+<span class="lineNum">     125 </span><span class="lineNoCov">          0 :         p_manifold-&gt;penetration.y = level_y - transform.pos_y + bbox.h / 2.0f;</span>
+<span class="lineNum">     126 </span>            :     }
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :     if (collision)</span>
+<span class="lineNum">     128 </span>            :     {
+<span class="lineNum">     129 </span><span class="lineNoCov">          0 :         return p_manifold;</span>
+<span class="lineNum">     130 </span>            :     }
+<span class="lineNum">     131 </span>            :     else
+<span class="lineNum">     132 </span>            :     {
+<span class="lineNum">     133 </span><span class="lineNoCov">          0 :         delete p_manifold;</span>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :         return nullptr;</span>
+<span class="lineNum">     135 </span>            :     }
+<a name="136"><span class="lineNum">     136 </span>            : }</a>
+<span class="lineNum">     137 </span>            : 
+<span class="lineNum">     138 </span><span class="lineNoCov">          0 : void Collision::resolve_collision(</span>
+<span class="lineNum">     139 </span>            :     anax::Entity&amp; e1, anax::Entity&amp; e2, Manifold* p_manifold)
+<span class="lineNum">     140 </span>            : {
+<span class="lineNum">     141 </span><span class="lineNoCov">          0 :     assert(p_manifold != nullptr);</span>
+<span class="lineNum">     142 </span>            : 
+<span class="lineNum">     143 </span><span class="lineNoCov">          0 :     if (!e1.hasComponent&lt;components::PhysicsComponent&gt;() ||</span>
+<span class="lineNum">     144 </span><span class="lineNoCov">          0 :         !e2.hasComponent&lt;components::PhysicsComponent&gt;())</span>
+<span class="lineNum">     145 </span>            :     {
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :         return;</span>
+<span class="lineNum">     147 </span>            :     }
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :     auto&amp; physics2 = e2.getComponent&lt;components::PhysicsComponent&gt;();</span>
+<span class="lineNum">     149 </span><span class="lineNoCov">          0 :     auto&amp; physics1 = e1.getComponent&lt;components::PhysicsComponent&gt;();</span>
+<span class="lineNum">     150 </span>            : 
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :     throw_if_missing_component&lt;components::TransformComponent&gt;(e1);</span>
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :     auto&amp; transform1 = e1.getComponent&lt;components::TransformComponent&gt;();</span>
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span><span class="lineNoCov">          0 :     throw_if_missing_component&lt;components::TransformComponent&gt;(e2);</span>
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :     auto&amp; transform2 = e2.getComponent&lt;components::TransformComponent&gt;();</span>
+<span class="lineNum">     156 </span>            :     do_resolve_collision(
+<span class="lineNum">     157 </span><span class="lineNoCov">          0 :         &amp;physics1, &amp;transform1, &amp;physics2, &amp;transform2, p_manifold);</span>
+<a name="158"><span class="lineNum">     158 </span>            : }</a>
+<span class="lineNum">     159 </span>            : 
+<span class="lineNum">     160 </span><span class="lineNoCov">          0 : void Collision::resolve_collision(anax::Entity&amp; e1, Manifold* p_manifold)</span>
+<span class="lineNum">     161 </span>            : {
+<span class="lineNum">     162 </span><span class="lineNoCov">          0 :     const float level_mass = 0.0f;</span>
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :     const float level_friction = 0.0f;</span>
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :     const float level_restitution = 0.0f;</span>
+<span class="lineNum">     165 </span><span class="lineNoCov">          0 :     const float level_vel_x = 0.0f;</span>
+<span class="lineNum">     166 </span><span class="lineNoCov">          0 :     const float level_vel_y = 0.0f;</span>
+<span class="lineNum">     167 </span><span class="lineNoCov">          0 :     const float level_force_x = 0.0f;</span>
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :     const float level_force_y = 0.0f;</span>
+<span class="lineNum">     169 </span>            : 
+<span class="lineNum">     170 </span><span class="lineNoCov">          0 :     const float level_pos_x = 0.0f;</span>
+<span class="lineNum">     171 </span><span class="lineNoCov">          0 :     const float level_pos_y = 0.0f;</span>
+<span class="lineNum">     172 </span><span class="lineNoCov">          0 :     const float level_size_x = 0.0f;</span>
+<span class="lineNum">     173 </span><span class="lineNoCov">          0 :     const float level_size_y = 0.0f;</span>
+<span class="lineNum">     174 </span><span class="lineNoCov">          0 :     const float level_rotation = 0.0f;</span>
+<span class="lineNum">     175 </span><span class="lineNoCov">          0 :     const bool level_flip_vert = false;</span>
+<span class="lineNum">     176 </span><span class="lineNoCov">          0 :     const bool level_flip_horiz = false;</span>
+<span class="lineNum">     177 </span><span class="lineNoCov">          0 :     assert(p_manifold != nullptr);</span>
+<span class="lineNum">     178 </span>            : 
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 :     if (!e1.hasComponent&lt;components::PhysicsComponent&gt;())</span>
+<span class="lineNum">     180 </span>            :     {
+<span class="lineNum">     181 </span><span class="lineNoCov">          0 :         return;</span>
+<span class="lineNum">     182 </span>            :     }
+<span class="lineNum">     183 </span><span class="lineNoCov">          0 :     auto&amp; physics1 = e1.getComponent&lt;components::PhysicsComponent&gt;();</span>
+<span class="lineNum">     184 </span>            :     auto physics2 = components::PhysicsComponent{level_mass,
+<span class="lineNum">     185 </span>            :         level_friction,
+<span class="lineNum">     186 </span>            :         level_restitution,
+<span class="lineNum">     187 </span>            :         level_vel_x,
+<span class="lineNum">     188 </span>            :         level_vel_y,
+<span class="lineNum">     189 </span>            :         level_force_x,
+<span class="lineNum">     190 </span><span class="lineNoCov">          0 :         level_force_y};</span>
+<span class="lineNum">     191 </span>            : 
+<span class="lineNum">     192 </span><span class="lineNoCov">          0 :     throw_if_missing_component&lt;components::TransformComponent&gt;(e1);</span>
+<span class="lineNum">     193 </span><span class="lineNoCov">          0 :     auto&amp; transform1 = e1.getComponent&lt;components::TransformComponent&gt;();</span>
+<span class="lineNum">     194 </span>            :     auto transform2 = components::TransformComponent{level_pos_x,
+<span class="lineNum">     195 </span>            :         level_pos_y,
+<span class="lineNum">     196 </span>            :         level_size_x,
+<span class="lineNum">     197 </span>            :         level_size_y,
+<span class="lineNum">     198 </span>            :         level_rotation,
+<span class="lineNum">     199 </span>            :         level_flip_vert,
+<span class="lineNum">     200 </span><span class="lineNoCov">          0 :         level_flip_horiz};</span>
+<span class="lineNum">     201 </span>            : 
+<span class="lineNum">     202 </span>            :     do_resolve_collision(
+<span class="lineNum">     203 </span><span class="lineNoCov">          0 :         &amp;physics1, &amp;transform1, &amp;physics2, &amp;transform2, p_manifold);</span>
+<a name="204"><span class="lineNum">     204 </span>            : }</a>
+<span class="lineNum">     205 </span>            : 
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 : void Collision::do_resolve_collision(components::PhysicsComponent* p_physics1,</span>
+<span class="lineNum">     207 </span>            :     components::TransformComponent* p_transform1,
+<span class="lineNum">     208 </span>            :     components::PhysicsComponent* p_physics2,
+<span class="lineNum">     209 </span>            :     components::TransformComponent* p_transform2,
+<span class="lineNum">     210 </span>            :     Manifold* p_manifold)
+<span class="lineNum">     211 </span>            : {
+<span class="lineNum">     212 </span><span class="lineNoCov">          0 :     assert(p_manifold != nullptr);</span>
+<span class="lineNum">     213 </span><span class="lineNoCov">          0 :     assert(p_physics1 != nullptr);</span>
+<span class="lineNum">     214 </span><span class="lineNoCov">          0 :     assert(p_transform1 != nullptr);</span>
+<span class="lineNum">     215 </span><span class="lineNoCov">          0 :     assert(p_physics2 != nullptr);</span>
+<span class="lineNum">     216 </span><span class="lineNoCov">          0 :     assert(p_transform2 != nullptr);</span>
+<span class="lineNum">     217 </span>            : 
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 :     float vel_dx = p_physics2-&gt;velocity.x - p_physics1-&gt;velocity.x;</span>
+<span class="lineNum">     219 </span><span class="lineNoCov">          0 :     float vel_dy = p_physics2-&gt;velocity.y - p_physics1-&gt;velocity.y;</span>
+<span class="lineNum">     220 </span>            : 
+<span class="lineNum">     221 </span>            :     float vel_normal =
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :         vel_dx * p_manifold-&gt;normal.x + vel_dy * p_manifold-&gt;normal.y;</span>
+<span class="lineNum">     223 </span>            : 
+<span class="lineNum">     224 </span><span class="lineNoCov">          0 :     m_sp_logger-&gt;debug(&quot;Normal velocity is {}&quot;, vel_normal);</span>
+<span class="lineNum">     225 </span><span class="lineNoCov">          0 :     m_sp_logger-&gt;debug(&quot;rel velocity is x{}, y{}&quot;, vel_dx, vel_dy);</span>
+<span class="lineNum">     226 </span><span class="lineNoCov">          0 :     if (vel_normal &gt; 0)</span>
+<span class="lineNum">     227 </span>            :     {
+<span class="lineNum">     228 </span><span class="lineNoCov">          0 :         m_sp_logger-&gt;debug(&quot;Objects are moving away&quot;);</span>
+<span class="lineNum">     229 </span><span class="lineNoCov">          0 :         return;</span>
+<span class="lineNum">     230 </span>            :     }
+<span class="lineNum">     231 </span>            :     // TODO(Keegan): Add restitution calculation
+<span class="lineNum">     232 </span>            :     const float restitution =
+<span class="lineNum">     233 </span><span class="lineNoCov">          0 :         std::max(p_physics1-&gt;restitution, p_physics2-&gt;restitution);</span>
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span><span class="lineNoCov">          0 :     float impulse = -(1.0f * restitution) * vel_normal;</span>
+<span class="lineNum">     236 </span>            : 
+<span class="lineNum">     237 </span>            :     // TODO(Keegan): Add mass consideration? Or keep in movement?
+<span class="lineNum">     238 </span>            : 
+<span class="lineNum">     239 </span><span class="lineNoCov">          0 :     float impulse_x = impulse * p_manifold-&gt;normal.x;</span>
+<span class="lineNum">     240 </span><span class="lineNoCov">          0 :     float impulse_y = impulse * p_manifold-&gt;normal.y;</span>
+<span class="lineNum">     241 </span>            : 
+<span class="lineNum">     242 </span><span class="lineNoCov">          0 :     m_sp_logger-&gt;debug(&quot;impulse is x{}, y{}&quot;, impulse_x, impulse_y);</span>
+<span class="lineNum">     243 </span>            : 
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :     p_physics1-&gt;force.x -= impulse_x;</span>
+<span class="lineNum">     245 </span><span class="lineNoCov">          0 :     p_physics2-&gt;force.x += impulse_x;</span>
+<span class="lineNum">     246 </span>            : 
+<span class="lineNum">     247 </span><span class="lineNoCov">          0 :     p_physics1-&gt;force.y -= impulse_y;</span>
+<span class="lineNum">     248 </span><span class="lineNoCov">          0 :     p_physics2-&gt;force.y += impulse_y;</span>
+<span class="lineNum">     249 </span>            : 
+<span class="lineNum">     250 </span><span class="lineNoCov">          0 :     m_sp_logger-&gt;debug(</span>
+<span class="lineNum">     251 </span><span class="lineNoCov">          0 :         &quot;entity1 force is x{}, y{}&quot;, p_physics1-&gt;force.x, p_physics1-&gt;force.y);</span>
+<span class="lineNum">     252 </span><span class="lineNoCov">          0 :     m_sp_logger-&gt;debug(</span>
+<span class="lineNum">     253 </span><span class="lineNoCov">          0 :         &quot;entity2 force is x{}, y{}&quot;, p_physics2-&gt;force.x, p_physics2-&gt;force.y);</span>
+<span class="lineNum">     254 </span>            : 
+<span class="lineNum">     255 </span><span class="lineNoCov">          0 :     const float positional_percent = 0.2;</span>
+<span class="lineNum">     256 </span><span class="lineNoCov">          0 :     const float positional_slop = 0.01;</span>
+<span class="lineNum">     257 </span>            :     float x_correction =
+<span class="lineNum">     258 </span><span class="lineNoCov">          0 :         std::max(p_manifold-&gt;penetration.x - positional_slop, 0.0f) /</span>
+<span class="lineNum">     259 </span><span class="lineNoCov">          0 :         (p_physics1-&gt;inv_mass + p_physics2-&gt;inv_mass) * positional_percent *</span>
+<span class="lineNum">     260 </span><span class="lineNoCov">          0 :         p_manifold-&gt;normal.x;</span>
+<span class="lineNum">     261 </span>            :     float y_correction =
+<span class="lineNum">     262 </span><span class="lineNoCov">          0 :         std::max(p_manifold-&gt;penetration.y - positional_slop, 0.0f) /</span>
+<span class="lineNum">     263 </span><span class="lineNoCov">          0 :         (p_physics1-&gt;inv_mass + p_physics2-&gt;inv_mass) * positional_percent *</span>
+<span class="lineNum">     264 </span><span class="lineNoCov">          0 :         p_manifold-&gt;normal.y;</span>
+<span class="lineNum">     265 </span><span class="lineNoCov">          0 :     p_transform1-&gt;pos_x -= p_physics1-&gt;inv_mass * x_correction;</span>
+<span class="lineNum">     266 </span><span class="lineNoCov">          0 :     p_transform1-&gt;pos_y -= p_physics1-&gt;inv_mass * y_correction;</span>
+<span class="lineNum">     267 </span><span class="lineNoCov">          0 :     p_transform2-&gt;pos_x += p_physics2-&gt;inv_mass * x_correction;</span>
+<span class="lineNum">     268 </span><span class="lineNoCov">          0 :     p_transform2-&gt;pos_y += p_physics2-&gt;inv_mass * y_correction;</span>
+<a name="269"><span class="lineNum">     269 </span>            : }</a>
+<span class="lineNum">     270 </span>            : 
+<span class="lineNum">     271 </span><span class="lineNoCov">          0 : void Collision::update(core::Level* p_level)</span>
+<span class="lineNum">     272 </span>            : {
+<span class="lineNum">     273 </span><span class="lineNoCov">          0 :     auto colliders = getEntities();</span>
+<span class="lineNum">     274 </span>            : 
+<span class="lineNum">     275 </span><span class="lineNoCov">          0 :     for (std::size_t i = 0; i &lt; colliders.size(); ++i)</span>
+<span class="lineNum">     276 </span>            :     {
+<span class="lineNum">     277 </span><span class="lineNoCov">          0 :         auto&amp; e1 = colliders[i];</span>
+<span class="lineNum">     278 </span>            : 
+<span class="lineNum">     279 </span>            :         // No hasComponent check needed since system filters entities
+<span class="lineNum">     280 </span><span class="lineNoCov">          0 :         if (!e1.getComponent&lt;components::Collision&gt;().can_cause_events)</span>
+<span class="lineNum">     281 </span>            :         {
+<span class="lineNum">     282 </span><span class="lineNoCov">          0 :             continue;</span>
+<span class="lineNum">     283 </span>            :         }
+<span class="lineNum">     284 </span><span class="lineNoCov">          0 :         if (p_level != nullptr)</span>
+<span class="lineNum">     285 </span>            :         {
+<span class="lineNum">     286 </span>            :             auto up_manifold =
+<span class="lineNum">     287 </span><span class="lineNoCov">          0 :                 std::unique_ptr&lt;Manifold&gt;(check_level_collision(e1, p_level));</span>
+<span class="lineNum">     288 </span><span class="lineNoCov">          0 :             if (up_manifold)</span>
+<span class="lineNum">     289 </span>            :             {
+<span class="lineNum">     290 </span><span class="lineNoCov">          0 :                 resolve_collision(e1, up_manifold.get());</span>
+<span class="lineNum">     291 </span>            :             }
+<span class="lineNum">     292 </span>            :         }
+<span class="lineNum">     293 </span><span class="lineNoCov">          0 :         for (std::size_t j = i + 1; j &lt; colliders.size(); ++j)</span>
+<span class="lineNum">     294 </span>            :         {
+<span class="lineNum">     295 </span><span class="lineNoCov">          0 :             auto&amp; e2 = colliders[j];</span>
+<span class="lineNum">     296 </span>            :             auto up_manifold =
+<span class="lineNum">     297 </span><span class="lineNoCov">          0 :                 std::unique_ptr&lt;Manifold&gt;(check_collision(e1, e2));</span>
+<span class="lineNum">     298 </span><span class="lineNoCov">          0 :             if (up_manifold)</span>
+<span class="lineNum">     299 </span>            :             {
+<span class="lineNum">     300 </span><span class="lineNoCov">          0 :                 resolve_collision(e1, e2, up_manifold.get());</span>
+<span class="lineNum">     301 </span><span class="lineNoCov">          0 :                 check_trigger(e1, e2, up_manifold.get());</span>
+<span class="lineNum">     302 </span>            :             }
+<span class="lineNum">     303 </span>            :         }
+<span class="lineNum">     304 </span>            :     }
+<a name="305"><span class="lineNum">     305 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     306 </span>            : 
+<span class="lineNum">     307 </span><span class="lineNoCov">          0 : void Collision::check_trigger(</span>
+<span class="lineNum">     308 </span>            :     anax::Entity&amp; e1, anax::Entity&amp; e2, Manifold* p_manifold)
+<span class="lineNum">     309 </span>            : {
+<span class="lineNum">     310 </span><span class="lineNoCov">          0 :     if (e1.hasComponent&lt;components::Trigger&gt;())</span>
+<span class="lineNum">     311 </span>            :     {
+<span class="lineNum">     312 </span><span class="lineNoCov">          0 :         auto msg = e1.getComponent&lt;components::Trigger&gt;().trigger_msg;</span>
+<span class="lineNum">     313 </span><span class="lineNoCov">          0 :         m_trigger_signal.emit(msg, e2);</span>
+<span class="lineNum">     314 </span>            :     }
+<span class="lineNum">     315 </span><span class="lineNoCov">          0 :     else if (e2.hasComponent&lt;components::Trigger&gt;())</span>
+<span class="lineNum">     316 </span>            :     {
+<span class="lineNum">     317 </span><span class="lineNoCov">          0 :         auto msg = e2.getComponent&lt;components::Trigger&gt;().trigger_msg;</span>
+<span class="lineNum">     318 </span><span class="lineNoCov">          0 :         m_trigger_signal.emit(msg, e1);</span>
+<span class="lineNum">     319 </span>            :     }
+<a name="320"><span class="lineNum">     320 </span><span class="lineNoCov">          0 : }</span></a>
+<span class="lineNum">     321 </span>            : 
+<span class="lineNum">     322 </span><span class="lineCov">          3 : } // namespace systems</span>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - src/core/data.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/core</a> - data.hpp<span style="font-size: 80%;"> (source / <a href="data.hpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef CORE_DATA_HPP</a>
+<span class="lineNum">       2 </span>            : #define CORE_DATA_HPP
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #include &quot;json.hpp&quot;
+<span class="lineNum">       5 </span>            : #include &quot;level.hpp&quot;
+<span class="lineNum">       6 </span>            : #include &quot;logging.hpp&quot;
+<span class="lineNum">       7 </span>            : #include &quot;systems/ai.hpp&quot;
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #include &quot;core/level.hpp&quot;
+<span class="lineNum">      10 </span>            : #include &lt;string&gt;
+<span class="lineNum">      11 </span>            : #include &lt;anax/anax.hpp&gt;
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : namespace core
+<a name="14"><span class="lineNum">      14 </span>            : {</a>
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span><span class="lineNoCov">          0 : class DataReader : public JsonFileReader</span>
+<span class="lineNum">      17 </span>            : {
+<span class="lineNum">      18 </span>            : public:
+<span class="lineNum">      19 </span>            :     typedef void (DataReader::*factory_method)(
+<span class="lineNum">      20 </span>            :         const Json::Value &amp;data, anax::Entity);
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            :     explicit DataReader(std::string filename);
+<span class="lineNum">      23 </span>            :     anax::Entity makeEntity(std::string entityname, anax::World&amp; world);
+<span class="lineNum">      24 </span>            :     void makeEntities(anax::World&amp; world);
+<span class="lineNum">      25 </span>            :     std::map&lt;std::string, DataReader::factory_method&gt; component_factories;
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span>            : private:
+<span class="lineNum">      28 </span>            :     void factory_component_ai(const Json::Value &amp;data, anax::Entity entity);
+<span class="lineNum">      29 </span>            :     systems::AiNode* factory_ai_node(const Json::Value &amp;data);
+<span class="lineNum">      30 </span>            :     void factory_component_player(const Json::Value &amp;data, anax::Entity entity);
+<span class="lineNum">      31 </span>            :     void factory_component_camera(const Json::Value &amp;data, anax::Entity entity);
+<span class="lineNum">      32 </span>            :     void factory_component_collision(
+<span class="lineNum">      33 </span>            :         const Json::Value &amp;data, anax::Entity entity);
+<span class="lineNum">      34 </span>            :     void factory_component_movement(const Json::Value &amp;data, anax::Entity entity);
+<span class="lineNum">      35 </span>            :     void factory_component_texture(const Json::Value &amp;data, anax::Entity entity);
+<span class="lineNum">      36 </span>            :     void factory_component_transform(
+<span class="lineNum">      37 </span>            :         const Json::Value &amp;data, anax::Entity entity);
+<span class="lineNum">      38 </span>            :     void factory_component_trigger(
+<span class="lineNum">      39 </span>            :         const Json::Value &amp;data, anax::Entity entity);
+<span class="lineNum">      40 </span>            :     void factory_component_physics(
+<span class="lineNum">      41 </span>            :         const Json::Value &amp;data, anax::Entity entity);
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            :     std::map&lt;std::string, anax::Entity&gt; m_map_entities;
+<a name="44"><span class="lineNum">      44 </span>            : };</a>
+<span class="lineNum">      45 </span>            : 
+<span class="lineNum">      46 </span><span class="lineNoCov">          0 : class LevelReader : public JsonFileReader</span>
+<span class="lineNum">      47 </span>            : {
+<span class="lineNum">      48 </span>            : public:
+<span class="lineNum">      49 </span>            :     void build_level(std::unique_ptr&lt;Level&gt;&amp; up_level);
+<span class="lineNum">      50 </span>            :     LevelTileSet* load_tileset(std::string filename);
+<span class="lineNum">      51 </span>            :     explicit LevelReader(std::string filename);
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            : private:
+<span class="lineNum">      54 </span>            :     Json::Value m_json_tileset;
+<span class="lineNum">      55 </span>            : };
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span>            : } // namespace core
+<span class="lineNum">      58 </span>            : #endif /* CORE_DATA_HPP */
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

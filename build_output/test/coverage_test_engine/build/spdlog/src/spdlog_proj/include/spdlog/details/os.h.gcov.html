@@ -1,0 +1,436 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/spdlog/src/spdlog_proj/include/spdlog/details/os.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../../index.html">top level</a> - <a href="index.html">build/spdlog/src/spdlog_proj/include/spdlog/details</a> - os.h<span style="font-size: 80%;"> (source / <a href="os.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">21</td>
+            <td class="headerCovTableEntryLo">61.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntryLo">62.5 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : //</a>
+<span class="lineNum">       2 </span>            : // Copyright(c) 2015 Gabi Melman.
+<span class="lineNum">       3 </span>            : // Distributed under the MIT License (http://opensource.org/licenses/MIT)
+<span class="lineNum">       4 </span>            : //
+<span class="lineNum">       5 </span>            : #pragma once
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : #include &lt;spdlog/common.h&gt;
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #include &lt;cstdio&gt;
+<span class="lineNum">      10 </span>            : #include &lt;ctime&gt;
+<span class="lineNum">      11 </span>            : #include &lt;functional&gt;
+<span class="lineNum">      12 </span>            : #include &lt;string&gt;
+<span class="lineNum">      13 </span>            : #include &lt;stdio.h&gt;
+<span class="lineNum">      14 </span>            : #include &lt;string.h&gt;
+<span class="lineNum">      15 </span>            : #include &lt;sys/stat.h&gt;
+<span class="lineNum">      16 </span>            : 
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span>            : #ifdef _WIN32
+<span class="lineNum">      19 </span>            : 
+<span class="lineNum">      20 </span>            : #ifndef NOMINMAX
+<span class="lineNum">      21 </span>            : #define NOMINMAX //prevent windows redefining min/max
+<span class="lineNum">      22 </span>            : #endif
+<span class="lineNum">      23 </span>            : 
+<span class="lineNum">      24 </span>            : #ifndef WIN32_LEAN_AND_MEAN
+<span class="lineNum">      25 </span>            : #define WIN32_LEAN_AND_MEAN
+<span class="lineNum">      26 </span>            : #endif
+<span class="lineNum">      27 </span>            : #include &lt;windows.h&gt;
+<span class="lineNum">      28 </span>            : 
+<span class="lineNum">      29 </span>            : #ifdef __MINGW32__
+<span class="lineNum">      30 </span>            : #include &lt;share.h&gt;
+<span class="lineNum">      31 </span>            : #endif
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            : #include &lt;sys/types.h&gt;
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : #elif __linux__
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            : #include &lt;sys/syscall.h&gt; //Use gettid() syscall under linux to get thread id
+<span class="lineNum">      38 </span>            : #include &lt;unistd.h&gt;
+<span class="lineNum">      39 </span>            : #include &lt;chrono&gt;
+<span class="lineNum">      40 </span>            : 
+<span class="lineNum">      41 </span>            : #elif __FreeBSD__
+<span class="lineNum">      42 </span>            : #include &lt;sys/thr.h&gt; //Use thr_self() syscall under FreeBSD to get thread id
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span>            : #else
+<span class="lineNum">      45 </span>            : #include &lt;thread&gt;
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            : #endif
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            : namespace spdlog
+<span class="lineNum">      50 </span>            : {
+<span class="lineNum">      51 </span>            : namespace details
+<span class="lineNum">      52 </span>            : {
+<span class="lineNum">      53 </span>            : namespace os
+<a name="54"><span class="lineNum">      54 </span>            : {</a>
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span><span class="lineCov">         12 : inline spdlog::log_clock::time_point now()</span>
+<span class="lineNum">      57 </span>            : {
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            : #if defined __linux__ &amp;&amp; defined SPDLOG_CLOCK_COARSE
+<span class="lineNum">      60 </span>            :     timespec ts;
+<span class="lineNum">      61 </span>            :     ::clock_gettime(CLOCK_REALTIME_COARSE, &amp;ts);
+<span class="lineNum">      62 </span>            :     return std::chrono::time_point&lt;log_clock, typename log_clock::duration&gt;(
+<span class="lineNum">      63 </span>            :                std::chrono::duration_cast&lt;typename log_clock::duration&gt;(
+<span class="lineNum">      64 </span>            :                    std::chrono::seconds(ts.tv_sec) + std::chrono::nanoseconds(ts.tv_nsec)));
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span>            : #else
+<span class="lineNum">      68 </span><span class="lineCov">         12 :     return log_clock::now();</span>
+<span class="lineNum">      69 </span>            : #endif
+<a name="70"><span class="lineNum">      70 </span>            : </a>
+<span class="lineNum">      71 </span>            : }
+<span class="lineNum">      72 </span><span class="lineCov">         14 : inline std::tm localtime(const std::time_t &amp;time_tt)</span>
+<span class="lineNum">      73 </span>            : {
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span>            : #ifdef _WIN32
+<span class="lineNum">      76 </span>            :     std::tm tm;
+<span class="lineNum">      77 </span>            :     localtime_s(&amp;tm, &amp;time_tt);
+<span class="lineNum">      78 </span>            : #else
+<span class="lineNum">      79 </span>            :     std::tm tm;
+<span class="lineNum">      80 </span><span class="lineCov">         14 :     localtime_r(&amp;time_tt, &amp;tm);</span>
+<span class="lineNum">      81 </span>            : #endif
+<span class="lineNum">      82 </span><span class="lineCov">         14 :     return tm;</span>
+<a name="83"><span class="lineNum">      83 </span>            : }</a>
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span><span class="lineCov">          1 : inline std::tm localtime()</span>
+<span class="lineNum">      86 </span>            : {
+<span class="lineNum">      87 </span><span class="lineCov">          1 :     std::time_t now_t = time(nullptr);</span>
+<span class="lineNum">      88 </span><span class="lineCov">          1 :     return localtime(now_t);</span>
+<span class="lineNum">      89 </span>            : }
+<span class="lineNum">      90 </span>            : 
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span>            : inline std::tm gmtime(const std::time_t &amp;time_tt)
+<span class="lineNum">      93 </span>            : {
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span>            : #ifdef _WIN32
+<span class="lineNum">      96 </span>            :     std::tm tm;
+<span class="lineNum">      97 </span>            :     gmtime_s(&amp;tm, &amp;time_tt);
+<span class="lineNum">      98 </span>            : #else
+<span class="lineNum">      99 </span>            :     std::tm tm;
+<span class="lineNum">     100 </span>            :     gmtime_r(&amp;time_tt, &amp;tm);
+<span class="lineNum">     101 </span>            : #endif
+<span class="lineNum">     102 </span>            :     return tm;
+<span class="lineNum">     103 </span>            : }
+<span class="lineNum">     104 </span>            : 
+<span class="lineNum">     105 </span>            : inline std::tm gmtime()
+<span class="lineNum">     106 </span>            : {
+<span class="lineNum">     107 </span>            :     std::time_t now_t = time(nullptr);
+<span class="lineNum">     108 </span>            :     return gmtime(now_t);
+<span class="lineNum">     109 </span>            : }
+<span class="lineNum">     110 </span>            : inline bool operator==(const std::tm&amp; tm1, const std::tm&amp; tm2)
+<span class="lineNum">     111 </span>            : {
+<span class="lineNum">     112 </span>            :     return (tm1.tm_sec == tm2.tm_sec &amp;&amp;
+<span class="lineNum">     113 </span>            :             tm1.tm_min == tm2.tm_min &amp;&amp;
+<span class="lineNum">     114 </span>            :             tm1.tm_hour == tm2.tm_hour &amp;&amp;
+<span class="lineNum">     115 </span>            :             tm1.tm_mday == tm2.tm_mday &amp;&amp;
+<span class="lineNum">     116 </span>            :             tm1.tm_mon == tm2.tm_mon &amp;&amp;
+<span class="lineNum">     117 </span>            :             tm1.tm_year == tm2.tm_year &amp;&amp;
+<span class="lineNum">     118 </span>            :             tm1.tm_isdst == tm2.tm_isdst);
+<span class="lineNum">     119 </span>            : }
+<span class="lineNum">     120 </span>            : 
+<span class="lineNum">     121 </span>            : inline bool operator!=(const std::tm&amp; tm1, const std::tm&amp; tm2)
+<span class="lineNum">     122 </span>            : {
+<span class="lineNum">     123 </span>            :     return !(tm1 == tm2);
+<span class="lineNum">     124 </span>            : }
+<span class="lineNum">     125 </span>            : 
+<span class="lineNum">     126 </span>            : // eol definition
+<span class="lineNum">     127 </span>            : #if !defined (SPDLOG_EOL)
+<span class="lineNum">     128 </span>            : #ifdef _WIN32
+<span class="lineNum">     129 </span>            : #define SPDLOG_EOL &quot;\r\n&quot;
+<span class="lineNum">     130 </span>            : #else
+<span class="lineNum">     131 </span>            : #define SPDLOG_EOL &quot;\n&quot;
+<span class="lineNum">     132 </span>            : #endif
+<span class="lineNum">     133 </span>            : #endif
+<span class="lineNum">     134 </span>            : 
+<span class="lineNum">     135 </span>            : SPDLOG_CONSTEXPR static const char* eol = SPDLOG_EOL;
+<span class="lineNum">     136 </span>            : SPDLOG_CONSTEXPR static int eol_size = sizeof(SPDLOG_EOL) - 1;
+<span class="lineNum">     137 </span>            : 
+<span class="lineNum">     138 </span>            : 
+<a name="139"><span class="lineNum">     139 </span>            : </a>
+<span class="lineNum">     140 </span>            : //fopen_s on non windows for writing
+<span class="lineNum">     141 </span><span class="lineCov">          1 : inline int fopen_s(FILE** fp, const filename_t&amp; filename, const filename_t&amp; mode)</span>
+<span class="lineNum">     142 </span>            : {
+<span class="lineNum">     143 </span>            : #ifdef _WIN32
+<span class="lineNum">     144 </span>            : #ifdef SPDLOG_WCHAR_FILENAMES
+<span class="lineNum">     145 </span>            :     *fp = _wfsopen((filename.c_str()), mode.c_str(), _SH_DENYWR);
+<span class="lineNum">     146 </span>            : #else
+<span class="lineNum">     147 </span>            :     *fp = _fsopen((filename.c_str()), mode.c_str(), _SH_DENYWR);
+<span class="lineNum">     148 </span>            : #endif
+<span class="lineNum">     149 </span>            :     return *fp == nullptr;
+<span class="lineNum">     150 </span>            : #else
+<span class="lineNum">     151 </span><span class="lineCov">          1 :     *fp = fopen((filename.c_str()), mode.c_str());</span>
+<span class="lineNum">     152 </span><span class="lineCov">          1 :     return *fp == nullptr;</span>
+<span class="lineNum">     153 </span>            : #endif
+<span class="lineNum">     154 </span>            : }
+<span class="lineNum">     155 </span>            : 
+<span class="lineNum">     156 </span>            : inline int remove(const filename_t &amp;filename)
+<span class="lineNum">     157 </span>            : {
+<span class="lineNum">     158 </span>            : #if defined(_WIN32) &amp;&amp; defined(SPDLOG_WCHAR_FILENAMES)
+<span class="lineNum">     159 </span>            :     return _wremove(filename.c_str());
+<span class="lineNum">     160 </span>            : #else
+<span class="lineNum">     161 </span>            :     return std::remove(filename.c_str());
+<span class="lineNum">     162 </span>            : #endif
+<span class="lineNum">     163 </span>            : }
+<span class="lineNum">     164 </span>            : 
+<span class="lineNum">     165 </span>            : inline int rename(const filename_t&amp; filename1, const filename_t&amp; filename2)
+<span class="lineNum">     166 </span>            : {
+<span class="lineNum">     167 </span>            : #if defined(_WIN32) &amp;&amp; defined(SPDLOG_WCHAR_FILENAMES)
+<span class="lineNum">     168 </span>            :     return _wrename(filename1.c_str(), filename2.c_str());
+<span class="lineNum">     169 </span>            : #else
+<span class="lineNum">     170 </span>            :     return std::rename(filename1.c_str(), filename2.c_str());
+<span class="lineNum">     171 </span>            : #endif
+<span class="lineNum">     172 </span>            : }
+<span class="lineNum">     173 </span>            : 
+<span class="lineNum">     174 </span>            : 
+<span class="lineNum">     175 </span>            : //Return if file exists
+<span class="lineNum">     176 </span>            : inline bool file_exists(const filename_t&amp; filename)
+<span class="lineNum">     177 </span>            : {
+<span class="lineNum">     178 </span>            : #ifdef _WIN32
+<span class="lineNum">     179 </span>            : #ifdef SPDLOG_WCHAR_FILENAMES
+<span class="lineNum">     180 </span>            :     auto attribs = GetFileAttributesW(filename.c_str());
+<span class="lineNum">     181 </span>            : #else
+<span class="lineNum">     182 </span>            :     auto attribs = GetFileAttributesA(filename.c_str());
+<span class="lineNum">     183 </span>            : #endif
+<span class="lineNum">     184 </span>            :     return (attribs != INVALID_FILE_ATTRIBUTES &amp;&amp; !(attribs &amp; FILE_ATTRIBUTE_DIRECTORY));
+<span class="lineNum">     185 </span>            : #else //common linux/unix all have the stat system call
+<span class="lineNum">     186 </span>            :     struct stat buffer;
+<span class="lineNum">     187 </span>            :     return (stat (filename.c_str(), &amp;buffer) == 0);
+<span class="lineNum">     188 </span>            : #endif
+<span class="lineNum">     189 </span>            : }
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span>            : 
+<span class="lineNum">     192 </span>            : 
+<span class="lineNum">     193 </span>            : 
+<span class="lineNum">     194 </span>            : //Return file size according to open FILE* object
+<span class="lineNum">     195 </span>            : inline size_t filesize(FILE *f)
+<span class="lineNum">     196 </span>            : {
+<span class="lineNum">     197 </span>            :     if (f == nullptr)
+<span class="lineNum">     198 </span>            :         throw spdlog_ex(&quot;Failed getting file size. fd is null&quot;);
+<span class="lineNum">     199 </span>            : #ifdef _WIN32
+<span class="lineNum">     200 </span>            :     int fd = _fileno(f);
+<span class="lineNum">     201 </span>            : #if _WIN64 //64 bits
+<span class="lineNum">     202 </span>            :     struct _stat64 st;
+<span class="lineNum">     203 </span>            :     if (_fstat64(fd, &amp;st) == 0)
+<span class="lineNum">     204 </span>            :         return st.st_size;
+<span class="lineNum">     205 </span>            : 
+<span class="lineNum">     206 </span>            : #else //windows 32 bits
+<span class="lineNum">     207 </span>            :     struct _stat st;
+<span class="lineNum">     208 </span>            :     if (_fstat(fd, &amp;st) == 0)
+<span class="lineNum">     209 </span>            :         return st.st_size;
+<span class="lineNum">     210 </span>            : #endif
+<span class="lineNum">     211 </span>            : 
+<span class="lineNum">     212 </span>            : #else // unix
+<span class="lineNum">     213 </span>            :     int fd = fileno(f);
+<span class="lineNum">     214 </span>            :     //64 bits(but not in osx, where fstat64 is deprecated)
+<span class="lineNum">     215 </span>            : #if !defined(__FreeBSD__) &amp;&amp; !defined(__APPLE__) &amp;&amp; (defined(__x86_64__) || defined(__ppc64__))
+<span class="lineNum">     216 </span>            :     struct stat64 st;
+<span class="lineNum">     217 </span>            :     if (fstat64(fd, &amp;st) == 0)
+<span class="lineNum">     218 </span>            :         return st.st_size;
+<span class="lineNum">     219 </span>            : #else // unix 32 bits or osx
+<span class="lineNum">     220 </span>            :     struct stat st;
+<span class="lineNum">     221 </span>            :     if (fstat(fd, &amp;st) == 0)
+<span class="lineNum">     222 </span>            :         return st.st_size;
+<span class="lineNum">     223 </span>            : #endif
+<span class="lineNum">     224 </span>            : #endif
+<span class="lineNum">     225 </span>            :     throw spdlog_ex(&quot;Failed getting file size from fd&quot;, errno);
+<span class="lineNum">     226 </span>            : }
+<span class="lineNum">     227 </span>            : 
+<span class="lineNum">     228 </span>            : 
+<span class="lineNum">     229 </span>            : 
+<a name="230"><span class="lineNum">     230 </span>            : </a>
+<span class="lineNum">     231 </span>            : //Return utc offset in minutes or throw spdlog_ex on failure
+<span class="lineNum">     232 </span><span class="lineNoCov">          0 : inline int utc_minutes_offset(const std::tm&amp; tm = details::os::localtime())</span>
+<span class="lineNum">     233 </span>            : {
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span>            : #ifdef _WIN32
+<span class="lineNum">     236 </span>            : #if _WIN32_WINNT &lt; _WIN32_WINNT_WS08
+<span class="lineNum">     237 </span>            :     TIME_ZONE_INFORMATION tzinfo;
+<span class="lineNum">     238 </span>            :     auto rv = GetTimeZoneInformation(&amp;tzinfo);
+<span class="lineNum">     239 </span>            : #else
+<span class="lineNum">     240 </span>            :     DYNAMIC_TIME_ZONE_INFORMATION tzinfo;
+<span class="lineNum">     241 </span>            :     auto rv = GetDynamicTimeZoneInformation(&amp;tzinfo);
+<span class="lineNum">     242 </span>            : #endif
+<span class="lineNum">     243 </span>            :     if (rv == TIME_ZONE_ID_INVALID)
+<span class="lineNum">     244 </span>            :         throw spdlog::spdlog_ex(&quot;Failed getting timezone info. &quot;, errno);
+<span class="lineNum">     245 </span>            : 
+<span class="lineNum">     246 </span>            :     int offset = -tzinfo.Bias;
+<span class="lineNum">     247 </span>            :     if (tm.tm_isdst)
+<span class="lineNum">     248 </span>            :         offset -= tzinfo.DaylightBias;
+<span class="lineNum">     249 </span>            :     else
+<span class="lineNum">     250 </span>            :         offset -= tzinfo.StandardBias;
+<span class="lineNum">     251 </span>            :     return offset;
+<span class="lineNum">     252 </span>            : #else
+<span class="lineNum">     253 </span>            : 
+<span class="lineNum">     254 </span>            : #if defined(sun) || defined(__sun)
+<span class="lineNum">     255 </span>            :     // 'tm_gmtoff' field is BSD extension and it's missing on SunOS/Solaris
+<span class="lineNum">     256 </span>            :     struct helper
+<span class="lineNum">     257 </span>            :     {
+<span class="lineNum">     258 </span>            :         static long int calculate_gmt_offset(const std::tm &amp; localtm = details::os::localtime(), const std::tm &amp; gmtm = details::os::gmtime())
+<span class="lineNum">     259 </span>            :         {
+<span class="lineNum">     260 </span>            :             int local_year = localtm.tm_year + (1900 - 1);
+<span class="lineNum">     261 </span>            :             int gmt_year = gmtm.tm_year + (1900 - 1);
+<span class="lineNum">     262 </span>            : 
+<span class="lineNum">     263 </span>            :             long int days = (
+<span class="lineNum">     264 </span>            :                                 // difference in day of year
+<span class="lineNum">     265 </span>            :                                 localtm.tm_yday - gmtm.tm_yday
+<span class="lineNum">     266 </span>            : 
+<span class="lineNum">     267 </span>            :                                 // + intervening leap days
+<span class="lineNum">     268 </span>            :                                 + ((local_year &gt;&gt; 2) - (gmt_year &gt;&gt; 2))
+<span class="lineNum">     269 </span>            :                                 - (local_year / 100 - gmt_year / 100)
+<span class="lineNum">     270 </span>            :                                 + ((local_year / 100 &gt;&gt; 2) - (gmt_year / 100 &gt;&gt; 2))
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span>            :                                 // + difference in years * 365 */
+<span class="lineNum">     273 </span>            :                                 + (long int)(local_year - gmt_year) * 365
+<span class="lineNum">     274 </span>            :                             );
+<span class="lineNum">     275 </span>            : 
+<span class="lineNum">     276 </span>            :             long int hours = (24 * days) + (localtm.tm_hour - gmtm.tm_hour);
+<span class="lineNum">     277 </span>            :             long int mins = (60 * hours) + (localtm.tm_min - gmtm.tm_min);
+<span class="lineNum">     278 </span>            :             long int secs = (60 * mins) + (localtm.tm_sec - gmtm.tm_sec);
+<span class="lineNum">     279 </span>            : 
+<span class="lineNum">     280 </span>            :             return secs;
+<span class="lineNum">     281 </span>            :         }
+<span class="lineNum">     282 </span>            :     };
+<span class="lineNum">     283 </span>            : 
+<span class="lineNum">     284 </span>            :     long int offset_seconds = helper::calculate_gmt_offset(tm);
+<span class="lineNum">     285 </span>            : #else
+<span class="lineNum">     286 </span><span class="lineNoCov">          0 :     long int offset_seconds = tm.tm_gmtoff;</span>
+<span class="lineNum">     287 </span>            : #endif
+<span class="lineNum">     288 </span>            : 
+<span class="lineNum">     289 </span><span class="lineNoCov">          0 :     return static_cast&lt;int&gt;(offset_seconds / 60);</span>
+<span class="lineNum">     290 </span>            : #endif
+<span class="lineNum">     291 </span>            : }
+<span class="lineNum">     292 </span>            : 
+<a name="293"><span class="lineNum">     293 </span>            : //Return current thread id as size_t</a>
+<span class="lineNum">     294 </span>            : //It exists because the std::this_thread::get_id() is much slower(espcially under VS 2013)
+<span class="lineNum">     295 </span><span class="lineCov">         12 : inline size_t thread_id()</span>
+<span class="lineNum">     296 </span>            : {
+<span class="lineNum">     297 </span>            : #ifdef _WIN32
+<span class="lineNum">     298 </span>            :     return  static_cast&lt;size_t&gt;(::GetCurrentThreadId());
+<span class="lineNum">     299 </span>            : #elif __linux__
+<span class="lineNum">     300 </span>            : # if defined(__ANDROID__) &amp;&amp; defined(__ANDROID_API__) &amp;&amp; (__ANDROID_API__ &lt; 21)
+<span class="lineNum">     301 </span>            : #  define SYS_gettid __NR_gettid
+<span class="lineNum">     302 </span>            : # endif
+<span class="lineNum">     303 </span><span class="lineCov">         12 :     return  static_cast&lt;size_t&gt;(syscall(SYS_gettid));</span>
+<span class="lineNum">     304 </span>            : #elif __FreeBSD__
+<span class="lineNum">     305 </span>            :     long tid;
+<span class="lineNum">     306 </span>            :     thr_self(&amp;tid);
+<span class="lineNum">     307 </span>            :     return static_cast&lt;size_t&gt;(tid);
+<span class="lineNum">     308 </span>            : #else //Default to standard C++11 (OSX and other Unix)
+<span class="lineNum">     309 </span>            :     return static_cast&lt;size_t&gt;(std::hash&lt;std::thread::id&gt;()(std::this_thread::get_id()));
+<span class="lineNum">     310 </span>            : #endif
+<span class="lineNum">     311 </span>            : 
+<span class="lineNum">     312 </span>            : 
+<span class="lineNum">     313 </span>            : }
+<span class="lineNum">     314 </span>            : 
+<span class="lineNum">     315 </span>            : 
+<span class="lineNum">     316 </span>            : // wchar support for windows file names (SPDLOG_WCHAR_FILENAMES must be defined)
+<span class="lineNum">     317 </span>            : #if defined(_WIN32) &amp;&amp; defined(SPDLOG_WCHAR_FILENAMES)
+<span class="lineNum">     318 </span>            : #define SPDLOG_FILENAME_T(s) L ## s
+<span class="lineNum">     319 </span>            : inline std::string filename_to_str(const filename_t&amp; filename)
+<span class="lineNum">     320 </span>            : {
+<span class="lineNum">     321 </span>            :     std::wstring_convert&lt;std::codecvt_utf8&lt;wchar_t&gt;, wchar_t&gt; c;
+<span class="lineNum">     322 </span>            :     return c.to_bytes(filename);
+<span class="lineNum">     323 </span>            : }
+<a name="324"><span class="lineNum">     324 </span>            : #else</a>
+<span class="lineNum">     325 </span>            : #define SPDLOG_FILENAME_T(s) s
+<span class="lineNum">     326 </span><span class="lineNoCov">          0 : inline std::string filename_to_str(const filename_t&amp; filename)</span>
+<span class="lineNum">     327 </span>            : {
+<span class="lineNum">     328 </span><span class="lineNoCov">          0 :     return filename;</span>
+<span class="lineNum">     329 </span>            : }
+<span class="lineNum">     330 </span>            : #endif
+<span class="lineNum">     331 </span>            : 
+<a name="332"><span class="lineNum">     332 </span>            : </a>
+<span class="lineNum">     333 </span>            : // Return errno string (thread safe)
+<span class="lineNum">     334 </span><span class="lineNoCov">          0 : inline std::string errno_str(int err_num)</span>
+<span class="lineNum">     335 </span>            : {
+<span class="lineNum">     336 </span>            :     char buf[256];
+<span class="lineNum">     337 </span><span class="lineNoCov">          0 :     SPDLOG_CONSTEXPR auto buf_size = sizeof(buf);</span>
+<span class="lineNum">     338 </span>            : 
+<span class="lineNum">     339 </span>            : #ifdef _WIN32
+<span class="lineNum">     340 </span>            :     if(strerror_s(buf, buf_size, err_num) == 0)
+<span class="lineNum">     341 </span>            :         return std::string(buf);
+<span class="lineNum">     342 </span>            :     else
+<span class="lineNum">     343 </span>            :         return &quot;Unkown error&quot;;
+<span class="lineNum">     344 </span>            : 
+<span class="lineNum">     345 </span>            : #elif defined(__FreeBSD__) || defined(__APPLE__) || defined(ANDROID) || \
+<span class="lineNum">     346 </span>            :       ((_POSIX_C_SOURCE &gt;= 200112L) &amp;&amp; ! _GNU_SOURCE) // posix version
+<span class="lineNum">     347 </span>            : 
+<span class="lineNum">     348 </span>            :     if (strerror_r(err_num, buf, buf_size) == 0)
+<span class="lineNum">     349 </span>            :         return std::string(buf);
+<span class="lineNum">     350 </span>            :     else
+<span class="lineNum">     351 </span>            :         return &quot;Unkown error&quot;;
+<span class="lineNum">     352 </span>            : 
+<span class="lineNum">     353 </span>            : #else  // gnu version (might not use the given buf, so its retval pointer must be used)
+<span class="lineNum">     354 </span><span class="lineNoCov">          0 :     return std::string(strerror_r(err_num, buf, buf_size));</span>
+<span class="lineNum">     355 </span>            : #endif
+<span class="lineNum">     356 </span>            : }
+<span class="lineNum">     357 </span>            : 
+<span class="lineNum">     358 </span>            : } //os
+<span class="lineNum">     359 </span>            : } //details
+<span class="lineNum">     360 </span>            : } //spdlog
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

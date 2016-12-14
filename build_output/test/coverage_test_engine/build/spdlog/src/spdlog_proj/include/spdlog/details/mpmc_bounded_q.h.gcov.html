@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_test_engine.info.cleaned - build/spdlog/src/spdlog_proj/include/spdlog/details/mpmc_bounded_q.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../../../../../index.html">top level</a> - <a href="index.html">build/spdlog/src/spdlog_proj/include/spdlog/details</a> - mpmc_bounded_q.h<span style="font-size: 80%;"> (source / <a href="mpmc_bounded_q.h.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_test_engine.info.cleaned</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">26</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2016-12-13 12:59:55</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            : A modified version of Bounded MPMC queue by Dmitry Vyukov.
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : Original code from:
+<span class="lineNum">       5 </span>            : http://www.1024cores.net/home/lock-free-algorithms/queues/bounded-mpmc-queue
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : licensed by Dmitry Vyukov under the terms below:
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : Simplified BSD license
+<span class="lineNum">      10 </span>            : 
+<span class="lineNum">      11 </span>            : Copyright (c) 2010-2011 Dmitry Vyukov. All rights reserved.
+<span class="lineNum">      12 </span>            : Redistribution and use in source and binary forms, with or without modification,
+<span class="lineNum">      13 </span>            : are permitted provided that the following conditions are met:
+<span class="lineNum">      14 </span>            : 1. Redistributions of source code must retain the above copyright notice, this list of
+<span class="lineNum">      15 </span>            : conditions and the following disclaimer.
+<span class="lineNum">      16 </span>            : 
+<span class="lineNum">      17 </span>            : 2. Redistributions in binary form must reproduce the above copyright notice, this list
+<span class="lineNum">      18 </span>            : of conditions and the following disclaimer in the documentation and/or other materials
+<span class="lineNum">      19 </span>            : provided with the distribution.
+<span class="lineNum">      20 </span>            : 
+<span class="lineNum">      21 </span>            : THIS SOFTWARE IS PROVIDED BY DMITRY VYUKOV &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED
+<span class="lineNum">      22 </span>            : WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+<span class="lineNum">      23 </span>            : MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+<span class="lineNum">      24 </span>            : SHALL DMITRY VYUKOV OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+<span class="lineNum">      25 </span>            : INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+<span class="lineNum">      26 </span>            : LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+<span class="lineNum">      27 </span>            : OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+<span class="lineNum">      28 </span>            : LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+<span class="lineNum">      29 </span>            : OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+<span class="lineNum">      30 </span>            : ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class="lineNum">      31 </span>            : 
+<span class="lineNum">      32 </span>            : The views and conclusions contained in the software and documentation are those of the authors and
+<span class="lineNum">      33 </span>            : should not be interpreted as representing official policies, either expressed or implied, of Dmitry Vyukov.
+<span class="lineNum">      34 </span>            : */
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span>            : /*
+<span class="lineNum">      37 </span>            : The code in its current form adds the license below:
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            : Copyright(c) 2015 Gabi Melman.
+<span class="lineNum">      40 </span>            : Distributed under the MIT License (http://opensource.org/licenses/MIT)
+<span class="lineNum">      41 </span>            : 
+<span class="lineNum">      42 </span>            : */
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span>            : #pragma once
+<span class="lineNum">      45 </span>            : 
+<span class="lineNum">      46 </span>            : #include &lt;spdlog/common.h&gt;
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            : #include &lt;atomic&gt;
+<span class="lineNum">      49 </span>            : #include &lt;utility&gt;
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span>            : namespace spdlog
+<span class="lineNum">      52 </span>            : {
+<span class="lineNum">      53 </span>            : namespace details
+<span class="lineNum">      54 </span>            : {
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span>            : template&lt;typename T&gt;
+<span class="lineNum">      57 </span>            : class mpmc_bounded_queue
+<span class="lineNum">      58 </span>            : {
+<span class="lineNum">      59 </span>            : public:
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            :     using item_type = T;
+<span class="lineNum">      62 </span>            :     mpmc_bounded_queue(size_t buffer_size)
+<span class="lineNum">      63 </span>            :         :max_size_(buffer_size),
+<span class="lineNum">      64 </span>            :          buffer_(new cell_t [buffer_size]),
+<span class="lineNum">      65 </span>            :          buffer_mask_(buffer_size - 1)
+<span class="lineNum">      66 </span>            :     {
+<span class="lineNum">      67 </span>            :         //queue size must be power of two
+<span class="lineNum">      68 </span>            :         if(!((buffer_size &gt;= 2) &amp;&amp; ((buffer_size &amp; (buffer_size - 1)) == 0)))
+<span class="lineNum">      69 </span>            :             throw spdlog_ex(&quot;async logger queue size must be power of two&quot;);
+<span class="lineNum">      70 </span>            : 
+<span class="lineNum">      71 </span>            :         for (size_t i = 0; i != buffer_size; i += 1)
+<span class="lineNum">      72 </span>            :             buffer_[i].sequence_.store(i, std::memory_order_relaxed);
+<span class="lineNum">      73 </span>            :         enqueue_pos_.store(0, std::memory_order_relaxed);
+<span class="lineNum">      74 </span>            :         dequeue_pos_.store(0, std::memory_order_relaxed);
+<a name="75"><span class="lineNum">      75 </span>            :     }</a>
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span><span class="lineNoCov">          0 :     ~mpmc_bounded_queue()</span>
+<span class="lineNum">      78 </span>            :     {
+<span class="lineNum">      79 </span><span class="lineNoCov">          0 :         delete [] buffer_;</span>
+<span class="lineNum">      80 </span><span class="lineNoCov">          0 :     }</span>
+<a name="81"><span class="lineNum">      81 </span>            : </a>
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :     bool enqueue(T&amp;&amp; data)</span>
+<span class="lineNum">      84 </span>            :     {
+<span class="lineNum">      85 </span>            :         cell_t* cell;
+<span class="lineNum">      86 </span><span class="lineNoCov">          0 :         size_t pos = enqueue_pos_.load(std::memory_order_relaxed);</span>
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 :         for (;;)</span>
+<span class="lineNum">      88 </span>            :         {
+<span class="lineNum">      89 </span><span class="lineNoCov">          0 :             cell = &amp;buffer_[pos &amp; buffer_mask_];</span>
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :             size_t seq = cell-&gt;sequence_.load(std::memory_order_acquire);</span>
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :             intptr_t dif = (intptr_t)seq - (intptr_t)pos;</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 :             if (dif == 0)</span>
+<span class="lineNum">      93 </span>            :             {
+<span class="lineNum">      94 </span><span class="lineNoCov">          0 :                 if (enqueue_pos_.compare_exchange_weak(pos, pos + 1, std::memory_order_relaxed))</span>
+<span class="lineNum">      95 </span><span class="lineNoCov">          0 :                     break;</span>
+<span class="lineNum">      96 </span>            :             }
+<span class="lineNum">      97 </span><span class="lineNoCov">          0 :             else if (dif &lt; 0)</span>
+<span class="lineNum">      98 </span>            :             {
+<span class="lineNum">      99 </span><span class="lineNoCov">          0 :                 return false;</span>
+<span class="lineNum">     100 </span>            :             }
+<span class="lineNum">     101 </span>            :             else
+<span class="lineNum">     102 </span>            :             {
+<span class="lineNum">     103 </span><span class="lineNoCov">          0 :                 pos = enqueue_pos_.load(std::memory_order_relaxed);</span>
+<span class="lineNum">     104 </span>            :             }
+<span class="lineNum">     105 </span>            :         }
+<span class="lineNum">     106 </span><span class="lineNoCov">          0 :         cell-&gt;data_ = std::move(data);</span>
+<span class="lineNum">     107 </span><span class="lineNoCov">          0 :         cell-&gt;sequence_.store(pos + 1, std::memory_order_release);</span>
+<span class="lineNum">     108 </span><span class="lineNoCov">          0 :         return true;</span>
+<span class="lineNum">     109 </span>            :     }
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span>            :     bool dequeue(T&amp; data)
+<span class="lineNum">     112 </span>            :     {
+<span class="lineNum">     113 </span>            :         cell_t* cell;
+<span class="lineNum">     114 </span>            :         size_t pos = dequeue_pos_.load(std::memory_order_relaxed);
+<span class="lineNum">     115 </span>            :         for (;;)
+<span class="lineNum">     116 </span>            :         {
+<span class="lineNum">     117 </span>            :             cell = &amp;buffer_[pos &amp; buffer_mask_];
+<span class="lineNum">     118 </span>            :             size_t seq =
+<span class="lineNum">     119 </span>            :                 cell-&gt;sequence_.load(std::memory_order_acquire);
+<span class="lineNum">     120 </span>            :             intptr_t dif = (intptr_t)seq - (intptr_t)(pos + 1);
+<span class="lineNum">     121 </span>            :             if (dif == 0)
+<span class="lineNum">     122 </span>            :             {
+<span class="lineNum">     123 </span>            :                 if (dequeue_pos_.compare_exchange_weak(pos, pos + 1, std::memory_order_relaxed))
+<span class="lineNum">     124 </span>            :                     break;
+<span class="lineNum">     125 </span>            :             }
+<span class="lineNum">     126 </span>            :             else if (dif &lt; 0)
+<span class="lineNum">     127 </span>            :                 return false;
+<span class="lineNum">     128 </span>            :             else
+<span class="lineNum">     129 </span>            :                 pos = dequeue_pos_.load(std::memory_order_relaxed);
+<span class="lineNum">     130 </span>            :         }
+<span class="lineNum">     131 </span>            :         data = std::move(cell-&gt;data_);
+<span class="lineNum">     132 </span>            :         cell-&gt;sequence_.store(pos + buffer_mask_ + 1, std::memory_order_release);
+<span class="lineNum">     133 </span>            :         return true;
+<a name="134"><span class="lineNum">     134 </span>            :     }</a>
+<span class="lineNum">     135 </span>            : 
+<span class="lineNum">     136 </span><span class="lineNoCov">          0 :     size_t approx_size()</span>
+<span class="lineNum">     137 </span>            :     {
+<span class="lineNum">     138 </span><span class="lineNoCov">          0 :         size_t first_pos = dequeue_pos_.load(std::memory_order_relaxed);</span>
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :         size_t last_pos = enqueue_pos_.load(std::memory_order_relaxed);</span>
+<span class="lineNum">     140 </span><span class="lineNoCov">          0 :         if (last_pos &lt;= first_pos)</span>
+<span class="lineNum">     141 </span><span class="lineNoCov">          0 :             return 0;</span>
+<span class="lineNum">     142 </span><span class="lineNoCov">          0 :         auto size = last_pos - first_pos;</span>
+<span class="lineNum">     143 </span><span class="lineNoCov">          0 :         return size &lt; max_size_ ? size : max_size_;</span>
+<span class="lineNum">     144 </span>            :     }
+<a name="145"><span class="lineNum">     145 </span>            : </a>
+<span class="lineNum">     146 </span>            : private:
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :     struct cell_t</span>
+<span class="lineNum">     148 </span>            :     {
+<span class="lineNum">     149 </span>            :         std::atomic&lt;size_t&gt;   sequence_;
+<span class="lineNum">     150 </span>            :         T                     data_;
+<span class="lineNum">     151 </span>            :     };
+<span class="lineNum">     152 </span>            : 
+<span class="lineNum">     153 </span>            :     size_t const max_size_;
+<span class="lineNum">     154 </span>            : 
+<span class="lineNum">     155 </span>            :     static size_t const     cacheline_size = 64;
+<span class="lineNum">     156 </span>            :     typedef char            cacheline_pad_t [cacheline_size];
+<span class="lineNum">     157 </span>            : 
+<span class="lineNum">     158 </span>            :     cacheline_pad_t         pad0_;
+<span class="lineNum">     159 </span>            :     cell_t* const           buffer_;
+<span class="lineNum">     160 </span>            :     size_t const            buffer_mask_;
+<span class="lineNum">     161 </span>            :     cacheline_pad_t         pad1_;
+<span class="lineNum">     162 </span>            :     std::atomic&lt;size_t&gt;     enqueue_pos_;
+<span class="lineNum">     163 </span>            :     cacheline_pad_t         pad2_;
+<span class="lineNum">     164 </span>            :     std::atomic&lt;size_t&gt;     dequeue_pos_;
+<span class="lineNum">     165 </span>            :     cacheline_pad_t         pad3_;
+<span class="lineNum">     166 </span>            : 
+<span class="lineNum">     167 </span>            :     mpmc_bounded_queue(mpmc_bounded_queue const&amp;) = delete;
+<span class="lineNum">     168 </span>            :     void operator= (mpmc_bounded_queue const&amp;) = delete;
+<span class="lineNum">     169 </span>            : };
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span>            : } // ns details
+<span class="lineNum">     172 </span>            : } // ns spdlog
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../../../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.12</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
